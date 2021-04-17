@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<Pane prefHeight="241.0" prefWidth="263.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+    <Circle fx:id="joystickBorderCircle" layoutX="133.0" layoutY="105.0" radius="65.0" stroke="BLACK" strokeType="INSIDE">
+        <fill>
+            <RadialGradient centerX="0.5057803468208093" centerY="0.5147783251231528" cycleMethod="REFLECT" focusAngle="69.44" radius="0.33544303797468356">
+                <stops>
+                    <Stop color="#000000d6" />
+                    <Stop color="WHITE" offset="1.0" />
+                </stops>
+            </RadialGradient>
+        </fill></Circle>
+    <Circle fx:id="joystickControlCircle" fill="#636b72" layoutX="133.0" layoutY="107.0" radius="25.0" stroke="BLACK" strokeType="INSIDE">
+        <effect>
+            <Lighting>
+                <bumpInput>
+                    <Shadow />
+                </bumpInput>
+            </Lighting>
+        </effect>
+    </Circle>
+    <Label layoutX="85.0" layoutY="6.0" text="🡄 aileron 🡆">
+        <font>
+            <Font name="System Bold" size="18.0" />
+        </font>
+    </Label>
+    <Label layoutX="173.0" layoutY="99.0" rotate="90.0" text="🡄 elevator 🡆">
+        <font>
+            <Font name="System Bold" size="18.0" />
+        </font>
+    </Label>
+    <Slider fx:id="rudderS" blockIncrement="0.1" disable="true" layoutX="58.0" layoutY="186.0" max="1.0" min="-1.0" prefWidth="150.0" />
+    <Slider fx:id="throttleS" blockIncrement="0.05" disable="true" layoutX="44.0" layoutY="29.0" max="1.0" orientation="VERTICAL" prefHeight="150.0" value="0.5" />
+    <Label layoutX="-5.0" layoutY="89.0" rotate="-90.0" text="throttle">
+        <font>
+            <Font name="System Bold" size="18.0" />
+        </font>
+    </Label>
+    <Label layoutX="104.0" layoutY="207.0" text="rudder">
+        <font>
+            <Font name="System Bold" size="18.0" />
+        </font>
+    </Label>
+</children>
+</Pane>
