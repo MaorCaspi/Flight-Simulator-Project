@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="214.0" prefWidth="243.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AnomalyDetectionGraphController">
+   <children>
+      <TextField layoutX="8.0" layoutY="-1.0" prefHeight="214.0" prefWidth="233.0" text="קנבס שמציג את גרף גילוי החריגות">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+   </children>
+</Pane>

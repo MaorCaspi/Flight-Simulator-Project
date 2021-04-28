@@ -21,28 +21,71 @@ public class MainWindowController implements Initializable {
     @FXML
     private BorderPane attributesViewPane;
     @FXML
-    private BorderPane playbackControlsPane;
+    private BorderPane anomalyDetectionGraphPane;
     @FXML
-    private Button button;
+    private Button play;
+    @FXML
+    private Button pause;
+    @FXML
+    private Button forward;
+    @FXML
+    private Button rewind;
+    @FXML
+    private Button openCSV;
 
     @FXML
-    public void pressButton(ActionEvent event){
+    public void pressButtonPlay(ActionEvent event){
         System.out.println("hello");
-
+    }
+    @FXML
+    public void pressButtonPause(ActionEvent event){
+        System.out.println("hello");
+    }
+    @FXML
+    public void pressButtonForward(ActionEvent event){
+        System.out.println("hello");
+    }
+    @FXML
+    public void pressButtonRewind(ActionEvent event){
+        System.out.println("hello");
+    }
+    @FXML
+    public void pressButtonOpenCSV(ActionEvent event){
+        System.out.println("hello");
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Pane joystickView = new FxmlLoader().getPage("joystickWindow.fxml");
+        Pane joystickView = new FxmlLoader().getPage("JoystickWindow.fxml");
         joystickPane.setCenter(joystickView);
 
-        Pane clocksPanelView = new FxmlLoader().getPage("clocksPanel.fxml");
+        Pane clocksPanelView = new FxmlLoader().getPage("ClocksPanel.fxml");
         clocksPanelPane.setCenter(clocksPanelView);
 
-        Pane attributesViewView = new FxmlLoader().getPage("attributesView.fxml");
+        Pane attributesViewView = new FxmlLoader().getPage("AttributesView.fxml");
         attributesViewPane.setCenter(attributesViewView);
 
-        Pane playbackControlsView = new FxmlLoader().getPage("playbackControls.fxml");
-        playbackControlsPane.setCenter(playbackControlsView);
+        Pane anomalyDetectionGraphView = new FxmlLoader().getPage("AnomalyDetectionGraph.fxml");
+        anomalyDetectionGraphPane.setCenter(anomalyDetectionGraphView);
+
+        ImageView PlayView = new ImageView(new Image("media/btn_play.png"));
+        PlayView.setFitHeight(25);
+        PlayView.setPreserveRatio(true);
+        play.setGraphic(PlayView);
+
+        ImageView PauseView = new ImageView(new Image("media/btn_pause.png"));
+        PauseView.setFitHeight(25);
+        PauseView.setPreserveRatio(true);
+        pause.setGraphic(PauseView);
+
+        ImageView ForwardView = new ImageView(new Image("media/btn_forward.png"));
+        ForwardView.setFitHeight(25);
+        ForwardView.setPreserveRatio(true);
+        forward.setGraphic(ForwardView);
+
+        ImageView RewindView = new ImageView(new Image("media/btn_rewind.png"));
+        RewindView.setFitHeight(25);
+        RewindView.setPreserveRatio(true);
+        rewind.setGraphic(RewindView);
     }
 }
