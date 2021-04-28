@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="1.8.0_281" class="java.beans.XMLDecoder">
- <object class="model.FlightSettings">
+ <object class="other_classes.FlightSettings">
   <void property="fileSampleRateInSecond">
    <float>1.0</float>
   </void>

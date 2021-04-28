@@ -1,4 +1,6 @@
-package model;
+package other_classes;
+
+import other_classes.FlightSettings;
 
 public class tempMain {
 
