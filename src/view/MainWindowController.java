@@ -9,12 +9,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.scene.layout.BorderPane;
 import other_classes.FxmlLoader;
+import view_model.ViewModel;
 
 
-public class MainWindowController implements Initializable {
+public class MainWindowController implements Initializable, Observer {
+    ViewModel vm;
     @FXML
     private BorderPane joystickPane;
     @FXML
@@ -34,25 +38,27 @@ public class MainWindowController implements Initializable {
     @FXML
     private Button openCSV;
 
-    @FXML
-    public void pressButtonPlay(ActionEvent event){
-        System.out.println("hello");
+    public void setViewModel(ViewModel vm){
+        this.vm=vm;
     }
+
+    @FXML
+    public void pressButtonPlay(ActionEvent event){ vm.play(); }
     @FXML
     public void pressButtonPause(ActionEvent event){
-        System.out.println("hello");
+        vm.pause();
     }
     @FXML
     public void pressButtonForward(ActionEvent event){
-        System.out.println("hello");
+        vm.forward();
     }
     @FXML
     public void pressButtonRewind(ActionEvent event){
-        System.out.println("hello");
+        vm.rewind();
     }
     @FXML
-    public void pressButtonOpenCSV(ActionEvent event){
-        System.out.println("hello");
+    public void pressButtonLoadCSV(ActionEvent event){
+        vm.setTimeSeries();
     }
 
     @Override
@@ -88,5 +94,10 @@ public class MainWindowController implements Initializable {
         RewindView.setFitHeight(25);
         RewindView.setPreserveRatio(true);
         rewind.setGraphic(RewindView);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

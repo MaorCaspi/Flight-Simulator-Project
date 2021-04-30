@@ -16,7 +16,7 @@
       <Label layoutX="204.0" layoutY="446.0" prefHeight="17.0" prefWidth="60.0" text="Play speed" />
       <TextField layoutX="302.0" layoutY="442.0" prefHeight="25.0" prefWidth="45.0" text="1.0" />
       <Slider layoutX="9.0" layoutY="474.0" prefHeight="14.0" prefWidth="552.0" />
-      <Button fx:id="openCSV" layoutX="27.0" layoutY="430.0" mnemonicParsing="false" onAction="#pressButtonOpenCSV" text="Open" />
+      <Button fx:id="openCSV" layoutX="27.0" layoutY="430.0" mnemonicParsing="false" onAction="#pressButtonLoadCSV" text="Open" />
 
 
    </children>
