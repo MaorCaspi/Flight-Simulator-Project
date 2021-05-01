@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import model.FlightGearModel;
+import model.Model;
 import view_model.ViewModel;
 
 public class Main extends Application {
@@ -20,7 +20,7 @@ public class Main extends Application {
         primaryStage.getIcons().add(icon);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        FlightGearModel flightGearModel=new FlightGearModel("properties.txt");
+        Model flightGearModel=new Model("properties.txt");
         ViewModel vm=new ViewModel(flightGearModel);
        flightGearModel.addObserver(vm);
         MainWindowController mwc=fxl.getController();
