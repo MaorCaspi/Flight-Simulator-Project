@@ -1,7 +1,6 @@
 package model;
 
 import other_classes.TimeSeries;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;

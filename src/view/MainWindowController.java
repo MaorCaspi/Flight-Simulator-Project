@@ -1,5 +1,6 @@
 package view;
 
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
@@ -17,7 +19,7 @@ import other_classes.FxmlLoader;
 import view_model.ViewModel;
 
 
-public class MainWindowController implements Initializable, Observer {
+public class MainWindowController implements Initializable, Observer{
     ViewModel vm;
     @FXML
     private BorderPane joystickPane;
@@ -59,6 +61,7 @@ public class MainWindowController implements Initializable, Observer {
     @FXML
     public void pressButtonLoadCSV(ActionEvent event){
         vm.setTimeSeries();
+
     }
 
     @Override

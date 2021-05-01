@@ -21,7 +21,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         Model flightGearModel=new Model("properties.txt");
-        ViewModel vm=new ViewModel(flightGearModel);
+        ViewModel vm=new ViewModel(flightGearModel,primaryStage);
        flightGearModel.addObserver(vm);
         MainWindowController mwc=fxl.getController();
         mwc.setViewModel(vm);
