@@ -10,7 +10,7 @@ public class ViewModel extends Observable implements Observer  {
     public ViewModel(FlightGearModel m){
         this.m=m;
     }
-    public void setTimeSeries() { m.setTimeSeries(); }
+    public void setTimeSeries() { System.out.println("setTimeSeries"); }
     public void play(){ m.play(); }
     public void pause() {m.pause(); }
     public void forward() {m.forward();  }

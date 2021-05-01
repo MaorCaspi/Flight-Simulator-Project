@@ -8,22 +8,15 @@ import java.util.HashMap;
 import java.util.Observable;
 
 
-public class FlightGearModel extends Observable implements Runnable{
-    static boolean firstTimePlay;
-    static boolean pause;
-    FlightGearModel flightGearModel;
-    static Socket fg;
-    static PrintWriter out;
-    static TimeSeries ts;
-    static int i=0;
+class PlayCSV extends Thread {
+    Socket fg;
+    PrintWriter out;
+    boolean pause;
     HashMap<String, String> properties;
     String propertiesFileName;
 
-
-    public FlightGearModel(String propertiesFileName)
+    public PlayCSV(String propertiesFileName)
     {
-        firstTimePlay=true;
-        pause=false;
         this.propertiesFileName=propertiesFileName;
         properties=new HashMap<>();
         try {
@@ -36,65 +29,80 @@ public class FlightGearModel extends Observable implements Runnable{
             in.close();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error with properties text file");
         }
-
     }
+
     @Override
-    public synchronized void run() {//playCSV
-        while (true) {
-            try {
-                for (;i<ts.getRowSize();i++) {
-
-                    while (FlightGearModel.pause) {
-                        System.out.println("im in pause");
-                        wait();
-                    }
-
-                    out.println(ts.getRowByRowNumber(i));
-                    out.flush();
-                    System.out.println(ts.getRowByRowNumber(i));//!!!!
-                    Thread.sleep(100);
-                }
-                out.close();
-                fg.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            }
+    public synchronized void run() {
+        FlightGearModel f=new FlightGearModel("properties.txt");
+        pause=false;
+        try {
+            fg = new Socket(properties.get("ip"), Integer.parseInt(properties.get("port")));
+            out = new PrintWriter(fg.getOutputStream());
         }
+        catch (Exception e) {
+            System.out.println("FlightGear Connection Error");
+        }
+        try {
+            for (int i=0;i<f.ts.getRowSize();i++) {
 
-    public void setTimeSeries()
-    {
-        System.out.println("setTimeSeries");
+                while (pause) {
+                    System.out.println("im in pause");
+                    wait();
+                }
+                try {
+                    out.println(f.ts.getRowByRowNumber(i));
+                    out.flush();
+                }
+                catch (Exception e) { }
+                System.out.println(f.ts.getRowByRowNumber(i));//!!!!
+                Thread.sleep(100);
+            }
+            out.close();
+            fg.close();
+        }
+        catch (Exception e) {
+            System.out.println("Time Series Error");
+        }
     }
-    public synchronized void play()
+    public synchronized void wakeUP()
+    {
+        pause=false;
+        notify();
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public class FlightGearModel extends Observable {
+    boolean firstTimePlay=true;
+    TimeSeries ts;
+    PlayCSV playCSV;
+
+
+    public FlightGearModel(String propertiesFileName)
+    {
+        playCSV=new PlayCSV(propertiesFileName);
+    }
+    public void play()
     {
         if(firstTimePlay) {
-            try {
-                fg = new Socket(properties.get("ip"), Integer.parseInt(properties.get("port")));
-                out = new PrintWriter(fg.getOutputStream());
-                ts = new TimeSeries("reg_flight.csv");
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+            ts = new TimeSeries("reg_flight.csv");
             firstTimePlay=false;
-            flightGearModel=new FlightGearModel(propertiesFileName);
-            Thread t1=new Thread(flightGearModel);
-            t1.setDaemon(true);//Threads as deamons means that when the main program ends all deamon threads will terminate too
+            Thread t1=new Thread(playCSV);
+            t1.setDaemon(true);//Threads as deamons-when the main program ends-this thread will terminate too
             t1.start();
+            System.out.println("im the dad");
         }
         else {
-            pause=false;
-            notify();
+            playCSV.wakeUP();
         }
     }
-    public static void pause()
+    public void pause()
     {
-        if(!pause)
+        if(!playCSV.pause)
         {
-            pause=true;
+            playCSV.pause=true;
         }
     }
     public void forward()
