@@ -1,8 +1,11 @@
 package view;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -20,7 +23,8 @@ import view_model.ViewModel;
 
 public class MainWindowController implements Initializable, Observer{
     ViewModel vm;
-    Float playSpeed;
+    DoubleProperty playSpeed;
+
 
     @FXML
     private BorderPane joystickPane,clocksPanelPane,attributesViewPane,anomalyDetectionGraphPane;
@@ -29,9 +33,14 @@ public class MainWindowController implements Initializable, Observer{
     @FXML
     TextField playSpeedTF;
 
+    public MainWindowController()
+    {
+    }
+
     public void setViewModel(ViewModel vm){
         this.vm=vm;
-        //vm.playSpeed.bind(playSpeed);
+        playSpeed=new SimpleDoubleProperty(1.0);
+        vm.playSpeed.bind(playSpeed);
     }
 
     @FXML
@@ -55,15 +64,20 @@ public class MainWindowController implements Initializable, Observer{
     @FXML
     public void playSpeedWasChanged(ActionEvent event){
         try {
-            float newPlaySpeed = Float.parseFloat(playSpeedTF.textProperty().getValue());
-            System.out.println(newPlaySpeed);
+            double newPlaySpeed = Double.parseDouble(playSpeedTF.textProperty().getValue());
+            if(playSpeed.equals(newPlaySpeed)) { return;} //if yes-it doesn't really changed- so do nothing.
+            if(newPlaySpeed<=0.0)
+                throw new Exception();
+            playSpeed.setValue(newPlaySpeed);
         }
         catch (Exception e)
         {
-            System.out.println("nununu");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Problem with the play speed!\nYou must enter a valid play speed number.");
+            alert.showAndWait();
             return;
         }
-        //vm.playSpeedWasChanged();
     }
 
     @Override

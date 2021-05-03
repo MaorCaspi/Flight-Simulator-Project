@@ -1,8 +1,9 @@
 package view_model;
 
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.css.SimpleStyleableFloatProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,13 +19,15 @@ public class ViewModel extends Observable implements Observer  {
     boolean firstTimePlay;
     TimeSeries ts;
     Stage stage;
-    public FloatProperty playSpeed;
+    public DoubleProperty playSpeed;
 
     public ViewModel(Model m, Stage stage){
         this.m=m;
+        m.addObserver(this);
         this.stage=stage;
         firstTimePlay=true;
-        FloatProperty playSpeed = new SimpleFloatProperty();
+        playSpeed = new SimpleDoubleProperty();
+        //playSpeed.addListener(observable, oldValue, newValue)->m.setPlaySpeed((double)newValue);
     }
     public void setTimeSeries() {
         FileChooser fileChooser = new FileChooser();
@@ -66,9 +69,6 @@ public class ViewModel extends Observable implements Observer  {
     }
     public void forward() { }
     public void rewind(){ }
-    public void playSpeedWasChanged(){
-        System.out.println("ff");
-    }
 
     @Override
     public void update(Observable o, Object arg) {
