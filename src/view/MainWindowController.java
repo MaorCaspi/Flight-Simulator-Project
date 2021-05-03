@@ -1,15 +1,14 @@
 package view;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,27 +20,18 @@ import view_model.ViewModel;
 
 public class MainWindowController implements Initializable, Observer{
     ViewModel vm;
+    Float playSpeed;
+
     @FXML
-    private BorderPane joystickPane;
+    private BorderPane joystickPane,clocksPanelPane,attributesViewPane,anomalyDetectionGraphPane;
     @FXML
-    private BorderPane clocksPanelPane;
+    private Button play,pause,forward,rewind;
     @FXML
-    private BorderPane attributesViewPane;
-    @FXML
-    private BorderPane anomalyDetectionGraphPane;
-    @FXML
-    private Button play;
-    @FXML
-    private Button pause;
-    @FXML
-    private Button forward;
-    @FXML
-    private Button rewind;
-    @FXML
-    private Button openCSV;
+    TextField playSpeedTF;
 
     public void setViewModel(ViewModel vm){
         this.vm=vm;
+        //vm.playSpeed.bind(playSpeed);
     }
 
     @FXML
@@ -61,7 +51,19 @@ public class MainWindowController implements Initializable, Observer{
     @FXML
     public void pressButtonLoadCSV(ActionEvent event){
         vm.setTimeSeries();
-
+    }
+    @FXML
+    public void playSpeedWasChanged(ActionEvent event){
+        try {
+            float newPlaySpeed = Float.parseFloat(playSpeedTF.textProperty().getValue());
+            System.out.println(newPlaySpeed);
+        }
+        catch (Exception e)
+        {
+            System.out.println("nununu");
+            return;
+        }
+        //vm.playSpeedWasChanged();
     }
 
     @Override
