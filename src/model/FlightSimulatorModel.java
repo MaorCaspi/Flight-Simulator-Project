@@ -75,7 +75,22 @@ public class FlightSimulatorModel extends Observable implements Model{
 
     @Override
     public boolean getPainter(Runnable r) {
-        return false;////////////////////!!!!
+        return false;
+    }
+
+    @Override
+    public void setTimeSeries(TimeSeries ts) {
+
+    }
+
+    @Override
+    public void play(double start, double speed) {
+
+    }
+
+    @Override
+    public void pause() {
+
     }
 }
 
