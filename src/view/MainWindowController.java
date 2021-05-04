@@ -2,6 +2,8 @@ package view;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,11 +14,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import other_classes.FxmlLoader;
 import view_model.ViewModel;
 
@@ -24,6 +29,7 @@ import view_model.ViewModel;
 public class MainWindowController implements Initializable, Observer{
     ViewModel vm;
     DoubleProperty playSpeed;
+    StringProperty anomalyFlightPath;
 
 
     @FXML
@@ -41,10 +47,21 @@ public class MainWindowController implements Initializable, Observer{
         this.vm=vm;
         playSpeed=new SimpleDoubleProperty(1.0);
         vm.playSpeed.bind(playSpeed);
+        anomalyFlightPath=new SimpleStringProperty();
+        vm.anomalyFlightPath.bind(anomalyFlightPath);
     }
 
     @FXML
-    public void pressButtonPlay(ActionEvent event){ vm.play(); }
+    public void pressButtonPlay(ActionEvent event){
+        if(anomalyFlightPath.getValue()==null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Problem with flight recording file!\nYou must upload a CSV file.");
+            alert.showAndWait();
+            return;
+        }
+        vm.play();
+    }
     @FXML
     public void pressButtonPause(ActionEvent event){
         vm.pause();
@@ -59,7 +76,14 @@ public class MainWindowController implements Initializable, Observer{
     }
     @FXML
     public void pressButtonLoadCSV(ActionEvent event){
-        vm.setTimeSeries();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Upload flight recording file - CSV");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV file", "*.csv*"));
+        File file = fileChooser.showOpenDialog(new Stage());
+        if (file != null) {
+            anomalyFlightPath.setValue(file.getPath());
+        }
+
     }
     @FXML
     public void playSpeedWasChanged(ActionEvent event){
