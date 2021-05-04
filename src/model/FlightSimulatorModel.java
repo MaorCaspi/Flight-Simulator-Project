@@ -12,6 +12,8 @@ public class FlightSimulatorModel extends Observable implements Model{
     PrintWriter out;
     public boolean pause;
     HashMap<String, String> properties;
+    double playSpeed;
+
 
     public FlightSimulatorModel(String propertiesFileName)
     {
@@ -52,7 +54,7 @@ public class FlightSimulatorModel extends Observable implements Model{
                 }
                 catch (Exception e) { }
                 System.out.println(ts.getRowByRowNumber(i));//!!!!
-                Thread.sleep(100);
+                Thread.sleep((long) (100/playSpeed));
             }
             out.close();
             fg.close();
@@ -65,6 +67,15 @@ public class FlightSimulatorModel extends Observable implements Model{
     {
         pause=false;
         notify();
+    }
+    public void setPlaySpeed(double val)
+    {
+        playSpeed=val;
+    }
+
+    @Override
+    public boolean getPainter(Runnable r) {
+        return false;////////////////////!!!!
     }
 }
 

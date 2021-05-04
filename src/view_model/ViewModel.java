@@ -23,7 +23,7 @@ public class ViewModel extends Observable implements Observer  {
         firstTimePlay=true;
         playSpeed = new SimpleDoubleProperty();
         anomalyFlightPath = new SimpleStringProperty();
-        //playSpeed.addListener(observable, oldValue, newValue)->m.setPlaySpeed((double)newValue);
+        playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
         anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue);});
 
     }
