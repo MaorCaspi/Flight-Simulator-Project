@@ -10,7 +10,7 @@
       <BorderPane fx:id="attributesViewPane" layoutX="24.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" />
       <BorderPane fx:id="anomalyDetectionGraphPane" layoutX="397.0" layoutY="9.0" prefHeight="165.0" prefWidth="232.0" />
       <Button fx:id="play" layoutX="133.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="14.0" prefWidth="16.0" />
-      <Button fx:id="pause" layoutX="196.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonPause" />
+      <Button fx:id="pause" layoutX="196.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonPause" prefHeight="25.0" prefWidth="31.0" />
       <Button fx:id="rewind" layoutX="53.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonRewind" />
       <Button fx:id="forward" layoutX="277.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonForward" />
       <Label layoutX="204.0" layoutY="446.0" prefHeight="17.0" prefWidth="60.0" text="Play speed" />

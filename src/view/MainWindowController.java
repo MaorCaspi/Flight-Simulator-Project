@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
@@ -122,21 +123,25 @@ public class MainWindowController implements Initializable, Observer{
         PlayView.setFitHeight(25);
         PlayView.setPreserveRatio(true);
         play.setGraphic(PlayView);
+        play.setBackground(Background.EMPTY);
 
         ImageView PauseView = new ImageView(new Image("media/btn_pause.png"));
         PauseView.setFitHeight(25);
         PauseView.setPreserveRatio(true);
         pause.setGraphic(PauseView);
+        pause.setBackground(Background.EMPTY);
 
         ImageView ForwardView = new ImageView(new Image("media/btn_forward.png"));
         ForwardView.setFitHeight(25);
         ForwardView.setPreserveRatio(true);
         forward.setGraphic(ForwardView);
+        forward.setBackground(Background.EMPTY);
 
         ImageView RewindView = new ImageView(new Image("media/btn_rewind.png"));
         RewindView.setFitHeight(25);
         RewindView.setPreserveRatio(true);
         rewind.setGraphic(RewindView);
+        rewind.setBackground(Background.EMPTY);
     }
 
     @Override
