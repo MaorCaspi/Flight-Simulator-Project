@@ -20,8 +20,9 @@ public class Main extends Application {
         primaryStage.getIcons().add(icon);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        FlightSimulatorModel flightGearModel=new FlightSimulatorModel("properties.txt");
+        FlightSimulatorModel flightGearModel=new FlightSimulatorModel();
         ViewModel vm=new ViewModel(flightGearModel);
+        flightGearModel.addObserver(vm);
         MainWindowController mwc=fxl.getController();
         mwc.setViewModel(vm);
         vm.addObserver(mwc);

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
    <children>
       <BorderPane fx:id="joystickPane" layoutX="629.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
       <BorderPane fx:id="clocksPanelPane" layoutX="629.0" layoutY="271.0" prefHeight="74.0" prefWidth="92.0" />
@@ -14,7 +14,7 @@
       <Button fx:id="rewind" layoutX="53.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonRewind" />
       <Button fx:id="forward" layoutX="277.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonForward" />
       <Label layoutX="204.0" layoutY="446.0" prefHeight="17.0" prefWidth="60.0" text="Play speed" />
-      <Slider layoutX="9.0" layoutY="474.0" prefHeight="14.0" prefWidth="552.0" />
+      <Slider fx:id="progressBar" layoutX="9.0" layoutY="474.0" max="1.0" onDragDone="#progressBarWasDragged" prefHeight="14.0" prefWidth="552.0" />
       <Button fx:id="openCSV" layoutX="27.0" layoutY="430.0" mnemonicParsing="false" onAction="#pressButtonLoadCSV" text="Open CSV" />
       <TextField fx:id="playSpeedTF" layoutX="293.0" layoutY="443.0" onAction="#playSpeedWasChanged" prefHeight="25.0" prefWidth="31.0" text="1.0" />
 

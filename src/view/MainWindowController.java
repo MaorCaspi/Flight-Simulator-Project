@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,9 +40,12 @@ public class MainWindowController implements Initializable, Observer{
     private Button play,pause,forward,rewind;
     @FXML
     TextField playSpeedTF;
+    @FXML
+    Slider progressBar;
 
     public MainWindowController()
     {
+
     }
 
     public void setViewModel(ViewModel vm){
@@ -50,6 +54,7 @@ public class MainWindowController implements Initializable, Observer{
         vm.playSpeed.bind(playSpeed);
         anomalyFlightPath=new SimpleStringProperty();
         vm.anomalyFlightPath.bind(anomalyFlightPath);
+        progressBar.valueProperty().bindBidirectional(vm.progression);
     }
 
     @FXML
@@ -147,5 +152,8 @@ public class MainWindowController implements Initializable, Observer{
     @Override
     public void update(Observable o, Object arg) {
 
+    }
+    public void progressBarWasDragged(){
+        vm.progressBarWasDragged();
     }
 }

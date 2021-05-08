@@ -14,47 +14,40 @@ public class ViewModel extends Observable implements Observer  {
     FlightSimulatorModel m;
     boolean firstTimePlay;
     TimeSeries ts;
-    public DoubleProperty playSpeed;
+    public DoubleProperty playSpeed,progression;
     public StringProperty anomalyFlightPath;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
-        m.addObserver(this);
+        //m.addObserver(this);
         firstTimePlay=true;
         playSpeed = new SimpleDoubleProperty();
+        progression = new SimpleDoubleProperty();
         anomalyFlightPath = new SimpleStringProperty();
         playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
-        anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue);});
-
+        anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue); m.setTimeSeries(ts);});
+        //progression.addListener((observable, oldValue, newValue)->{m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
     }
     public void play(){
-        if(firstTimePlay) {
-            firstTimePlay=false;
-            Thread t1=new Thread()
-            {
-                public void run() {
-                    m.playCsv(ts);
-                }
-            };
-            t1.setDaemon(true);//when the main program ends-this thread will terminate too
-            t1.start();
-        }
-        else {
-            m.wakeUP();
-        }
+        m.play((int)(progression.getValue()* ts.getRowSize()));
     }
     public void pause() {
-        if(!m.pause)
-        {
-            m.pause=true;
-        }
+        m.pause();
     }
     public void forward(){}
-    public void rewind(){}
+    public void rewind(){progression.setValue(0.5);}
+
+    public void progressBarWasDragged(){
+        pause();
+        m.setProgression((int)(ts.getRowSize() * progression.getValue().doubleValue()));
+        play();
+    }
 
     @Override
     public void update(Observable o, Object arg) {
-        if(o==m){}
+        if(o==m){
+            progression.setValue((double)m.getNumOfRow()/ts.getRowSize());
+        }
     }
 
 }
