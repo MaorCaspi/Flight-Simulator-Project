@@ -76,7 +76,7 @@ public class FGPlayer {
                 }
                 flightSimulatorModel.setNumOfRow(i);
                 System.out.println(ts.getRowByRowNumber(i));//!!!!
-                Thread.sleep((long) (100 / playSpeed));
+                Thread.sleep((long) (100 / playSpeed));///!!!!!!!
             }
             out.close();
             fg.close();
@@ -118,7 +118,7 @@ public class FGPlayer {
                 }
                 flightSimulatorModel.setNumOfRow(i);
                 System.out.println(ts.getRowByRowNumber(i));//!!!!
-                Thread.sleep((long) (100 / 20));
+                Thread.sleep((long) (100 / 20));///!!!!!!!
             }
             stop();
         } catch (Exception e) {

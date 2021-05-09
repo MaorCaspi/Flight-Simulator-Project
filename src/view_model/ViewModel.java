@@ -15,7 +15,7 @@ public class ViewModel extends Observable implements Observer  {
     boolean firstTimePlay;
     TimeSeries ts;
     public DoubleProperty playSpeed,progression;
-    public StringProperty anomalyFlightPath;
+    public StringProperty anomalyFlightPath,time;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
@@ -23,9 +23,19 @@ public class ViewModel extends Observable implements Observer  {
         playSpeed = new SimpleDoubleProperty();
         progression = new SimpleDoubleProperty();
         anomalyFlightPath = new SimpleStringProperty();
+        time = new SimpleStringProperty();
         playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
         anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue); m.setTimeSeries(ts);});
-        progression.addListener((observable, oldValue, newValue)->{m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
+        progression.addListener((observable, oldValue, newValue)->{
+            if(ts!=null)
+                m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
+    }
+    private void setTime(int rowNumber)
+    {
+        int totalMilliseconds=(int)(rowNumber*100);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        int seconds = (int) (totalMilliseconds / 1000) % 60 ;
+        int minutes = (int) ((totalMilliseconds / (1000*60)) % 60);
+        time.setValue(minutes+":"+seconds);
     }
     public void play(){
         m.play((int)(progression.getValue()* ts.getRowSize()));
@@ -40,6 +50,7 @@ public class ViewModel extends Observable implements Observer  {
     public void update(Observable o, Object arg) {
         if(o==m){
             progression.setValue((double)m.getNumOfRow()/ts.getRowSize());
+            setTime(m.getNumOfRow());
         }
     }
 

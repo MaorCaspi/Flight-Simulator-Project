@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -19,11 +18,7 @@
       <Button fx:id="loadCSV" layoutX="27.0" layoutY="430.0" mnemonicParsing="false" onAction="#pressButtonLoadCSV" text="Open CSV" />
       <TextField fx:id="playSpeedTF" layoutX="293.0" layoutY="443.0" onAction="#playSpeedWasChanged" prefHeight="25.0" prefWidth="31.0" text="1.0" />
       <Button fx:id="stop" layoutX="256.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonStop" />
-      <SubScene height="200.0" width="200.0">
-        <root>
-          <Region />
-        </root>
-      </SubScene>
+      <Label fx:id="time" layoutX="410.0" layoutY="446.0" prefHeight="17.0" prefWidth="49.0" />
 
 
    </children>
