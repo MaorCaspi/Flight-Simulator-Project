@@ -19,14 +19,13 @@ public class ViewModel extends Observable implements Observer  {
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
-        //m.addObserver(this);
         firstTimePlay=true;
         playSpeed = new SimpleDoubleProperty();
         progression = new SimpleDoubleProperty();
         anomalyFlightPath = new SimpleStringProperty();
         playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
         anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue); m.setTimeSeries(ts);});
-        //progression.addListener((observable, oldValue, newValue)->{m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
+        progression.addListener((observable, oldValue, newValue)->{m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
     }
     public void play(){
         m.play((int)(progression.getValue()* ts.getRowSize()));
@@ -34,14 +33,8 @@ public class ViewModel extends Observable implements Observer  {
     public void pause() {
         m.pause();
     }
-    public void forward(){}
-    public void rewind(){progression.setValue(0.5);}
-
-    public void progressBarWasDragged(){
-        pause();
-        m.setProgression((int)(ts.getRowSize() * progression.getValue().doubleValue()));
-        play();
-    }
+    public void forward(){ m.forward();}
+    public void rewind(){ m.rewind();}
 
     @Override
     public void update(Observable o, Object arg) {

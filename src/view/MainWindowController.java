@@ -37,7 +37,7 @@ public class MainWindowController implements Initializable, Observer{
     @FXML
     private BorderPane joystickPane,clocksPanelPane,attributesViewPane,anomalyDetectionGraphPane;
     @FXML
-    private Button play,pause,forward,rewind;
+    private Button play,pause,forward,rewind,stop,loadCSV;
     @FXML
     TextField playSpeedTF;
     @FXML
@@ -47,7 +47,6 @@ public class MainWindowController implements Initializable, Observer{
     {
 
     }
-
     public void setViewModel(ViewModel vm){
         this.vm=vm;
         playSpeed=new SimpleDoubleProperty(1.0);
@@ -56,7 +55,6 @@ public class MainWindowController implements Initializable, Observer{
         vm.anomalyFlightPath.bind(anomalyFlightPath);
         progressBar.valueProperty().bindBidirectional(vm.progression);
     }
-
     @FXML
     public void pressButtonPlay(ActionEvent event){
         if(anomalyFlightPath.getValue()==null) {
@@ -81,6 +79,8 @@ public class MainWindowController implements Initializable, Observer{
         vm.rewind();
     }
     @FXML
+    public void pressButtonStop(ActionEvent event){ progressBar.setValue(1); }
+    @FXML
     public void pressButtonLoadCSV(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Upload flight recording file - CSV");
@@ -88,8 +88,8 @@ public class MainWindowController implements Initializable, Observer{
         File file = fileChooser.showOpenDialog(new Stage());
         if (file != null) {
             anomalyFlightPath.setValue(file.getPath());
+            loadCSV.setVisible(false);
         }
-
     }
     @FXML
     public void playSpeedWasChanged(ActionEvent event){
@@ -109,7 +109,6 @@ public class MainWindowController implements Initializable, Observer{
             return;
         }
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Pane joystickView = new FxmlLoader().getPage("JoystickWindow.fxml");
@@ -131,7 +130,7 @@ public class MainWindowController implements Initializable, Observer{
         play.setBackground(Background.EMPTY);
 
         ImageView PauseView = new ImageView(new Image("media/btn_pause.png"));
-        PauseView.setFitHeight(25);
+        PauseView.setFitHeight(35);
         PauseView.setPreserveRatio(true);
         pause.setGraphic(PauseView);
         pause.setBackground(Background.EMPTY);
@@ -147,13 +146,16 @@ public class MainWindowController implements Initializable, Observer{
         RewindView.setPreserveRatio(true);
         rewind.setGraphic(RewindView);
         rewind.setBackground(Background.EMPTY);
+
+        ImageView StopView = new ImageView(new Image("media/btn_stop.png"));
+        StopView.setFitHeight(25);
+        StopView.setPreserveRatio(true);
+        stop.setGraphic(StopView);
+        stop.setBackground(Background.EMPTY);
     }
 
     @Override
     public void update(Observable o, Object arg) {
 
-    }
-    public void progressBarWasDragged(){
-        vm.progressBarWasDragged();
     }
 }

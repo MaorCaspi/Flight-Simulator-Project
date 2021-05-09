@@ -2,9 +2,6 @@ package model;
 
 import other_classes.FGPlayer;
 import other_classes.TimeSeries;
-import java.io.*;
-import java.net.Socket;
-import java.util.HashMap;
 import java.util.Observable;
 
 
@@ -42,7 +39,7 @@ public class FlightSimulatorModel extends Observable implements Model{
 
     @Override
     public void setProgression(int rowNumber) {
-        if (!firstTimePlay) {
+        if (!firstTimePlay && !(rowNumber-5<this.numOfRow && this.numOfRow<rowNumber+5)) {
             thread.stop();
             thread=new Thread()
             {
@@ -69,6 +66,21 @@ public class FlightSimulatorModel extends Observable implements Model{
             thread.setDaemon(true);//when the main program ends-this thread will terminate too
             thread.start();
         }
+        else if(fgPlayer.isMoveForwardIsInProgress()) {
+            fgPlayer.unForward();
+        }
+        else if(fgPlayer.isMoveRewindIsInProgress()) {
+            fgPlayer.setMoveRewindIsInProgress(false);
+            thread.stop();
+            thread=new Thread()
+            {
+                public void run() {
+                    fgPlayer.play(start);
+                }
+            };
+            thread.setDaemon(true);//when the main program ends-this thread will terminate too
+            thread.start();
+        }
         else {
             fgPlayer.wakeUP();
         }
@@ -77,20 +89,34 @@ public class FlightSimulatorModel extends Observable implements Model{
 
     @Override
     public void pause() {
-        if(!fgPlayer.pause)
-        {
-            fgPlayer.pause=true;
+        if(fgPlayer!=null && !fgPlayer.isPause()) {
+            fgPlayer.setPause(true);
         }
     }
 
     @Override
     public void forward() {
+        if(fgPlayer!=null) {
+            fgPlayer.forward();
+        }
     }
 
     @Override
     public void rewind() {
-
+        if(fgPlayer!=null && !fgPlayer.isMoveRewindIsInProgress()) {
+            fgPlayer.setMoveRewindIsInProgress(true);
+            thread.stop();
+            thread=new Thread()
+            {
+                public void run() {
+                    fgPlayer.rewind(numOfRow);
+                }
+            };
+            thread.setDaemon(true);//when the main program ends-this thread will terminate too
+            thread.start();
+        }
     }
+
     public void setNumOfRow(int numOfRow){
         this.numOfRow=numOfRow;
         setChanged();

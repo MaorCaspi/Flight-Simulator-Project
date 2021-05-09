@@ -10,5 +10,4 @@ public interface Model {
     public void pause();
     public void forward();
     public void rewind();
-
 }
