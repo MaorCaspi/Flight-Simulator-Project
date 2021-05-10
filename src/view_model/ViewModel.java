@@ -1,9 +1,7 @@
 package view_model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.application.Platform;
+import javafx.beans.property.*;
 import model.FlightSimulatorModel;
 import other_classes.TimeSeries;
 
@@ -15,7 +13,7 @@ public class ViewModel extends Observable implements Observer  {
     boolean firstTimePlay;
     TimeSeries ts;
     public DoubleProperty playSpeed,progression;
-    public StringProperty anomalyFlightPath,time;
+    public StringProperty anomalyFlightPath,currentTime;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
@@ -23,7 +21,7 @@ public class ViewModel extends Observable implements Observer  {
         playSpeed = new SimpleDoubleProperty();
         progression = new SimpleDoubleProperty();
         anomalyFlightPath = new SimpleStringProperty();
-        time = new SimpleStringProperty();
+        currentTime = new SimpleStringProperty("0:0");
         playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
         anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue); m.setTimeSeries(ts);});
         progression.addListener((observable, oldValue, newValue)->{
@@ -33,9 +31,14 @@ public class ViewModel extends Observable implements Observer  {
     private void setTime(int rowNumber)
     {
         int totalMilliseconds=(int)(rowNumber*100);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        int seconds = (int) (totalMilliseconds / 1000) % 60 ;
-        int minutes = (int) ((totalMilliseconds / (1000*60)) % 60);
-        time.setValue(minutes+":"+seconds);
+        int seconds=(int)(totalMilliseconds / 1000) % 60;
+        int minutes=(int) ((totalMilliseconds / (1000*60)) % 60);
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                currentTime.set(minutes+":"+seconds);
+            }
+        });
     }
     public void play(){
         m.play((int)(progression.getValue()* ts.getRowSize()));
@@ -43,7 +46,7 @@ public class ViewModel extends Observable implements Observer  {
     public void pause() {
         m.pause();
     }
-    public void forward(){ m.forward();}
+    public void forward(){ m.forward(); }
     public void rewind(){ m.rewind();}
 
     @Override

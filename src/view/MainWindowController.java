@@ -1,5 +1,6 @@
 package view;
 
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,10 +26,10 @@ import other_classes.FxmlLoader;
 import view_model.ViewModel;
 
 
-public class MainWindowController<Lable> implements Initializable, Observer{
+public class MainWindowController implements Initializable, Observer{
     ViewModel vm;
     DoubleProperty playSpeed;
-    StringProperty anomalyFlightPath;
+    StringProperty anomalyFlightPath,time;
 
 
     @FXML
@@ -40,7 +41,7 @@ public class MainWindowController<Lable> implements Initializable, Observer{
     @FXML
     Slider progressBar;
     @FXML
-    Label time;
+    Label currentTime;
 
     public MainWindowController()
     {
@@ -53,7 +54,8 @@ public class MainWindowController<Lable> implements Initializable, Observer{
         anomalyFlightPath=new SimpleStringProperty();
         vm.anomalyFlightPath.bind(anomalyFlightPath);
         progressBar.valueProperty().bindBidirectional(vm.progression);
-        //time.textProperty().bind(vm.time);
+        currentTime.textProperty().bind(vm.currentTime);
+
     }
     @FXML
     public void pressButtonPlay(ActionEvent event){
@@ -75,9 +77,7 @@ public class MainWindowController<Lable> implements Initializable, Observer{
         vm.forward();
     }
     @FXML
-    public void pressButtonRewind(ActionEvent event){
-        vm.rewind();
-    }
+    public void pressButtonRewind(ActionEvent event){ vm.rewind(); }
     @FXML
     public void pressButtonStop(ActionEvent event){ progressBar.setValue(1); }
     @FXML
