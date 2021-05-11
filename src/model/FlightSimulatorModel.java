@@ -1,6 +1,7 @@
 package model;
 
 import other_classes.FGPlayer;
+import other_classes.Properties;
 import other_classes.TimeSeries;
 import java.util.Observable;
 
@@ -12,18 +13,26 @@ public class FlightSimulatorModel extends Observable implements Model{
     TimeSeries ts;
     Thread thread;
     int numOfRow;
+    Properties properties;
 
 
     public FlightSimulatorModel() {
 
         firstTimePlay=true;
         numOfRow=0;
+        properties=new Properties();
     }
     public void setPlaySpeed(double val) {
         playSpeed=val;
         if(!firstTimePlay) {
             fgPlayer.setPlaySpeed(val);
         }
+    }
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
+    public Properties getProperties() {
+        return properties;
     }
 
     @Override

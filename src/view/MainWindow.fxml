@@ -4,28 +4,52 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
    <children>
       <BorderPane fx:id="joystickPane" layoutX="629.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
       <BorderPane fx:id="clocksPanelPane" layoutX="629.0" layoutY="271.0" prefHeight="74.0" prefWidth="92.0" />
       <BorderPane fx:id="attributesViewPane" layoutX="24.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" />
       <BorderPane fx:id="anomalyDetectionGraphPane" layoutX="397.0" layoutY="9.0" prefHeight="165.0" prefWidth="232.0" />
-      <Button fx:id="play" layoutX="133.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="14.0" prefWidth="16.0" />
-      <Button fx:id="pause" layoutX="189.0" layoutY="516.0" mnemonicParsing="false" onAction="#pressButtonPause" prefHeight="25.0" prefWidth="31.0" />
-      <Button fx:id="rewind" layoutX="53.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonRewind" />
-      <Button fx:id="forward" layoutX="316.0" layoutY="516.0" mnemonicParsing="false" onAction="#pressButtonForward" />
+      <Button fx:id="play" layoutX="162.0" layoutY="464.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0" prefWidth="70.0" text="▶">
+         <font>
+            <Font size="55.0" />
+         </font></Button>
+      <Button fx:id="pause" layoutX="242.0" layoutY="472.0" mnemonicParsing="false" onAction="#pressButtonPause" prefHeight="102.0" prefWidth="102.0" text="⏸">
+         <font>
+            <Font size="40.0" />
+         </font></Button>
+      <Button fx:id="rewind" layoutX="82.0" layoutY="480.0" mnemonicParsing="false" onAction="#pressButtonRewind" prefHeight="83.0" prefWidth="85.0" text="⏪">
+         <font>
+            <Font size="40.0" />
+         </font></Button>
+      <Button fx:id="forward" layoutX="409.0" layoutY="480.0" mnemonicParsing="false" onAction="#pressButtonForward" prefHeight="86.0" prefWidth="85.0" text="⏩">
+         <font>
+            <Font size="40.0" />
+         </font></Button>
       <Label layoutX="162.0" layoutY="420.0" prefHeight="50.0" prefWidth="162.0" text="Play speed">
          <font>
             <Font size="25.0" />
          </font></Label>
       <Slider fx:id="progressBar" layoutX="9.0" layoutY="474.0" max="1.0" prefHeight="14.0" prefWidth="552.0" />
-      <Button fx:id="loadCSV" layoutX="27.0" layoutY="430.0" mnemonicParsing="false" onAction="#pressButtonLoadCSV" text="Open CSV" />
       <TextField fx:id="playSpeedTF" layoutX="317.0" layoutY="433.0" onAction="#playSpeedWasChanged" prefHeight="25.0" prefWidth="31.0" text="1.0" />
-      <Button fx:id="stop" layoutX="256.0" layoutY="521.0" mnemonicParsing="false" onAction="#pressButtonStop" />
+      <Button fx:id="stop" layoutX="317.0" layoutY="481.0" mnemonicParsing="false" onAction="#pressButtonStop" prefHeight="86.0" prefWidth="92.0" text="⏹">
+         <font>
+            <Font size="40.0" />
+         </font></Button>
       <Label fx:id="currentTime" layoutX="480.0" layoutY="420.0" text="0:0">
          <font>
             <Font size="34.0" />
          </font></Label>
+      <MenuButton mnemonicParsing="false" text="Load files">
+        <items>
+          <MenuItem mnemonicParsing="false" onAction="#pressButtonLoadProperties" style="-fx-font-size: 20.0 pt;" text="Load properties file" />
+          <MenuItem mnemonicParsing="false" onAction="#pressButtonLoadCSV" style="-fx-font-size: 20.0 pt;" text="Load flight recording file" />
+            <MenuItem mnemonicParsing="false" onAction="#pressButtonLoadCSV" style="-fx-font-size: 20.0 pt;" text="Load anomaly detection algorithm" />
+        </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
 
 
    </children>

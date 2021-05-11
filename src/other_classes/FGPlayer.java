@@ -49,7 +49,7 @@ public class FGPlayer {
 
     private boolean createConnection() {
         try {
-            fg = new Socket("localhost", 5400);
+            fg = new Socket(flightSimulatorModel.getProperties().getFlightGearIP(), flightSimulatorModel.getProperties().getFlightGearPort());
             out = new PrintWriter(fg.getOutputStream());
             connectionIsClose = false;
             return true;
@@ -76,7 +76,7 @@ public class FGPlayer {
                 }
                 flightSimulatorModel.setNumOfRow(i);
                 System.out.println(ts.getRowByRowNumber(i));///////////////////////////////
-                Thread.sleep((long) (100 / playSpeed));///!!!!!!!
+                Thread.sleep((long) (flightSimulatorModel.getProperties().getRate()/ playSpeed));///!!!!!!!
             }
             out.close();
             fg.close();
@@ -118,7 +118,7 @@ public class FGPlayer {
                 }
                 flightSimulatorModel.setNumOfRow(i);
                 System.out.println(ts.getRowByRowNumber(i));//////////////
-                Thread.sleep((long) (100 / 20));///!!!!!!!
+                Thread.sleep((long) (flightSimulatorModel.getProperties().getRate()/20));///!!!!!!!
             }
             stop();
         } catch (Exception e) {

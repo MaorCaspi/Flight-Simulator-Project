@@ -9,8 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 
@@ -34,6 +32,7 @@ public class MainWindowController implements Initializable, Observer{
     ViewModel vm;
     DoubleProperty playSpeed;
     StringProperty anomalyFlightPath;
+    StringProperty propertiesPath;
 
     JoystickWindowController joystick;
     ClocksPanelController clocksPanel;
@@ -44,7 +43,7 @@ public class MainWindowController implements Initializable, Observer{
     @FXML
     private BorderPane joystickPane,clocksPanelPane,attributesViewPane,anomalyDetectionGraphPane;
     @FXML
-    private Button play,pause,forward,rewind,stop,loadCSV;
+    private Button play,pause,forward,rewind,stop;
     @FXML
     TextField playSpeedTF;
     @FXML
@@ -65,6 +64,8 @@ public class MainWindowController implements Initializable, Observer{
         vm.playSpeed.bind(playSpeed);
         anomalyFlightPath=new SimpleStringProperty();
         vm.anomalyFlightPath.bind(anomalyFlightPath);
+        propertiesPath=new SimpleStringProperty();
+        vm.propertiesPath.bind(propertiesPath);///////////////////
         progressBar.valueProperty().bindBidirectional(vm.progression);
         currentTime.textProperty().bind(vm.currentTime);
     }
@@ -105,7 +106,16 @@ public class MainWindowController implements Initializable, Observer{
         File file = fileChooser.showOpenDialog(new Stage());
         if (file != null) {
             anomalyFlightPath.setValue(file.getPath());
-            loadCSV.setVisible(false);
+        }
+    }
+    @FXML
+    public void pressButtonLoadProperties(ActionEvent event){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Upload properties file - XML");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML file", "*.xml*"));
+        File file = fileChooser.showOpenDialog(new Stage());
+        if (file != null) {
+            propertiesPath.setValue(file.getPath());
         }
     }
     @FXML
@@ -140,35 +150,12 @@ public class MainWindowController implements Initializable, Observer{
         Pane anomalyDetectionGraphView = new FxmlLoader().getPage("AnomalyDetectionGraph/AnomalyDetectionGraph.fxml");
         anomalyDetectionGraphPane.setCenter(anomalyDetectionGraphView);
 
-        ImageView PlayView = new ImageView(new Image("media/btn_play.png"));
-        PlayView.setFitHeight(25);
-        PlayView.setPreserveRatio(true);
-        play.setGraphic(PlayView);
         play.setBackground(Background.EMPTY);
-
-        ImageView PauseView = new ImageView(new Image("media/btn_pause.png"));
-        PauseView.setFitHeight(35);
-        PauseView.setPreserveRatio(true);
-        pause.setGraphic(PauseView);
         pause.setBackground(Background.EMPTY);
-
-        ImageView ForwardView = new ImageView(new Image("media/btn_forward.png"));
-        ForwardView.setFitHeight(25);
-        ForwardView.setPreserveRatio(true);
-        forward.setGraphic(ForwardView);
         forward.setBackground(Background.EMPTY);
-
-        ImageView RewindView = new ImageView(new Image("media/btn_rewind.png"));
-        RewindView.setFitHeight(25);
-        RewindView.setPreserveRatio(true);
-        rewind.setGraphic(RewindView);
         rewind.setBackground(Background.EMPTY);
-
-        ImageView StopView = new ImageView(new Image("media/btn_stop.png"));
-        StopView.setFitHeight(25);
-        StopView.setPreserveRatio(true);
-        stop.setGraphic(StopView);
         stop.setBackground(Background.EMPTY);
+
     }
 
     @Override

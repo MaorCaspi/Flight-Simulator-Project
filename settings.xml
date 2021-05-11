@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_281" class="java.beans.XMLDecoder">
+ <object class="other_classes.Properties" id="Properties0">
+  <void property="anomalyDetectionFilePath">
+   <string>\media\anomalyDetectionFile</string>
+  </void>
+  <void property="flightGearIP">
+   <string>127.0.0.1</string>
+  </void>
+  <void property="flightGearPort">
+   <int>5400</int>
+  </void>
+  <void property="normalFlightCsvPath">
+   <string>\media\reg_flight.csv</string>
+  </void>
+  <void property="rate">
+   <float>100.0</float>
+  </void>
+  <void property="rowsIndex">
+   <void method="put">
+    <string>throttle</string>
+    <int>7</int>
+   </void>
+   <void method="put">
+    <string>high</string>
+    <int>26</int>
+   </void>
+   <void method="put">
+    <string>elevator</string>
+    <int>2</int>
+   </void>
+   <void method="put">
+    <string>rudder</string>
+    <int>3</int>
+   </void>
+   <void method="put">
+    <string>roll</string>
+    <int>29</int>
+   </void>
+   <void method="put">
+    <string>aileron</string>
+    <int>1</int>
+   </void>
+   <void method="put">
+    <string>pitch</string>
+    <int>30</int>
+   </void>
+   <void method="put">
+    <string>speed</string>
+    <int>25</int>
+   </void>
+   <void method="put">
+    <string>yaw</string>
+    <int>21</int>
+   </void>
+   <void method="put">
+    <string>direction</string>
+    <int>37</int>
+   </void>
+  </void>
+ </object>
+</java>
