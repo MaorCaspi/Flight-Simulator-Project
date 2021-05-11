@@ -23,13 +23,22 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import other_classes.FxmlLoader;
+import view.AnomalyDetectionGraph.AnomalyDetectionGraphController;
+import view.AttributesView.AttributesViewController;
+import view.ClocksPanel.ClocksPanelController;
+import view.Joystick.JoystickWindowController;
 import view_model.ViewModel;
 
 
 public class MainWindowController implements Initializable, Observer{
     ViewModel vm;
     DoubleProperty playSpeed;
-    StringProperty anomalyFlightPath,time;
+    StringProperty anomalyFlightPath;
+
+    JoystickWindowController joystick;
+    ClocksPanelController clocksPanel;
+    AttributesViewController attributesView;
+    AnomalyDetectionGraphController anomalyDetectionGraph;
 
 
     @FXML
@@ -45,7 +54,10 @@ public class MainWindowController implements Initializable, Observer{
 
     public MainWindowController()
     {
-
+        joystick=new JoystickWindowController();
+        clocksPanel=new ClocksPanelController();
+        attributesView=new AttributesViewController();
+        anomalyDetectionGraph=new AnomalyDetectionGraphController();
     }
     public void setViewModel(ViewModel vm){
         this.vm=vm;
@@ -55,7 +67,6 @@ public class MainWindowController implements Initializable, Observer{
         vm.anomalyFlightPath.bind(anomalyFlightPath);
         progressBar.valueProperty().bindBidirectional(vm.progression);
         currentTime.textProperty().bind(vm.currentTime);
-
     }
     @FXML
     public void pressButtonPlay(ActionEvent event){
@@ -67,10 +78,12 @@ public class MainWindowController implements Initializable, Observer{
             return;
         }
         vm.play();
+        progressBar.setDisable(false);
     }
     @FXML
     public void pressButtonPause(ActionEvent event){
         vm.pause();
+        progressBar.setDisable(true);
     }
     @FXML
     public void pressButtonForward(ActionEvent event){
@@ -79,7 +92,11 @@ public class MainWindowController implements Initializable, Observer{
     @FXML
     public void pressButtonRewind(ActionEvent event){ vm.rewind(); }
     @FXML
-    public void pressButtonStop(ActionEvent event){ progressBar.setValue(1); }
+    public void pressButtonStop(ActionEvent event) {
+        if (!progressBar.isDisabled()) {
+            progressBar.setValue(1);
+        }
+    }
     @FXML
     public void pressButtonLoadCSV(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
@@ -111,16 +128,16 @@ public class MainWindowController implements Initializable, Observer{
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Pane joystickView = new FxmlLoader().getPage("JoystickWindow.fxml");
+        Pane joystickView = new FxmlLoader().getPage("Joystick/JoystickWindow.fxml");
         joystickPane.setCenter(joystickView);
 
-        Pane clocksPanelView = new FxmlLoader().getPage("ClocksPanel.fxml");
+        Pane clocksPanelView = new FxmlLoader().getPage("ClocksPanel/ClocksPanel.fxml");
         clocksPanelPane.setCenter(clocksPanelView);
 
-        Pane attributesViewView = new FxmlLoader().getPage("AttributesView.fxml");
+        Pane attributesViewView = new FxmlLoader().getPage("AttributesView/AttributesView.fxml");
         attributesViewPane.setCenter(attributesViewView);
 
-        Pane anomalyDetectionGraphView = new FxmlLoader().getPage("AnomalyDetectionGraph.fxml");
+        Pane anomalyDetectionGraphView = new FxmlLoader().getPage("AnomalyDetectionGraph/AnomalyDetectionGraph.fxml");
         anomalyDetectionGraphPane.setCenter(anomalyDetectionGraphView);
 
         ImageView PlayView = new ImageView(new Image("media/btn_play.png"));

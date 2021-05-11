@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
    <children>
       <BorderPane fx:id="joystickPane" layoutX="629.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
       <BorderPane fx:id="clocksPanelPane" layoutX="629.0" layoutY="271.0" prefHeight="74.0" prefWidth="92.0" />

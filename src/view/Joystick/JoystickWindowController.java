@@ -1,4 +1,4 @@
-package view;
+package view.Joystick;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 
 public class JoystickWindowController implements Initializable {
     @FXML
-    Slider throttleS, rudderS;
+    public Slider throttleS, rudderS;
     @FXML
     Circle joystickBorderCircle, joystickControlCircle;
     public void setthrottle(float val)

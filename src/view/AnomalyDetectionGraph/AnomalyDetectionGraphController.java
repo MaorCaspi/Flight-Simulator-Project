@@ -1,4 +1,4 @@
-package view;
+package view.AnomalyDetectionGraph;
 
 import javafx.fxml.Initializable;
 

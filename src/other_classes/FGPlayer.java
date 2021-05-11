@@ -54,7 +54,7 @@ public class FGPlayer {
             connectionIsClose = false;
             return true;
         } catch (Exception e) {
-            System.out.println("FlightGear Connection Error");
+            System.out.println("FlightGear Connection Error");/////////////////////////
             return false;
         }
     }
@@ -66,7 +66,7 @@ public class FGPlayer {
         try {
             for (int i = start; i < ts.getRowSize(); i++) {
                 while (pause) {
-                    System.out.println("im in pause");
+                    System.out.println("im in pause");///////////////////////////////////////
                     wait();
                 }
                 try {
@@ -75,14 +75,14 @@ public class FGPlayer {
                 } catch (Exception e) {
                 }
                 flightSimulatorModel.setNumOfRow(i);
-                System.out.println(ts.getRowByRowNumber(i));//!!!!
+                System.out.println(ts.getRowByRowNumber(i));///////////////////////////////
                 Thread.sleep((long) (100 / playSpeed));///!!!!!!!
             }
             out.close();
             fg.close();
             connectionIsClose = true;
         } catch (Exception e) {
-            System.out.println("Time Series Error");
+            System.out.println("Time Series Error");///////////////////////////////////////////
         }
     }
 
@@ -117,12 +117,12 @@ public class FGPlayer {
                 } catch (Exception e) {
                 }
                 flightSimulatorModel.setNumOfRow(i);
-                System.out.println(ts.getRowByRowNumber(i));//!!!!
+                System.out.println(ts.getRowByRowNumber(i));//////////////
                 Thread.sleep((long) (100 / 20));///!!!!!!!
             }
             stop();
         } catch (Exception e) {
-            System.out.println("Time Series Error");
+            System.out.println("Time Series Error");////////////////////////
         }
     }
 
@@ -133,7 +133,6 @@ public class FGPlayer {
         }
     }
     private void stop() {
-
         try {
             out.close();
             fg.close();

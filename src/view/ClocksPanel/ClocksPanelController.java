@@ -1,4 +1,4 @@
-package view;
+package view.ClocksPanel;
 
 import javafx.fxml.Initializable;
 

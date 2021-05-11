@@ -12,6 +12,7 @@ public class ViewModel extends Observable implements Observer  {
     FlightSimulatorModel m;
     boolean firstTimePlay;
     TimeSeries ts;
+    int csvLength;
     public DoubleProperty playSpeed,progression;
     public StringProperty anomalyFlightPath,currentTime;
 
@@ -23,7 +24,7 @@ public class ViewModel extends Observable implements Observer  {
         anomalyFlightPath = new SimpleStringProperty();
         currentTime = new SimpleStringProperty("0:0");
         playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
-        anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue); m.setTimeSeries(ts);});
+        anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue); m.setTimeSeries(ts); csvLength=ts.getRowSize();});
         progression.addListener((observable, oldValue, newValue)->{
             if(ts!=null)
                 m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
@@ -32,13 +33,8 @@ public class ViewModel extends Observable implements Observer  {
     {
         int totalMilliseconds=(int)(rowNumber*100);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         int seconds=(int)(totalMilliseconds / 1000) % 60;
-        int minutes=(int) ((totalMilliseconds / (1000*60)) % 60);
-        Platform.runLater(new Runnable(){
-            @Override
-            public void run() {
-                currentTime.set(minutes+":"+seconds);
-            }
-        });
+        int minutes=(int) ((totalMilliseconds / (60000)) % 60);
+        Platform.runLater(() -> currentTime.set((minutes+":"+seconds)));
     }
     public void play(){
         m.play((int)(progression.getValue()* ts.getRowSize()));
@@ -52,8 +48,9 @@ public class ViewModel extends Observable implements Observer  {
     @Override
     public void update(Observable o, Object arg) {
         if(o==m){
-            progression.setValue((double)m.getNumOfRow()/ts.getRowSize());
-            setTime(m.getNumOfRow());
+            int numOfRow=m.getNumOfRow();
+            progression.setValue((double)numOfRow/csvLength);
+            setTime(numOfRow);
         }
     }
 
