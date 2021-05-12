@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
-
 import java.io.File;
 import java.net.URL;
 import java.util.Observable;
@@ -29,27 +28,21 @@ import view_model.ViewModel;
 
 
 public class MainWindowController implements Initializable, Observer{
-    ViewModel vm;
-    DoubleProperty playSpeed;
-    StringProperty anomalyFlightPath;
-    StringProperty propertiesPath;
+    private ViewModel vm;
+    private DoubleProperty playSpeed;
+    private StringProperty anomalyFlightPath,propertiesPath;
 
-    JoystickWindowController joystick;
-    ClocksPanelController clocksPanel;
-    AttributesViewController attributesView;
-    AnomalyDetectionGraphController anomalyDetectionGraph;
+    private JoystickWindowController joystick;
+    private ClocksPanelController clocksPanel;
+    private AttributesViewController attributesView;
+    private AnomalyDetectionGraphController anomalyDetectionGraph;
 
 
-    @FXML
-    private BorderPane joystickPane,clocksPanelPane,attributesViewPane,anomalyDetectionGraphPane;
-    @FXML
-    private Button play,pause,forward,rewind,stop;
-    @FXML
-    TextField playSpeedTF;
-    @FXML
-    Slider progressBar;
-    @FXML
-    Label currentTime;
+    @FXML private BorderPane joystickPane,clocksPanelPane,attributesViewPane,anomalyDetectionGraphPane;
+    @FXML private Button play,pause,forward,rewind,stop;
+    @FXML private TextField playSpeedTF;
+    @FXML private Slider progressBar;
+    @FXML private Label currentTime;
 
     public MainWindowController()
     {
@@ -61,13 +54,13 @@ public class MainWindowController implements Initializable, Observer{
     public void setViewModel(ViewModel vm){
         this.vm=vm;
         playSpeed=new SimpleDoubleProperty(1.0);
-        vm.playSpeed.bind(playSpeed);
+        vm.getPlaySpeed().bind(playSpeed);
         anomalyFlightPath=new SimpleStringProperty();
-        vm.anomalyFlightPath.bind(anomalyFlightPath);
+        vm.getAnomalyFlightPath().bind(anomalyFlightPath);
         propertiesPath=new SimpleStringProperty();
-        vm.propertiesPath.bind(propertiesPath);///////////////////
-        progressBar.valueProperty().bindBidirectional(vm.progression);
-        currentTime.textProperty().bind(vm.currentTime);
+        vm.getPropertiesPath().bind(propertiesPath);
+        progressBar.valueProperty().bindBidirectional(vm.getProgression());
+        currentTime.textProperty().bind(vm.getCurrentTime());
     }
     @FXML
     public void pressButtonPlay(ActionEvent event){

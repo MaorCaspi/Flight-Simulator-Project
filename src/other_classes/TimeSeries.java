@@ -9,9 +9,9 @@ import java.util.Map;
 
 public class TimeSeries {
 
-    Map<String, ArrayList<Double>> ts;
-    ArrayList<String> atts;
-    int dataRowSize;
+    private Map<String, ArrayList<Double>> ts;
+    private ArrayList<String> atts;
+    private int dataRowSize;
 
     public TimeSeries(String csvFileName) {
         ts=new HashMap<>();

@@ -19,6 +19,7 @@ public class Properties {
     public Properties() {
         rowsIndex=new HashMap<>();
     }
+
     public void setRowsIndex(Map<String, Integer> rowsIndex) {
         this.rowsIndex = rowsIndex;
     }

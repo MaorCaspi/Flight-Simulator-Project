@@ -5,18 +5,17 @@ import javafx.beans.property.*;
 import model.FlightSimulatorModel;
 import other_classes.Properties;
 import other_classes.TimeSeries;
-
 import java.util.Observable;
 import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer  {
-    FlightSimulatorModel m;
-    boolean firstTimePlay;
-    TimeSeries ts;
-    Properties properties;
-    int csvLength;
-    public DoubleProperty playSpeed,progression;
-    public StringProperty anomalyFlightPath,propertiesPath,currentTime;
+    private FlightSimulatorModel m;
+    private boolean firstTimePlay;
+    private TimeSeries ts;
+    private Properties properties;
+    private int csvLength;
+    private DoubleProperty playSpeed,progression;
+    private StringProperty anomalyFlightPath,propertiesPath,currentTime;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
@@ -50,6 +49,22 @@ public class ViewModel extends Observable implements Observer  {
         int minutes=(int) ((totalMilliseconds / (60000)) % 60);
         Platform.runLater(() -> currentTime.set((minutes+":"+seconds)));
     }
+    public DoubleProperty getProgression() {
+        return progression;
+    }
+    public DoubleProperty getPlaySpeed() {
+        return playSpeed;
+    }
+    public StringProperty getAnomalyFlightPath() {
+        return anomalyFlightPath;
+    }
+    public StringProperty getPropertiesPath() {
+        return propertiesPath;
+    }
+    public StringProperty getCurrentTime() {
+        return currentTime;
+    }
+
     public void play(){
         m.play((int)(progression.getValue()* ts.getRowSize()));
     }

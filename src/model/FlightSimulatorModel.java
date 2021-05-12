@@ -7,13 +7,13 @@ import java.util.Observable;
 
 
 public class FlightSimulatorModel extends Observable implements Model{
-    double playSpeed;
-    FGPlayer fgPlayer;
-    boolean firstTimePlay;
-    TimeSeries ts;
-    Thread thread;
-    int numOfRow;
-    Properties properties;
+    private double playSpeed;
+    private FGPlayer fgPlayer;
+    private boolean firstTimePlay;
+    private TimeSeries ts;
+    private Thread thread;
+    private int numOfRow;
+    private Properties properties;
 
 
     public FlightSimulatorModel() {

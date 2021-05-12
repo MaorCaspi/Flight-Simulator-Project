@@ -7,12 +7,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class FGPlayer {
-    Socket fg;
-    PrintWriter out;
-    double playSpeed, prevPlaySpeed;
-    TimeSeries ts;
-    FlightSimulatorModel flightSimulatorModel;
-    boolean pause, connectionIsClose, moveForwardIsInProgress, moveRewindIsInProgress;
+    private Socket fg;
+    private PrintWriter out;
+    private double playSpeed, prevPlaySpeed;
+    private TimeSeries ts;
+    private FlightSimulatorModel flightSimulatorModel;
+    private boolean pause, connectionIsClose, moveForwardIsInProgress, moveRewindIsInProgress;
 
     public FGPlayer(TimeSeries ts, double speed, FlightSimulatorModel flightSimulatorModel) {
         connectionIsClose = true;
