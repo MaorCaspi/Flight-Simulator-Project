@@ -10,7 +10,6 @@ import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer  {
     private FlightSimulatorModel m;
-    private boolean firstTimePlay;
     private TimeSeries ts;
     private Properties properties;
     private int csvLength;
@@ -27,7 +26,6 @@ public class ViewModel extends Observable implements Observer  {
         properties=new Properties();
         properties.deserializeFromXML("settings.xml");
         m.setProperties(properties);
-        firstTimePlay=true;
         playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
         anomalyFlightPath.addListener((observable, oldValue, newValue) -> {
             if(newValue!=null) {
