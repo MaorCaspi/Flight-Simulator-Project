@@ -13,27 +13,24 @@ public class TimeSeries {
     private ArrayList<String> atts;
     private int dataRowSize;
 
-    public TimeSeries(String csvFileName) {
+    public TimeSeries(String csvFileName) throws IOException {
         ts=new HashMap<>();
         atts=new ArrayList<>();
-        try {
-            BufferedReader in=new BufferedReader(new FileReader(csvFileName));
-            String line=in.readLine();
-            for(String att : line.split(",")) {
-                atts.add(att);
-                ts.put(att, new ArrayList<>());
+        BufferedReader in=new BufferedReader(new FileReader(csvFileName));
+        String line=in.readLine();
+        for(String att : line.split(",")) {
+            atts.add(att);
+            ts.put(att, new ArrayList<>());
+        }
+        while((line=in.readLine())!=null) {
+            int i=0;
+            for(String val : line.split(",")) {
+                ts.get(atts.get(i)).add(Double.parseDouble(val));
+                i++;
             }
-            while((line=in.readLine())!=null) {
-                int i=0;
-                for(String val : line.split(",")) {
-                    ts.get(atts.get(i)).add(Double.parseDouble(val));
-                    i++;
-                }
-            }
+        }
             dataRowSize=ts.get(atts.get(0)).size();
-
             in.close();
-        }catch(IOException e) {}
     }
 
     public ArrayList<Double> getAttributeData(String name){
@@ -46,6 +43,9 @@ public class TimeSeries {
 
     public int getRowSize() {
         return dataRowSize;
+    }
+    public int getNumOfColumns(){
+        return ts.size();
     }
 
     public String getRowByRowNumber(int rowNumber)

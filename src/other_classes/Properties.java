@@ -67,6 +67,7 @@ public class Properties {
     public String getAnomalyDetectionFilePath() {
         return anomalyDetectionFilePath;
     }
+
     public void setFromAnotherProperties(Properties properties){
         setRowsIndex(properties.getRowsIndex());
         setRate(properties.getRate());
@@ -76,18 +77,12 @@ public class Properties {
         setAnomalyDetectionFilePath(properties.getAnomalyDetectionFilePath());
     }
 
-    public void serializeToXML (String filePath)
-    {
-        try {
-            FileOutputStream fos = new FileOutputStream(filePath);
-            XMLEncoder encoder = new XMLEncoder(fos);
-            encoder.writeObject(this);
-            encoder.close();
-            fos.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void serializeToXML (String filePath) throws IOException {
+        FileOutputStream fos = new FileOutputStream(filePath);
+        XMLEncoder encoder = new XMLEncoder(fos);
+        encoder.writeObject(this);
+        encoder.close();
+        fos.close();
     }
     public Boolean deserializeFromXML(String filePath) {
         try {

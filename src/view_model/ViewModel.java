@@ -29,10 +29,27 @@ public class ViewModel extends Observable implements Observer  {
         m.setProperties(properties);
         firstTimePlay=true;
         playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
-        anomalyFlightPath.addListener((observable, oldValue, newValue) -> {ts=new TimeSeries(newValue); m.setTimeSeries(ts); csvLength=ts.getRowSize();});
+        anomalyFlightPath.addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null) {
+                try {
+                    ts = new TimeSeries(newValue);
+                    if (ts.getNumOfColumns() != 39) {
+                        throw new Exception();
+                    }
+                    m.setTimeSeries(ts);
+                    csvLength = ts.getRowSize();
+                } catch (Exception e) {
+                    setChanged();
+                    notifyObservers("CSV file error");
+                }
+            }
+        });
+
         propertiesPath.addListener((observable, oldValue, newValue) -> {
             if(!properties.deserializeFromXML(newValue)){
-                System.out.println("properties file error");
+                propertiesPath.setValue(null);
+                setChanged();
+                notifyObservers("properties file error");
             }
             else{
                 m.setProperties(properties);

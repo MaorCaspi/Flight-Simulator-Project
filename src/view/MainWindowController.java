@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import java.io.File;
 import java.net.URL;
@@ -62,13 +61,28 @@ public class MainWindowController implements Initializable, Observer{
         progressBar.valueProperty().bindBidirectional(vm.getProgression());
         currentTime.textProperty().bind(vm.getCurrentTime());
     }
+    public void showErrorMessage(String message)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(message);
+        alert.showAndWait();
+    }
+    public String uploadFile(String title,String description,String extensions){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(description, extensions));
+        File file = fileChooser.showOpenDialog(new Stage());
+        if (file != null) {
+            return file.getPath();
+        }
+        return null;
+    }
+
     @FXML
     public void pressButtonPlay(ActionEvent event){
         if(anomalyFlightPath.getValue()==null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Problem with flight recording file!\nYou must upload a CSV file.");
-            alert.showAndWait();
+            showErrorMessage("Problem with flight recording file!\nYou must upload a CSV file.");
             return;
         }
         vm.play();
@@ -93,22 +107,16 @@ public class MainWindowController implements Initializable, Observer{
     }
     @FXML
     public void pressButtonLoadCSV(ActionEvent event){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Upload flight recording file - CSV");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV file", "*.csv*"));
-        File file = fileChooser.showOpenDialog(new Stage());
-        if (file != null) {
-            anomalyFlightPath.setValue(file.getPath());
+        String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
+        if (filePath != null) {
+            anomalyFlightPath.setValue(filePath);
         }
     }
     @FXML
     public void pressButtonLoadProperties(ActionEvent event){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Upload properties file - XML");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML file", "*.xml*"));
-        File file = fileChooser.showOpenDialog(new Stage());
-        if (file != null) {
-            propertiesPath.setValue(file.getPath());
+        String filePath=uploadFile("Upload properties file - XML","XML file","*.xml*");
+        if (filePath != null) {
+            propertiesPath.setValue(filePath);
         }
     }
     @FXML
@@ -122,10 +130,7 @@ public class MainWindowController implements Initializable, Observer{
         }
         catch (Exception e)
         {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Problem with the play speed!\nYou must enter a valid play speed number.");
-            alert.showAndWait();
+            showErrorMessage("Problem with the play speed!\nYou must enter a valid play speed number.");
             return;
         }
     }
@@ -143,16 +148,18 @@ public class MainWindowController implements Initializable, Observer{
         Pane anomalyDetectionGraphView = new FxmlLoader().getPage("AnomalyDetectionGraph/AnomalyDetectionGraph.fxml");
         anomalyDetectionGraphPane.setCenter(anomalyDetectionGraphView);
 
-        play.setBackground(Background.EMPTY);
-        pause.setBackground(Background.EMPTY);
-        forward.setBackground(Background.EMPTY);
-        rewind.setBackground(Background.EMPTY);
-        stop.setBackground(Background.EMPTY);
-
     }
 
     @Override
     public void update(Observable o, Object arg) {
-
+        switch (arg.toString()) {
+            case "CSV file error":
+                showErrorMessage("Problem with flight recording file!\nYou must upload a CSV file.");
+                anomalyFlightPath.setValue(null);
+                break;
+            case "properties file error":
+                showErrorMessage("Problem with properties file!\nPlease try again.");
+                break;
+        }
     }
 }
