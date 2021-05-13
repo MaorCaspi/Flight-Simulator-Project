@@ -3,13 +3,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import view.Joystick.* ?>
+<?import view.ClocksPanel.* ?>
+<?import view.AnomalyDetectionGraph.* ?>
+<?import view.AttributesView.* ?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
    <children>
-      <BorderPane fx:id="joystickPane" layoutX="629.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
-      <BorderPane fx:id="clocksPanelPane" layoutX="629.0" layoutY="271.0" prefHeight="74.0" prefWidth="92.0" />
-      <BorderPane fx:id="attributesViewPane" layoutX="24.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" />
-      <BorderPane fx:id="anomalyDetectionGraphPane" layoutX="397.0" layoutY="9.0" prefHeight="165.0" prefWidth="232.0" />
+      <MyAttributes fx:id="attributesView"  layoutX="24.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" />
+      <MyJoystick fx:id="joystick" layoutX="629.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
+      <MyClocksPanel fx:id="clocksPanel" layoutX="629.0" layoutY="271.0" prefHeight="74.0" prefWidth="92.0" />
+      <MyAnomalyDetectionGrap fx:id="anomalyDetectionGrap" layoutX="397.0" layoutY="9.0" prefHeight="165.0" prefWidth="232.0" />
       <Button fx:id="play" layoutX="162.0" layoutY="464.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0" prefWidth="70.0" style="-fx-background-color: none;" text="▶">
          <font>
             <Font size="55.0" />

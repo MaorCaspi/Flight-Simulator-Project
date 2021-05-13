@@ -1,6 +1,5 @@
 package view;
 
-import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,7 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
+
 import java.io.File;
 import java.net.URL;
 import java.util.Observable;
@@ -18,11 +17,6 @@ import java.util.ResourceBundle;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import other_classes.FxmlLoader;
-import view.AnomalyDetectionGraph.AnomalyDetectionGraphController;
-import view.AttributesView.AttributesViewController;
-import view.ClocksPanel.ClocksPanelController;
-import view.Joystick.JoystickWindowController;
 import view_model.ViewModel;
 
 
@@ -31,13 +25,9 @@ public class MainWindowController implements Initializable, Observer{
     private DoubleProperty playSpeed;
     private StringProperty anomalyFlightPath,propertiesPath;
 
-    private JoystickWindowController joystick;
-    private ClocksPanelController clocksPanel;
-    private AttributesViewController attributesView;
-    private AnomalyDetectionGraphController anomalyDetectionGraph;
 
 
-    @FXML private BorderPane joystickPane,clocksPanelPane,attributesViewPane,anomalyDetectionGraphPane;
+    @FXML private BorderPane attributesViewPane;
     @FXML private Button play,pause,forward,rewind,stop;
     @FXML private TextField playSpeedTF;
     @FXML private Slider progressBar;
@@ -45,10 +35,6 @@ public class MainWindowController implements Initializable, Observer{
 
     public MainWindowController()
     {
-        joystick=new JoystickWindowController();
-        clocksPanel=new ClocksPanelController();
-        attributesView=new AttributesViewController();
-        anomalyDetectionGraph=new AnomalyDetectionGraphController();
     }
     public void setViewModel(ViewModel vm){
         this.vm=vm;
@@ -136,17 +122,8 @@ public class MainWindowController implements Initializable, Observer{
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Pane joystickView = new FxmlLoader().getPage("Joystick/JoystickWindow.fxml");
-        joystickPane.setCenter(joystickView);
 
-        Pane clocksPanelView = new FxmlLoader().getPage("ClocksPanel/ClocksPanel.fxml");
-        clocksPanelPane.setCenter(clocksPanelView);
 
-        Pane attributesViewView = new FxmlLoader().getPage("AttributesView/AttributesView.fxml");
-        attributesViewPane.setCenter(attributesViewView);
-
-        Pane anomalyDetectionGraphView = new FxmlLoader().getPage("AnomalyDetectionGraph/AnomalyDetectionGraph.fxml");
-        anomalyDetectionGraphPane.setCenter(anomalyDetectionGraphView);
 
     }
 

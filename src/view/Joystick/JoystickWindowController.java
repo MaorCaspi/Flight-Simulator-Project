@@ -1,5 +1,8 @@
 package view.Joystick;
 
+
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Slider;
@@ -8,17 +11,33 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class JoystickWindowController implements Initializable {
-    @FXML private Slider throttleS, rudderS;
-    @FXML private Circle joystickBorderCircle, joystickControlCircle;
 
-    public void setthrottle(float val)
-    {
-        throttleS.setValue(val);
+    @FXML public Slider throttle, rudder;
+    public DoubleProperty aliron,elevators;
+
+    // @FXML private Circle joystickBorderCircle, joystickControlCircle;
+
+
+    public JoystickWindowController() {
     }
-    public void setRudder(float val)
-    {
-        rudderS.setValue(val);
+
+    public Slider getThrottle() {
+        return throttle;
     }
+
+    public void setThrottle(Slider throttle) {
+        this.throttle = throttle;
+    }
+
+    public Slider getRudder() {
+        return rudder;
+    }
+
+    public void setRudder(Slider rudder) {
+        this.rudder = rudder;
+    }
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
