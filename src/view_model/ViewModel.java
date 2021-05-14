@@ -8,12 +8,12 @@ import other_classes.TimeSeries;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ViewModel extends Observable implements Observer  {
+public class ViewModel extends Observable implements Observer{
     private FlightSimulatorModel m;
     private TimeSeries ts;
     private Properties properties;
     private int csvLength;
-    private DoubleProperty playSpeed,progression,throttle,rudder;
+    private DoubleProperty playSpeed,progression,throttle,rudder,heading,speed,altitude,roll,pitch,yaw;
     private StringProperty anomalyFlightPath,propertiesPath,currentTime;
 
     public ViewModel(FlightSimulatorModel m){
@@ -22,6 +22,12 @@ public class ViewModel extends Observable implements Observer  {
         progression = new SimpleDoubleProperty();
         throttle = new SimpleDoubleProperty();
         rudder = new SimpleDoubleProperty();
+        heading = new SimpleDoubleProperty();
+        speed = new SimpleDoubleProperty();
+        altitude = new SimpleDoubleProperty();
+        roll = new SimpleDoubleProperty();
+        pitch = new SimpleDoubleProperty();
+        yaw = new SimpleDoubleProperty();
         anomalyFlightPath = new SimpleStringProperty();
         propertiesPath=new SimpleStringProperty();
         currentTime = new SimpleStringProperty("0:0");
@@ -83,6 +89,12 @@ public class ViewModel extends Observable implements Observer  {
     }
     public DoubleProperty getThrottle() { return throttle; }
     public DoubleProperty getRudder() { return rudder; }
+    public DoubleProperty getHeading() { return heading; }
+    public DoubleProperty getSpeed() { return speed; }
+    public DoubleProperty getAltitude() { return altitude; }
+    public DoubleProperty getRoll() { return roll; }
+    public DoubleProperty getPitch() { return pitch; }
+    public DoubleProperty getYaw() { return yaw; }
 
     public void play(){
         m.play((int)(progression.getValue()* ts.getRowSize()));
@@ -101,7 +113,12 @@ public class ViewModel extends Observable implements Observer  {
             setTime(numOfRow);
             throttle.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("throttle"),numOfRow));
             rudder.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("rudder"),numOfRow));
-
+            heading.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("direction"),numOfRow));
+            speed.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("speed"),numOfRow));
+            altitude.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("high"),numOfRow));
+            roll.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("roll"),numOfRow));
+            pitch.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("pitch"),numOfRow));
+            yaw.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("yaw"),numOfRow));
         }
     }
 

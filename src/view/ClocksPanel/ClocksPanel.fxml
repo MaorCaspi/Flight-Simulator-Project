@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import eu.hansolo.medusa.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="211.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ClocksPanel.ClocksPanelController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="431.0" prefWidth="572.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ClocksPanel.ClocksPanelController">
    <children>
-      <TextArea layoutX="10.0" layoutY="14.0" prefHeight="158.0" prefWidth="192.0" text="לוח השעונים">
-         <font>
-            <Font size="28.0" />
-         </font>
-      </TextArea>
+      <Gauge fx:id="heading" layoutX="11.0" majorTickSpace="50.0" maxValue="359.0" prefHeight="188.0" prefWidth="171.0" title="Heading" />
+      <Gauge fx:id="speed" layoutX="7.0" layoutY="182.0" prefHeight="197.0" prefWidth="179.0" title="Air speed" />
+      <Gauge fx:id="altitude" layoutX="209.0" layoutY="14.0" majorTickSpace="200.0" minValue="-1000.0" maxValue="1000.0" prefHeight="171.0" prefWidth="171.0" title="Altitude-FT" />
+      <Gauge fx:id="roll" layoutX="209.0" layoutY="181.0" minValue="-100.0" prefHeight="188.0" prefWidth="171.0" title="Roll" />
+      <Gauge fx:id="pitch" layoutX="393.0" layoutY="12.0" maxValue="50.0" minValue="-50.0" prefHeight="165.0" prefWidth="179.0" title="Pitch" />
+      <Gauge fx:id="yaw" layoutX="393.0" layoutY="195.0" minValue="-100.0" prefHeight="171.0" prefWidth="171.0" title="Yaw" />
    </children>
 </Pane>

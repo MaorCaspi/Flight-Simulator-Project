@@ -44,7 +44,4 @@ public class MyJoystick extends Pane {
     public DoubleProperty getElevators() {
         return elevators;
     }
-
-
-
 }

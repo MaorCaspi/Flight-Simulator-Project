@@ -6,20 +6,18 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import java.io.File;
-import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.ResourceBundle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import view.ClocksPanel.MyClocksPanel;
 import view.Joystick.MyJoystick;
 import view_model.ViewModel;
 
 
-public class MainWindowController implements Initializable, Observer{
+public class MainWindowController implements Observer{
     private ViewModel vm;
     private DoubleProperty playSpeed;
     private StringProperty anomalyFlightPath,propertiesPath;
@@ -28,6 +26,7 @@ public class MainWindowController implements Initializable, Observer{
     @FXML private Slider progressBar;
     @FXML private Label currentTime;
     @FXML private MyJoystick joystick;
+    @FXML private MyClocksPanel clocksPanel;
 
     public void setViewModel(ViewModel vm){
         this.vm=vm;
@@ -41,6 +40,12 @@ public class MainWindowController implements Initializable, Observer{
         currentTime.textProperty().bind(vm.getCurrentTime());
         joystick.getRudder().bind(vm.getRudder());
         joystick.getThrottle().bind(vm.getThrottle());
+        clocksPanel.getHeading().bind(vm.getHeading());
+        clocksPanel.getSpeed().bind(vm.getSpeed());
+        clocksPanel.getAltitude().bind(vm.getAltitude());
+        clocksPanel.getRoll().bind(vm.getRoll());
+        clocksPanel.getPitch().bind(vm.getPitch());
+        clocksPanel.getYaw().bind(vm.getYaw());
     }
     public void showErrorMessage(String message)
     {
@@ -114,9 +119,6 @@ public class MainWindowController implements Initializable, Observer{
             showErrorMessage("Problem with the play speed!\nYou must enter a valid play speed number.");
             return;
         }
-    }
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
     }
 
     @Override
