@@ -14,19 +14,23 @@
       <MyJoystick fx:id="joystick" layoutX="629.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
       <MyClocksPanel fx:id="clocksPanel" layoutX="629.0" layoutY="271.0" prefHeight="74.0" prefWidth="92.0" />
       <MyAnomalyDetectionGrap fx:id="anomalyDetectionGrap" layoutX="397.0" layoutY="9.0" prefHeight="165.0" prefWidth="232.0" />
-      <Button fx:id="play" layoutX="162.0" layoutY="464.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0" prefWidth="70.0" style="-fx-background-color: none;" text="▶">
+      <Button layoutX="162.0" layoutY="484.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0" prefWidth="70.0" style="-fx-background-color: none;" text="▶">
          <font>
             <Font size="55.0" />
          </font></Button>
-      <Button fx:id="pause" layoutX="242.0" layoutY="472.0" mnemonicParsing="false" onAction="#pressButtonPause" prefHeight="102.0" prefWidth="102.0" style="-fx-background-color: none;" text="⏸">
+      <Button layoutX="242.0" layoutY="492.0" mnemonicParsing="false" onAction="#pressButtonPause" prefHeight="102.0" prefWidth="102.0" style="-fx-background-color: none;" text="⏸">
          <font>
             <Font size="40.0" />
          </font></Button>
-      <Button fx:id="rewind" layoutX="82.0" layoutY="480.0" mnemonicParsing="false" onAction="#pressButtonRewind" prefHeight="83.0" prefWidth="85.0" style="-fx-background-color: none;" text="⏪">
+      <Button layoutX="82.0" layoutY="500.0" mnemonicParsing="false" onAction="#pressButtonRewind" prefHeight="83.0" prefWidth="85.0" style="-fx-background-color: none;" text="⏪">
          <font>
             <Font size="40.0" />
          </font></Button>
-      <Button fx:id="forward" layoutX="409.0" layoutY="480.0" mnemonicParsing="false" onAction="#pressButtonForward" prefHeight="86.0" prefWidth="85.0" style="-fx-background-color: none;" text="⏩">
+      <Button layoutX="409.0" layoutY="500.0" mnemonicParsing="false" onAction="#pressButtonForward" prefHeight="86.0" prefWidth="85.0" style="-fx-background-color: none;" text="⏩">
+         <font>
+            <Font size="40.0" />
+         </font></Button>
+      <Button layoutX="317.0" layoutY="500.0" mnemonicParsing="false" onAction="#pressButtonStop" prefHeight="86.0" prefWidth="92.0" style="-fx-background-color: none;" text="⏹">
          <font>
             <Font size="40.0" />
          </font></Button>
@@ -36,10 +40,6 @@
          </font></Label>
       <Slider fx:id="progressBar" layoutX="9.0" layoutY="474.0" max="1.0" prefHeight="14.0" prefWidth="552.0" />
       <TextField fx:id="playSpeedTF" layoutX="317.0" layoutY="433.0" onAction="#playSpeedWasChanged" prefHeight="25.0" prefWidth="31.0" text="1.0" />
-      <Button fx:id="stop" layoutX="317.0" layoutY="481.0" mnemonicParsing="false" onAction="#pressButtonStop" prefHeight="86.0" prefWidth="92.0" style="-fx-background-color: none;" text="⏹">
-         <font>
-            <Font size="40.0" />
-         </font></Button>
       <Label fx:id="currentTime" layoutX="480.0" layoutY="420.0" text="0:0">
          <font>
             <Font size="34.0" />

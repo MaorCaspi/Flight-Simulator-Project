@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 public class JoystickWindowController implements Initializable {
 
-    @FXML public Slider throttle, rudder;
+    @FXML private Slider throttle, rudder;
     public DoubleProperty aliron,elevators;
 
     // @FXML private Circle joystickBorderCircle, joystickControlCircle;
@@ -25,17 +25,10 @@ public class JoystickWindowController implements Initializable {
         return throttle;
     }
 
-    public void setThrottle(Slider throttle) {
-        this.throttle = throttle;
-    }
-
     public Slider getRudder() {
         return rudder;
     }
 
-    public void setRudder(Slider rudder) {
-        this.rudder = rudder;
-    }
 
 
     @Override

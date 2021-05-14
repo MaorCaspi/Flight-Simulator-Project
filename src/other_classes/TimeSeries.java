@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class TimeSeries {
 
-    private Map<String, ArrayList<Double>> ts;
+    private Map<Integer, ArrayList<Double>> ts;
     private ArrayList<String> atts;
     private int dataRowSize;
 
@@ -18,23 +18,25 @@ public class TimeSeries {
         atts=new ArrayList<>();
         BufferedReader in=new BufferedReader(new FileReader(csvFileName));
         String line=in.readLine();
+        int i=1;
         for(String att : line.split(",")) {
             atts.add(att);
-            ts.put(att, new ArrayList<>());
+            ts.put(i, new ArrayList<>());
+            i++;
         }
         while((line=in.readLine())!=null) {
-            int i=0;
+            i=1;
             for(String val : line.split(",")) {
-                ts.get(atts.get(i)).add(Double.parseDouble(val));
+                ts.get(i).add(Double.parseDouble(val));
                 i++;
             }
         }
-            dataRowSize=ts.get(atts.get(0)).size();
-            in.close();
+        in.close();
+        dataRowSize=ts.get(1).size();
     }
 
-    public ArrayList<Double> getAttributeData(String name){
-        return ts.get(name);
+    public ArrayList<Double> getAttributeData(int id){
+        return ts.get(id);
     }
 
     public ArrayList<String> getAttributes(){
@@ -51,11 +53,14 @@ public class TimeSeries {
     public String getRowByRowNumber(int rowNumber)
     {
         StringBuilder result= new StringBuilder();
-        for(int i=0;i<atts.size()-1;i++)
+        for(int i=1;i<atts.size();i++)
         {
-            result.append(ts.get(atts.get(i)).get(rowNumber)+",");
+            result.append(ts.get(i).get(rowNumber)+",");
         }
-        result.append(ts.get(atts.get(atts.size()-1)).get(rowNumber));
+        result.append(ts.get(atts.size()).get(rowNumber));
         return result.toString();
+    }
+    public double getDataFromSpecificRowAndColumn(int columnNumber,int rowNumber){
+        return ts.get(columnNumber).get(rowNumber);
     }
 }

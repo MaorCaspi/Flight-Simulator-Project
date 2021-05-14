@@ -13,13 +13,15 @@ public class ViewModel extends Observable implements Observer  {
     private TimeSeries ts;
     private Properties properties;
     private int csvLength;
-    private DoubleProperty playSpeed,progression;
+    private DoubleProperty playSpeed,progression,throttle,rudder;
     private StringProperty anomalyFlightPath,propertiesPath,currentTime;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
         playSpeed = new SimpleDoubleProperty();
         progression = new SimpleDoubleProperty();
+        throttle = new SimpleDoubleProperty();
+        rudder = new SimpleDoubleProperty();
         anomalyFlightPath = new SimpleStringProperty();
         propertiesPath=new SimpleStringProperty();
         currentTime = new SimpleStringProperty("0:0");
@@ -31,7 +33,7 @@ public class ViewModel extends Observable implements Observer  {
             if(newValue!=null) {
                 try {
                     ts = new TimeSeries(newValue);
-                    if (ts.getNumOfColumns() != 39) {
+                    if (ts.getNumOfColumns() != 42) {
                         throw new Exception();
                     }
                     m.setTimeSeries(ts);
@@ -79,6 +81,8 @@ public class ViewModel extends Observable implements Observer  {
     public StringProperty getCurrentTime() {
         return currentTime;
     }
+    public DoubleProperty getThrottle() { return throttle; }
+    public DoubleProperty getRudder() { return rudder; }
 
     public void play(){
         m.play((int)(progression.getValue()* ts.getRowSize()));
@@ -87,7 +91,7 @@ public class ViewModel extends Observable implements Observer  {
         m.pause();
     }
     public void forward(){ m.forward(); }
-    public void rewind(){ m.rewind();}
+    public void rewind(){ m.rewind(); }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -95,6 +99,9 @@ public class ViewModel extends Observable implements Observer  {
             int numOfRow=m.getNumOfRow();
             progression.setValue((double)numOfRow/csvLength);
             setTime(numOfRow);
+            throttle.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("throttle"),numOfRow));
+            rudder.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("rudder"),numOfRow));
+
         }
     }
 

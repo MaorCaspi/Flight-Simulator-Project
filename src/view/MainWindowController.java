@@ -8,15 +8,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-
 import java.io.File;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import view.Joystick.MyJoystick;
 import view_model.ViewModel;
 
 
@@ -25,17 +24,11 @@ public class MainWindowController implements Initializable, Observer{
     private DoubleProperty playSpeed;
     private StringProperty anomalyFlightPath,propertiesPath;
 
-
-
-    @FXML private BorderPane attributesViewPane;
-    @FXML private Button play,pause,forward,rewind,stop;
     @FXML private TextField playSpeedTF;
     @FXML private Slider progressBar;
     @FXML private Label currentTime;
+    @FXML private MyJoystick joystick;
 
-    public MainWindowController()
-    {
-    }
     public void setViewModel(ViewModel vm){
         this.vm=vm;
         playSpeed=new SimpleDoubleProperty(1.0);
@@ -46,6 +39,8 @@ public class MainWindowController implements Initializable, Observer{
         vm.getPropertiesPath().bind(propertiesPath);
         progressBar.valueProperty().bindBidirectional(vm.getProgression());
         currentTime.textProperty().bind(vm.getCurrentTime());
+        joystick.getRudder().bind(vm.getRudder());
+        joystick.getThrottle().bind(vm.getThrottle());
     }
     public void showErrorMessage(String message)
     {
@@ -122,9 +117,6 @@ public class MainWindowController implements Initializable, Observer{
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
-
     }
 
     @Override

@@ -68,6 +68,8 @@ public class Properties {
         return anomalyDetectionFilePath;
     }
 
+    public int propertyName(String propertyName){ return rowsIndex.get(propertyName);}
+
     public void setFromAnotherProperties(Properties properties){
         setRowsIndex(properties.getRowsIndex());
         setRate(properties.getRate());
