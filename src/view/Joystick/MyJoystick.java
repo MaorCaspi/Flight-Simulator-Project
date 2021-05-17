@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class MyJoystick extends Pane {
 
-    private DoubleProperty throttle, rudder,aliron,elevators;
+    private DoubleProperty throttle, rudder,aileron,elevators;
 
     public MyJoystick(){
         super();
@@ -17,8 +17,8 @@ public class MyJoystick extends Pane {
             Pane joy=fxl.load(getClass().getResource("JoystickWindow.fxml").openStream());
             JoystickWindowController joystickWindowController=fxl.getController();
 
-            //aliron=joystickWindowController.aliron;
-            //elevators=joystickWindowController.elevators;
+            aileron=joystickWindowController.getJoystickControl().centerXProperty();
+            elevators=joystickWindowController.getJoystickControl().centerYProperty();
             rudder=joystickWindowController.getRudder().valueProperty();
             throttle=joystickWindowController.getThrottle().valueProperty();
 
@@ -37,8 +37,8 @@ public class MyJoystick extends Pane {
         return rudder;
     }
 
-    public DoubleProperty getAliron() {
-        return aliron;
+    public DoubleProperty getAileron() {
+        return aileron;
     }
 
     public DoubleProperty getElevators() {

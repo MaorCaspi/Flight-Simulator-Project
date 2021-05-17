@@ -1,11 +1,14 @@
 package view;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.FlightSimulatorModel;
 import view_model.ViewModel;
 
@@ -26,6 +29,16 @@ public class Main extends Application {
         MainWindowController mwc=fxl.getController();
         mwc.setViewModel(vm);
         vm.addObserver(mwc);
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() { //when press the x button
+            @Override
+            public void handle(WindowEvent event) {
+                vm.shutdownExecutor();
+                mwc.pressButtonStop();
+                Platform.exit();
+                System.exit(0);
+            }
+        });
     }
 
 

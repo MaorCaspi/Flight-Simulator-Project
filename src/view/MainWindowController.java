@@ -4,7 +4,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.io.File;
@@ -15,7 +14,6 @@ import javafx.stage.Stage;
 import view.ClocksPanel.MyClocksPanel;
 import view.Joystick.MyJoystick;
 import view_model.ViewModel;
-
 
 public class MainWindowController implements Observer{
     private ViewModel vm;
@@ -40,6 +38,8 @@ public class MainWindowController implements Observer{
         currentTime.textProperty().bind(vm.getCurrentTime());
         joystick.getRudder().bind(vm.getRudder());
         joystick.getThrottle().bind(vm.getThrottle());
+        joystick.getAileron().bind(vm.getAileron());
+        joystick.getElevators().bind(vm.getElevators());
         clocksPanel.getHeading().bind(vm.getHeading());
         clocksPanel.getSpeed().bind(vm.getSpeed());
         clocksPanel.getAltitude().bind(vm.getAltitude());
@@ -66,7 +66,7 @@ public class MainWindowController implements Observer{
     }
 
     @FXML
-    public void pressButtonPlay(ActionEvent event){
+    public void pressButtonPlay(){
         if(anomalyFlightPath.getValue()==null) {
             showErrorMessage("Problem with flight recording file!\nYou must upload a CSV file.");
             return;
@@ -75,38 +75,38 @@ public class MainWindowController implements Observer{
         progressBar.setDisable(false);
     }
     @FXML
-    public void pressButtonPause(ActionEvent event){
+    public void pressButtonPause(){
         vm.pause();
         progressBar.setDisable(true);
     }
     @FXML
-    public void pressButtonForward(ActionEvent event){
+    public void pressButtonForward(){
         vm.forward();
     }
     @FXML
-    public void pressButtonRewind(ActionEvent event){ vm.rewind(); }
+    public void pressButtonRewind(){ vm.rewind(); }
     @FXML
-    public void pressButtonStop(ActionEvent event) {
+    public void pressButtonStop() {
         if (!progressBar.isDisabled()) {
             progressBar.setValue(1);
         }
     }
     @FXML
-    public void pressButtonLoadCSV(ActionEvent event){
+    public void pressButtonLoadCSV(){
         String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
         if (filePath != null) {
             anomalyFlightPath.setValue(filePath);
         }
     }
     @FXML
-    public void pressButtonLoadProperties(ActionEvent event){
+    public void pressButtonLoadProperties(){
         String filePath=uploadFile("Upload properties file - XML","XML file","*.xml*");
         if (filePath != null) {
             propertiesPath.setValue(filePath);
         }
     }
     @FXML
-    public void playSpeedWasChanged(ActionEvent event){
+    public void playSpeedWasChanged(){
         try {
             double newPlaySpeed = Double.parseDouble(playSpeedTF.textProperty().getValue());
             if(playSpeed.equals(newPlaySpeed)) { return;} //if yes-it doesn't really changed- so do nothing.

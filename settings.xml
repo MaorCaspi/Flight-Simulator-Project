@@ -22,11 +22,15 @@
     <int>7</int>
    </void>
    <void method="put">
-    <string>high</string>
+    <string>altitude</string>
     <int>26</int>
    </void>
    <void method="put">
-    <string>elevator</string>
+    <string>heading</string>
+    <int>37</int>
+   </void>
+   <void method="put">
+    <string>elevators</string>
     <int>2</int>
    </void>
    <void method="put">
@@ -52,10 +56,6 @@
    <void method="put">
     <string>yaw</string>
     <int>21</int>
-   </void>
-   <void method="put">
-    <string>direction</string>
-    <int>37</int>
    </void>
   </void>
  </object>
