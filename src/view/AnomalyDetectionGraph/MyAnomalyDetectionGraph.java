@@ -7,7 +7,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
-import other_classes.Point;
+import other_classes.PointGraph;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,9 +26,9 @@ public class MyAnomalyDetectionGraph extends Pane{
            // Stage stage = (Stage) lbl.getScene().getWindow();
 
            // stage.setTitle("Line Chart Sample");
-           List<Point> points1= anomalyDetectionGraphController.getPoints1();
-           List<Point> points2= anomalyDetectionGraphController.getPoints1();
-           List<Point> points3= anomalyDetectionGraphController.getPoints1();
+           List<PointGraph> points1= anomalyDetectionGraphController.getPoints1();
+           List<PointGraph> points2= anomalyDetectionGraphController.getPoints1();
+           List<PointGraph> points3= anomalyDetectionGraphController.getPoints1();
 //            points.add(new Point(3,4));
 //            points.add(new Point(12,4));
 //            points.add(new Point(9,10));
@@ -66,7 +66,7 @@ public class MyAnomalyDetectionGraph extends Pane{
 
     }
 
-    public LineChart<Number, Number> CreateLineChart(List<Point> points, boolean isWider)
+    public LineChart<Number, Number> CreateLineChart(List<PointGraph> points, boolean isWider)
     {
 
         //defining the axes
@@ -75,7 +75,7 @@ public class MyAnomalyDetectionGraph extends Pane{
         xAxis.setLabel("Number of Month");
         //creating the chart
         final LineChart<Number, Number> lineChart =
-                new LineChart<Number, Number>(new NumberAxis(), new NumberAxis());
+                new LineChart<>(new NumberAxis(), new NumberAxis());
 
         lineChart.setTitle("Stock Monitoring, 2010");
         lineChart.setPrefHeight(220);
@@ -114,7 +114,7 @@ public class MyAnomalyDetectionGraph extends Pane{
         //defining a series
         XYChart.Series series = new XYChart.Series();
         series.setName("My portfolio");
-        for (int i =0 ; i<points.size() ; i++)
+        for(int i =0;i<points.size();i++)
         {
             series.getData().add(new XYChart.Data(points.get(i).getX(), points.get(i).getY()));
         }
