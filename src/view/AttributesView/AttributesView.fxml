@@ -5,6 +5,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="216.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AttributesView.AttributesViewController">
    <children>
-      <ListView layoutX="8.0" layoutY="16.0" prefHeight="313.0" prefWidth="200.0" />
+      <ListView items="${controller.myStrings}" prefWidth="220" prefHeight="300"></ListView>
+      <!--<ListView layoutX="8.0" layoutY="16.0" prefHeight="313.0" prefWidth="200.0" />-->
    </children>
 </Pane>

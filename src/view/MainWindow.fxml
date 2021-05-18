@@ -8,12 +8,32 @@
 <?import view.AnomalyDetectionGraph.* ?>
 <?import view.AttributesView.* ?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
+<?import javafx.scene.chart.ScatterChart?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
    <children>
-      <MyAttributes fx:id="attributesView"  layoutX="24.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" />
-      <MyJoystick fx:id="joystick" layoutX="629.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
-      <MyClocksPanel fx:id="clocksPanel" layoutX="629.0" layoutY="271.0" prefHeight="74.0" prefWidth="92.0" />
-      <MyAnomalyDetectionGrap fx:id="anomalyDetectionGrap" layoutX="397.0" layoutY="9.0" prefHeight="165.0" prefWidth="232.0" />
+      <!--<SplitPane orientation="VERTICAL"  >
+         <SplitPane orientation="HORIZONTAL"  >
+            <MyAttributes fx:id="attributesView"   minWidth="200" maxWidth="200" />
+            <MyAnomalyDetectionGraph fx:id="anomalyDetectionGraph" prefHeight="440" prefWidth="612" minHeight="440" maxHeight="440"  minWidth="612" maxWidth="612" >
+
+            </MyAnomalyDetectionGraph>
+
+            <SplitPane orientation="VERTICAL">
+               <MyJoystick fx:id="joystick" prefHeight="220" minHeight="220" maxHeight="220" minWidth="200" maxWidth="200"/>
+               <MyClocksPanel fx:id="clocksPanel"  prefHeight="220" minHeight="220" maxHeight="220" minWidth="200" maxWidth="200"/>
+            </SplitPane>
+
+         </SplitPane>
+      </SplitPane> -->
+
+      <MyAttributes fx:id="attributesView" layoutY="50.0"  minWidth="200" maxWidth="200" />
+      <MyAnomalyDetectionGraph  layoutX="484.0" fx:id="anomalyDetectionGraph" prefHeight="440" prefWidth="612" minHeight="440" maxHeight="440"  minWidth="612" maxWidth="612" >
+
+      </MyAnomalyDetectionGraph>
+      <MyJoystick fx:id="joystick" layoutX="1220.0"  prefHeight="220" minHeight="220" maxHeight="220" minWidth="200" maxWidth="200"/>
+      <MyClocksPanel fx:id="clocksPanel" layoutX="1220.0" layoutY="250.0" prefHeight="220" minHeight="220" maxHeight="220" minWidth="200" maxWidth="200"/>
+
+
       <Button layoutX="162.0" layoutY="484.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0" prefWidth="70.0" style="-fx-background-color: none;" text="▶">
          <font>
             <Font size="55.0" />

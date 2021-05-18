@@ -6,10 +6,12 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="214.0" prefWidth="243.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AnomalyDetectionGraph.AnomalyDetectionGraphController">
    <children>
-      <TextField layoutX="8.0" layoutY="-1.0" prefHeight="214.0" prefWidth="233.0" text="קנבס שמציג את גרף גילוי החריגות">
+
+      <!--<TextField layoutX="8.0" layoutY="-1.0" prefHeight="214.0" prefWidth="233.0" text="קנבס שמציג את גרף גילוי החריגות">
          <font>
             <Font size="14.0" />
          </font>
-      </TextField>
+      </TextField>-->
+
    </children>
 </Pane>
