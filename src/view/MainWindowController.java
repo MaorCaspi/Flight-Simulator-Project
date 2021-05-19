@@ -11,6 +11,7 @@ import java.util.Observable;
 import java.util.Observer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import view.AttributesView.MyAttributes;
 import view.ClocksPanel.MyClocksPanel;
 import view.Joystick.MyJoystick;
 import view_model.ViewModel;
@@ -25,6 +26,7 @@ public class MainWindowController implements Observer{
     @FXML private Label currentTime;
     @FXML private MyJoystick joystick;
     @FXML private MyClocksPanel clocksPanel;
+    @FXML private MyAttributes attributes;
 
     public void setViewModel(ViewModel vm){
         this.vm=vm;
@@ -96,6 +98,8 @@ public class MainWindowController implements Observer{
         String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
         if (filePath != null) {
             anomalyFlightPath.setValue(filePath);
+            attributes.setCsv(filePath);
+            attributes.LoadList();
         }
     }
     @FXML
@@ -103,6 +107,8 @@ public class MainWindowController implements Observer{
         String filePath=uploadFile("Upload properties file - XML","XML file","*.xml*");
         if (filePath != null) {
             propertiesPath.setValue(filePath);
+            attributes.setXml(filePath);
+            attributes.LoadList();
         }
     }
     @FXML

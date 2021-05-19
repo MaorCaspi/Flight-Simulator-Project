@@ -7,7 +7,7 @@ public class AttributesViewController{
     private final ObservableList<String> myStrings = FXCollections.observableArrayList();
 
     public AttributesViewController() {
-        myStrings.addAll("One", "Two", "Three");
+//        myStrings.addAll("One", "Two", "Three");
     }
 
     public ObservableList<String> getMyStrings() {

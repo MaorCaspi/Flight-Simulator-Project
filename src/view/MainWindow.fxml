@@ -11,10 +11,10 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
             prefWidth="1350.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="view.MainWindowController">
-   <MyAttributes fx:id="attributesView" layoutX="5.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0"/>
+   <MyAttributes fx:id="attributes" layoutX="5.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0"/>
    <MyJoystick fx:id="joystick" layoutX="1100.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0"/>
    <MyClocksPanel fx:id="clocksPanel" layoutX="850.0" layoutY="300.0" prefHeight="74.0" prefWidth="92.0"/>
-   <MyAnomalyDetectionGraph layoutX="230.0" fx:id="anomalyDetectionGraph" prefHeight="440" prefWidth="612"
+   <MyAnomalyDetectionGraph fx:id="anomaly" layoutX="230.0"  prefHeight="440" prefWidth="612"
                             minHeight="440" maxHeight="440" minWidth="612" maxWidth="612"/>
    <Button layoutX="162.0" layoutY="564.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0"
            prefWidth="70.0" style="-fx-background-color: none;" text="▶">

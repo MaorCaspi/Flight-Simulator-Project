@@ -8,9 +8,13 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
 import other_classes.PointGraph;
+import other_classes.Properties;
+import other_classes.TimeSeries;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MyAnomalyDetectionGraph extends Pane{
 
@@ -40,6 +44,16 @@ public class MyAnomalyDetectionGraph extends Pane{
             LineChart<Number, Number> lineChart1 =CreateLineChart(points1,false);
             LineChart<Number, Number> lineChart2 =CreateLineChart(points2,false);
             LineChart<Number, Number> lineChart3 =CreateLineChart(points3,true);
+
+//
+//            TimeSeries ts = new TimeSeries("C:\\Users\\Maya Assayag\\Desktop\\FilesReaderTemp\\anomaly_flight.csv");
+//            ArrayList<String> as = ts.getAttributes();
+//
+//
+//            Properties p = new Properties();
+//            p.deserializeFromXML("C:\\Users\\Maya Assayag\\PTM2-Project\\settings.xml");
+//            Map<String, Integer> rIndex = p.getRowsIndex();
+
 
 
 
