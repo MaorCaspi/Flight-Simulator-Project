@@ -8,39 +8,39 @@
 <?import view.AnomalyDetectionGraph.* ?>
 <?import view.AttributesView.* ?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
    <children>
-      <MyAttributes fx:id="attributesView"  layoutX="24.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" />
-      <MyJoystick fx:id="joystick" layoutX="629.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
-      <MyClocksPanel fx:id="clocksPanel" layoutX="629.0" layoutY="271.0" prefHeight="74.0" prefWidth="92.0" />
-      <MyAnomalyDetectionGraph  layoutX="484.0" fx:id="anomalyDetectionGraph" prefHeight="440" prefWidth="612" minHeight="440" maxHeight="440"  minWidth="612" maxWidth="612" />
-      <Button layoutX="162.0" layoutY="484.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0" prefWidth="70.0" style="-fx-background-color: none;" text="▶">
+      <MyAttributes fx:id="attributesView"  layoutX="5.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" />
+      <MyJoystick fx:id="joystick" layoutX="1100.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+      <MyClocksPanel fx:id="clocksPanel" layoutX="850.0" layoutY="300.0" prefHeight="74.0" prefWidth="92.0" />
+      <MyAnomalyDetectionGraph  layoutX="230.0" fx:id="anomalyDetectionGraph" prefHeight="440" prefWidth="612" minHeight="440" maxHeight="440"  minWidth="612" maxWidth="612" />
+      <Button layoutX="162.0" layoutY="564.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0" prefWidth="70.0" style="-fx-background-color: none;" text="▶">
          <font>
             <Font size="55.0" />
          </font></Button>
-      <Button layoutX="242.0" layoutY="492.0" mnemonicParsing="false" onAction="#pressButtonPause" prefHeight="102.0" prefWidth="102.0" style="-fx-background-color: none;" text="⏸">
+      <Button layoutX="242.0" layoutY="572.0" mnemonicParsing="false" onAction="#pressButtonPause" prefHeight="102.0" prefWidth="102.0" style="-fx-background-color: none;" text="⏸">
          <font>
             <Font size="40.0" />
          </font></Button>
-      <Button layoutX="82.0" layoutY="500.0" mnemonicParsing="false" onAction="#pressButtonRewind" prefHeight="83.0" prefWidth="85.0" style="-fx-background-color: none;" text="⏪">
+      <Button layoutX="82.0" layoutY="580.0" mnemonicParsing="false" onAction="#pressButtonRewind" prefHeight="83.0" prefWidth="85.0" style="-fx-background-color: none;" text="⏪">
          <font>
             <Font size="40.0" />
          </font></Button>
-      <Button layoutX="409.0" layoutY="500.0" mnemonicParsing="false" onAction="#pressButtonForward" prefHeight="86.0" prefWidth="85.0" style="-fx-background-color: none;" text="⏩">
+      <Button layoutX="409.0" layoutY="580.0" mnemonicParsing="false" onAction="#pressButtonForward" prefHeight="86.0" prefWidth="85.0" style="-fx-background-color: none;" text="⏩">
          <font>
             <Font size="40.0" />
          </font></Button>
-      <Button layoutX="317.0" layoutY="500.0" mnemonicParsing="false" onAction="#pressButtonStop" prefHeight="86.0" prefWidth="92.0" style="-fx-background-color: none;" text="⏹">
+      <Button layoutX="317.0" layoutY="580.0" mnemonicParsing="false" onAction="#pressButtonStop" prefHeight="86.0" prefWidth="92.0" style="-fx-background-color: none;" text="⏹">
          <font>
             <Font size="40.0" />
          </font></Button>
-      <Label layoutX="162.0" layoutY="420.0" prefHeight="50.0" prefWidth="162.0" text="Play speed">
+      <Label layoutX="162.0" layoutY="500.0" prefHeight="50.0" prefWidth="162.0" text="Play speed">
          <font>
             <Font size="25.0" />
          </font></Label>
-      <Slider fx:id="progressBar" layoutX="9.0" layoutY="474.0" max="1.0" prefHeight="14.0" prefWidth="552.0" />
-      <TextField fx:id="playSpeedTF" layoutX="317.0" layoutY="433.0" onAction="#playSpeedWasChanged" prefHeight="25.0" prefWidth="31.0" text="1.0" />
-      <Label fx:id="currentTime" layoutX="480.0" layoutY="420.0" text="0:0">
+      <Slider fx:id="progressBar" layoutX="9.0" layoutY="554.0" max="1.0" prefHeight="14.0" prefWidth="552.0" />
+      <TextField fx:id="playSpeedTF" layoutX="317.0" layoutY="513.0" onAction="#playSpeedWasChanged" prefHeight="25.0" prefWidth="31.0" text="1.0" />
+      <Label fx:id="currentTime" layoutX="480.0" layoutY="500.0" text="0:0">
          <font>
             <Font size="34.0" />
          </font></Label>

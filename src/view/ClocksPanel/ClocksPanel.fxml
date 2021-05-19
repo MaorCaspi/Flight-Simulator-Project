@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import eu.hansolo.medusa.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="431.0" prefWidth="572.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ClocksPanel.ClocksPanelController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefWidth="464.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ClocksPanel.ClocksPanelController">
    <children>
-      <Gauge fx:id="heading" layoutX="11.0" majorTickSpace="50.0" maxValue="359.0" prefHeight="188.0" prefWidth="171.0" title="Heading" />
-      <Gauge fx:id="speed" layoutX="7.0" layoutY="182.0" prefHeight="197.0" prefWidth="179.0" title="Air speed" />
-      <Gauge fx:id="altitude" layoutX="209.0" layoutY="14.0" majorTickSpace="200.0" minValue="-1000.0" maxValue="1000.0" prefHeight="171.0" prefWidth="171.0" title="Altitude-FT" />
-      <Gauge fx:id="roll" layoutX="209.0" layoutY="181.0" minValue="-100.0" prefHeight="188.0" prefWidth="171.0" title="Roll" />
-      <Gauge fx:id="pitch" layoutX="393.0" layoutY="12.0" maxValue="50.0" minValue="-50.0" prefHeight="165.0" prefWidth="179.0" title="Pitch" />
-      <Gauge fx:id="yaw" layoutX="393.0" layoutY="195.0" minValue="-100.0" prefHeight="171.0" prefWidth="171.0" title="Yaw" />
+      <Gauge fx:id="heading" layoutX="11.0" layoutY="35.0" majorTickSpace="50.0" maxValue="359.0" prefHeight="155.0" prefWidth="147.0" title="Heading" />
+      <Gauge fx:id="speed" layoutX="11.0" layoutY="203.0" prefHeight="155.0" prefWidth="147.0" title="Air speed" />
+      <Gauge fx:id="altitude" layoutX="160.0" layoutY="35.0" majorTickSpace="200.0" maxValue="1000.0" minValue="-1000.0" prefHeight="155.0" prefWidth="147.0" title="Altitude-FT" />
+      <Gauge fx:id="roll" layoutX="160.0" layoutY="203.0" minValue="-100.0" prefHeight="155.0" prefWidth="147.0" title="Roll" />
+      <Gauge fx:id="pitch" layoutX="313.0" layoutY="203.0" maxValue="50.0" minValue="-50.0" prefHeight="155.0" prefWidth="147.0" title="Pitch" />
+      <Gauge fx:id="yaw" layoutX="313.0" layoutY="35.0" minValue="-100.0" prefHeight="155.0" prefWidth="147.0" title="Yaw" />
+      <Label layoutX="33.0" layoutY="6.0" prefHeight="35.0" prefWidth="103.0" text="Heading">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="193.0" layoutY="6.0" text="Altitude">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="33.0" layoutY="176.0" prefHeight="35.0" prefWidth="114.0" text="Air speed">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="206.0" layoutY="176.0" text="Roll">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="365.0" layoutY="6.0" text="Yaw">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="355.0" layoutY="176.0" prefHeight="35.0" prefWidth="73.0" text="Pitch">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
