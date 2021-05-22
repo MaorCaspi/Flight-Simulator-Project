@@ -1,4 +1,9 @@
-package other_classes;
+package anomalyDetectors;
+
+import other_classes.CorrelatedFeatures;
+import other_classes.Line;
+import other_classes.Point;
+import other_classes.TimeSeries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +20,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	}
 
 	@Override
-	public void learnNormal(TimeSeries ts) 
+	public void learnNormal(TimeSeries ts)
 	{
 		int len=ts.getRowSize();
 		double vals[][]=new double[ts.getNumOfColumns()][len];
@@ -34,7 +39,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 					Line lin_reg=StatLib.linear_reg(ps);
 					double threshold=findThreshold(ps,lin_reg)*1.1f; // 10% increase
 
-					CorrelatedFeatures c=new CorrelatedFeatures(i, j, p, lin_reg, threshold);
+					CorrelatedFeatures c=new CorrelatedFeatures(ts.getFeatureByIndex(i), ts.getFeatureByIndex(j), p, lin_reg, threshold);
 
 					cf.add(c);
 				}
@@ -64,8 +69,8 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		ArrayList<AnomalyReport> v=new ArrayList<>();
 		
 		for(CorrelatedFeatures c : cf) {
-			ArrayList<Double> x=ts.getAttributeData(c.feature1);
-			ArrayList<Double> y=ts.getAttributeData(c.feature2);
+			ArrayList<Double> x=ts.getAttributeData(ts.getIndexByFeature(c.feature1));
+			ArrayList<Double> y=ts.getAttributeData(ts.getIndexByFeature(c.feature2));
 			for(int i=0;i<x.size();i++){
 				if(Math.abs(y.get(i) - c.lin_reg.f(x.get(i)))>c.threshold){
 					String d=c.feature1 + "-" + c.feature2;
@@ -86,14 +91,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	}
 }
 //////////////////////////////////////////////////////////////////////////////
-class Point {
-	public final double x,y;
-	public Point(double x, double y) {
-		this.x=x;
-		this.y=y;
-	}
-}
-//////////////////////////////////////////////////////////////////////////////
+
 class StatLib {
 
 	// simple average
@@ -156,4 +154,3 @@ class StatLib {
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////
-

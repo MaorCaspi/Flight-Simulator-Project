@@ -98,8 +98,8 @@ public class MainWindowController implements Observer{
         String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
         if (filePath != null) {
             anomalyFlightPath.setValue(filePath);
-            attributes.setCsv(filePath);
-            attributes.LoadList();
+            //attributes.setCsv(filePath); //maya 21/05/21
+            //attributes.LoadList(); //maya 21/05/21
         }
     }
     @FXML
@@ -115,7 +115,7 @@ public class MainWindowController implements Observer{
     public void playSpeedWasChanged(){
         try {
             double newPlaySpeed = Double.parseDouble(playSpeedTF.textProperty().getValue());
-            if(playSpeed.equals(newPlaySpeed)) { return;} //if yes-it doesn't really changed- so do nothing.
+            if(playSpeed.getValue().equals(newPlaySpeed)) { return;} //if yes-it doesn't really changed- so do nothing.
             if(newPlaySpeed<=0.0)
                 throw new Exception();
             playSpeed.setValue(newPlaySpeed);
@@ -123,7 +123,6 @@ public class MainWindowController implements Observer{
         catch (Exception e)
         {
             showErrorMessage("Problem with the play speed!\nYou must enter a valid play speed number.");
-            return;
         }
     }
 

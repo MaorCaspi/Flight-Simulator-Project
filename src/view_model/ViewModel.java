@@ -40,7 +40,7 @@ public class ViewModel extends Observable implements Observer{
         properties=new Properties();
         properties.deserializeFromXML("settings.xml");
         m.setProperties(properties);
-        playSpeed.addListener((observable, oldValue, newValue)->{m.setPlaySpeed((double)newValue);});
+        playSpeed.addListener((observable, oldValue, newValue)-> m.setPlaySpeed((double)newValue));
         anomalyFlightPath.addListener((observable, oldValue, newValue) -> {
             if(newValue!=null) {
                 try {
@@ -74,8 +74,8 @@ public class ViewModel extends Observable implements Observer{
     private void setTime(int rowNumber)
     {
         int totalMilliseconds=(int)(rowNumber*properties.getRate());
-        int seconds=(int)(totalMilliseconds / 1000) % 60;
-        int minutes=(int) ((totalMilliseconds / (60000)) % 60);
+        int seconds=(totalMilliseconds / 1000) % 60;
+        int minutes=((totalMilliseconds / (60000)) % 60);
         Platform.runLater(() -> currentTime.set((minutes+":"+seconds)));
     }
     public DoubleProperty getProgression() {

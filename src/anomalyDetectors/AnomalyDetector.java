@@ -1,4 +1,6 @@
-package other_classes;
+package anomalyDetectors;
+
+import other_classes.TimeSeries;
 
 import java.util.List;
 

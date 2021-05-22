@@ -11,8 +11,11 @@ public class TimeSeries {
 
     private Map<Integer, ArrayList<Double>> ts;
     private ArrayList<String> atts;
-    private int dataRowSize;
 
+    public TimeSeries() {
+        ts=new HashMap<>();
+        atts=new ArrayList<>();
+    }
     public TimeSeries(String csvFileName) throws IOException {
         ts=new HashMap<>();
         atts=new ArrayList<>();
@@ -32,7 +35,6 @@ public class TimeSeries {
             }
         }
         in.close();
-        dataRowSize=ts.get(1).size();
     }
 
     public ArrayList<Double> getAttributeData(int id){
@@ -44,7 +46,7 @@ public class TimeSeries {
     }
 
     public int getRowSize() {
-        return dataRowSize;
+        return ts.get(1).size();
     }
     public int getNumOfColumns(){
         return ts.size();
@@ -62,5 +64,20 @@ public class TimeSeries {
     }
     public double getDataFromSpecificRowAndColumn(int columnNumber,int rowNumber){
         return ts.get(columnNumber).get(rowNumber);
+    }
+    public int getIndexByFeature(String FeatureName){
+        for(int i=0;i<atts.size();i++) {
+            if(atts.get(i).equals(FeatureName)) {
+                return i+1;
+            }
+        }
+        return 0;
+    }
+    public String getFeatureByIndex(int index){
+        return atts.get(index-1);
+    }
+    public void addCol(String feature,ArrayList<Double> data) {
+        atts.add(feature);
+        ts.put(getNumOfColumns(), data);
     }
 }
