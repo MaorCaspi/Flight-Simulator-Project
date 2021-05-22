@@ -66,17 +66,15 @@ public class FGPlayer {
         try {
             for (int i = start; i < ts.getRowSize(); i++) {
                 while (pause) {
-                    System.out.println("im in pause");///////////////////////////////////////
                     wait();
                 }
                 try {
                     out.println(ts.getRowByRowNumber(i));
                     out.flush();
-                } catch (Exception e) {
-                }
+                } catch (Exception e) { }
                 flightSimulatorModel.setNumOfRow(i);
-                System.out.println(ts.getRowByRowNumber(i));///////////////////////////////
-                Thread.sleep((long) (flightSimulatorModel.getProperties().getRate()/ playSpeed));///!!!!!!!
+                //System.out.println(ts.getRowByRowNumber(i));///////////////////////////////
+                Thread.sleep((long) (flightSimulatorModel.getProperties().getRate()/ playSpeed));
             }
             out.close();
             fg.close();
@@ -102,7 +100,7 @@ public class FGPlayer {
     public void forward() {
         setMoveForwardIsInProgress(true);
         prevPlaySpeed = getPlaySpeed();
-        setPlaySpeed(20.0);
+        setPlaySpeed(5);
     }
 
     public void rewind(int start) {
@@ -114,11 +112,10 @@ public class FGPlayer {
                 try {
                     out.println(ts.getRowByRowNumber(i));
                     out.flush();
-                } catch (Exception e) {
-                }
+                } catch (Exception e) { }
                 flightSimulatorModel.setNumOfRow(i);
-                System.out.println(ts.getRowByRowNumber(i));//////////////
-                Thread.sleep((long) (flightSimulatorModel.getProperties().getRate()/20));///!!!!!!!
+                //System.out.println(ts.getRowByRowNumber(i));//////////////
+                Thread.sleep((long) (flightSimulatorModel.getProperties().getRate()/5));
             }
             stop();
         } catch (Exception e) {

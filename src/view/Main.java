@@ -19,7 +19,7 @@ public class Main extends Application {
         Image icon = new Image("media/Icon.png");
         primaryStage.setTitle("Flight Simulator");
         primaryStage.getIcons().add(icon);
-        primaryStage.setMaximized(true);
+        //primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         FlightSimulatorModel flightGearModel=new FlightSimulatorModel();
