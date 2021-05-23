@@ -3,9 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="216.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AttributesView.AttributesViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="216.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AttributesView.AttributesViewController">
    <children>
-      <ListView items="${controller.myStrings}" prefWidth="220" prefHeight="300"></ListView>
-      <!--<ListView layoutX="8.0" layoutY="16.0" prefHeight="313.0" prefWidth="200.0" />-->
+      <ListView fx:id="attributeslistView" prefHeight="300" prefWidth="220" />
    </children>
 </Pane>

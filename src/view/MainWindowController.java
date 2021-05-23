@@ -48,6 +48,7 @@ public class MainWindowController implements Observer{
         clocksPanel.getRoll().bind(vm.getRoll());
         clocksPanel.getPitch().bind(vm.getPitch());
         clocksPanel.getYaw().bind(vm.getYaw());
+        attributes.setXml("settings.xml"); //the default path for the properties file
     }
     public void showErrorMessage(String message)
     {
@@ -98,8 +99,9 @@ public class MainWindowController implements Observer{
         String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
         if (filePath != null) {
             anomalyFlightPath.setValue(filePath);
-            //attributes.setCsv(filePath); //maya 21/05/21
-            //attributes.LoadList(); //maya 21/05/21
+            attributes.setCsv(filePath);
+            attributes.LoadList();
+            vm.getSelectedFeature().bind(attributes.getSelectedFeature());
         }
     }
     @FXML
@@ -108,7 +110,6 @@ public class MainWindowController implements Observer{
         if (filePath != null) {
             propertiesPath.setValue(filePath);
             attributes.setXml(filePath);
-            attributes.LoadList();
         }
     }
     @FXML

@@ -1,17 +1,14 @@
 package view.AttributesView;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+
 
 public class AttributesViewController{
-    private final ObservableList<String> myStrings = FXCollections.observableArrayList();
 
-    public AttributesViewController() {
-//        myStrings.addAll("One", "Two", "Three");
+    @FXML private ListView<String> attributeslistView;
+
+    public ListView<String> getAttributeslistView() {
+        return attributeslistView;
     }
-
-    public ObservableList<String> getMyStrings() {
-        return myStrings ;
-    }
-
 }

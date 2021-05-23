@@ -17,7 +17,7 @@ public class ViewModel extends Observable implements Observer{
     private int csvLength;
     private ExecutorService executor;
     private DoubleProperty playSpeed,progression,throttle,rudder,aileron,elevators,heading,speed,altitude,roll,pitch,yaw;
-    private StringProperty anomalyFlightPath,propertiesPath,currentTime;
+    private StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
@@ -37,8 +37,9 @@ public class ViewModel extends Observable implements Observer{
         anomalyFlightPath = new SimpleStringProperty();
         propertiesPath=new SimpleStringProperty();
         currentTime = new SimpleStringProperty("0:0");
+        selectedFeature=new SimpleStringProperty();
         properties=new Properties();
-        properties.deserializeFromXML("settings.xml");
+        properties.deserializeFromXML("settings.xml");//the default path for the properties file
         m.setProperties(properties);
         playSpeed.addListener((observable, oldValue, newValue)-> m.setPlaySpeed((double)newValue));
         anomalyFlightPath.addListener((observable, oldValue, newValue) -> {
@@ -70,6 +71,7 @@ public class ViewModel extends Observable implements Observer{
         progression.addListener((observable, oldValue, newValue)->{
             if(ts!=null)
                 m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
+        selectedFeature.addListener((observable, oldValue, newValue)-> System.out.println(newValue));/////////////
     }
     private void setTime(int rowNumber)
     {
@@ -92,6 +94,9 @@ public class ViewModel extends Observable implements Observer{
     }
     public StringProperty getCurrentTime() {
         return currentTime;
+    }
+    public StringProperty getSelectedFeature() {
+        return selectedFeature;
     }
     public DoubleProperty getThrottle() { return throttle; }
     public DoubleProperty getRudder() { return rudder; }
