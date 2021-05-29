@@ -1,6 +1,7 @@
 package view.AnomalyDetectionGraph;
 
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import other_classes.Point;
@@ -18,12 +19,11 @@ public class MyAnomalyDetectionGraph extends Pane{
             Pane adg=fxl.load(getClass().getResource("AnomalyDetectionGraph.fxml").openStream());
             anomalyDetectionGraphController=fxl.getController();
             this.getChildren().add(adg);
-
         }
         catch (IOException e) {
             e.printStackTrace();
         }
     }
     public ListProperty<Point> getSelectedAttributePoints() { return anomalyDetectionGraphController.getSelectedAttributePoints(); }
-
+    public StringProperty getSelectedFeature(){return anomalyDetectionGraphController.getSelectedFeature();}
 }

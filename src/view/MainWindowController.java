@@ -1,8 +1,6 @@
 package view;
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.io.File;
@@ -10,7 +8,6 @@ import java.util.Observable;
 import java.util.Observer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import other_classes.Point;
 import view.AnomalyDetectionGraph.MyAnomalyDetectionGraph;
 import view.AttributesView.MyAttributes;
 import view.ClocksPanel.MyClocksPanel;
@@ -105,6 +102,7 @@ public class MainWindowController implements Observer{
             attributes.setCsv(filePath);
             attributes.LoadList();
             vm.getSelectedFeature().bind(attributes.getSelectedFeature());
+            graphs.getSelectedFeature().bind(attributes.getSelectedFeature());
         }
     }
     @FXML

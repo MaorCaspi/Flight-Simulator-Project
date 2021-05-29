@@ -126,11 +126,7 @@ public class ViewModel extends Observable implements Observer{
         m.pause();
     }
     public void forward(){ m.forward(); }
-    public void rewind(){
-        //m.rewind();
-        //selectedAttributePoints.add(new Point(1,7));
-        selectedAttributePoints.add(new Point(120,7));
-    }
+    public void rewind(){ m.rewind(); }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -147,23 +143,11 @@ public class ViewModel extends Observable implements Observer{
             executor.execute(() -> roll.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("roll"),m.getNumOfRow())));
             executor.execute(() -> pitch.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("pitch"),m.getNumOfRow())));
             executor.execute(() -> yaw.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("yaw"),m.getNumOfRow())));
-            executor.execute(() -> selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,m.getNumOfRow())));
-            //executor.execute(() -> selectedAttributePoints.add(new Point(m.getNumOfRow(), ts.getDataFromSpecificRowAndColumn(properties.propertyName("speed"),m.getNumOfRow()))));
+            //executor.execute(() -> selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,m.getNumOfRow())));
 
-
-
-            //selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,m.getNumOfRow()));
-
-            //System.out.println(selectedAttributePoints.get());
-            /*
-            synchronized (selectedAttributePoints) {
-
-                selectedAttributePoints.add(new Point(m.getNumOfRow(), 7));
-            }
-
-             */
-            //selectedAttributePoints.add(new Point(m.getNumOfRow(), 1.7));
-
+            Platform.runLater(()-> {
+            selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,m.getNumOfRow()));
+            });
         }
     }
 }

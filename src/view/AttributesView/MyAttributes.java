@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class MyAttributes extends Pane {
 
-    private ListView<String> attributeslistView;
     private  String csv,xml;
     private StringProperty selectedFeature;
 
@@ -35,7 +34,7 @@ public class MyAttributes extends Pane {
         try {
             Pane attr = fxl.load(getClass().getResource("AttributesView.fxml").openStream());
             AttributesViewController attributesViewController = fxl.getController();
-            attributeslistView=attributesViewController.getAttributeslistView();
+            ListView<String> attributesListView = attributesViewController.getAttributeslistView();
             TimeSeries ts = new TimeSeries(csv);
             ArrayList<String> as = ts.getAttributes();
 
@@ -45,12 +44,12 @@ public class MyAttributes extends Pane {
             float f=p.getRate();
             for (Map.Entry<String, Integer> e : rIndex.entrySet()) {
                 if (e.getValue() > 0 && e.getValue() < as.size() + 1){
-                    attributeslistView.getItems().add(as.get(e.getValue() - 1));
+                    attributesListView.getItems().add(as.get(e.getValue() - 1));
                 }
             }
-            attributeslistView.getSelectionModel().select(0);//show by default the first feature
-            selectedFeature=new SimpleStringProperty(attributeslistView.getSelectionModel().getSelectedItems().get(0));
-            attributeslistView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            attributesListView.getSelectionModel().select(0);//show by default the first feature
+            selectedFeature=new SimpleStringProperty(attributesListView.getSelectionModel().getSelectedItems().get(0));
+            attributesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 selectedFeature.setValue(newValue);
             });
 
