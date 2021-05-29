@@ -57,7 +57,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	private double findThreshold(Point ps[],Line rl){
 		double max=0;
 		for(int i=0;i<ps.length;i++){
-			double d=Math.abs(ps[i].y - rl.f(ps[i].x));
+			double d=Math.abs(ps[i].getY() - rl.f(ps[i].getX()));
 			if(d>max)
 				max=d;
 		}
@@ -133,8 +133,8 @@ class StatLib {
 		double x[]=new double[points.length];
 		double y[]=new double[points.length];
 		for(int i=0;i<points.length;i++){
-			x[i]=points[i].x;
-			y[i]=points[i].y;
+			x[i]=points[i].getX();
+			y[i]=points[i].getY();
 		}
 		double a=cov(x,y)/var(x);
 		double b=avg(y) - a*(avg(x));
@@ -150,7 +150,7 @@ class StatLib {
 
 	// returns the deviation between point p and the line
 	public static double dev(Point p,Line l){
-		return Math.abs(p.y-l.f(p.x));
+		return Math.abs(p.getY()-l.f(p.getX()));
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////

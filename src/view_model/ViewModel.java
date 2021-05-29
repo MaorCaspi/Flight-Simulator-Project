@@ -2,7 +2,9 @@ package view_model;
 
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import model.FlightSimulatorModel;
+import other_classes.Point;
 import other_classes.Properties;
 import other_classes.TimeSeries;
 import java.util.Observable;
@@ -14,10 +16,11 @@ public class ViewModel extends Observable implements Observer{
     private FlightSimulatorModel m;
     private TimeSeries ts;
     private Properties properties;
-    private int csvLength;
+    private int csvLength,selectedFeatureId;
     private ExecutorService executor;
     private DoubleProperty playSpeed,progression,throttle,rudder,aileron,elevators,heading,speed,altitude,roll,pitch,yaw;
     private StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature;
+    private ListProperty<Point> selectedAttributePoints;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
@@ -38,6 +41,7 @@ public class ViewModel extends Observable implements Observer{
         propertiesPath=new SimpleStringProperty();
         currentTime = new SimpleStringProperty("0:0");
         selectedFeature=new SimpleStringProperty();
+        selectedAttributePoints=new SimpleListProperty<>(FXCollections.observableArrayList());
         properties=new Properties();
         properties.deserializeFromXML("settings.xml");//the default path for the properties file
         m.setProperties(properties);
@@ -71,7 +75,11 @@ public class ViewModel extends Observable implements Observer{
         progression.addListener((observable, oldValue, newValue)->{
             if(ts!=null)
                 m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
-        selectedFeature.addListener((observable, oldValue, newValue)-> System.out.println(newValue));/////////////
+        selectedFeature.addListener((observable, oldValue, newValue) -> {
+            if(ts!=null){
+                selectedFeatureId=ts.getIndexByFeature(newValue);
+            }
+        });
     }
     private void setTime(int rowNumber)
     {
@@ -108,6 +116,7 @@ public class ViewModel extends Observable implements Observer{
     public DoubleProperty getRoll() { return roll; }
     public DoubleProperty getPitch() { return pitch; }
     public DoubleProperty getYaw() { return yaw; }
+    public ListProperty<Point> getSelectedAttributePoints() { return selectedAttributePoints; }
     public void shutdownExecutor() { executor.shutdown(); }
 
     public void play(){
@@ -117,7 +126,11 @@ public class ViewModel extends Observable implements Observer{
         m.pause();
     }
     public void forward(){ m.forward(); }
-    public void rewind(){ m.rewind(); }
+    public void rewind(){
+        //m.rewind();
+        //selectedAttributePoints.add(new Point(1,7));
+        selectedAttributePoints.add(new Point(120,7));
+    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -134,6 +147,23 @@ public class ViewModel extends Observable implements Observer{
             executor.execute(() -> roll.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("roll"),m.getNumOfRow())));
             executor.execute(() -> pitch.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("pitch"),m.getNumOfRow())));
             executor.execute(() -> yaw.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("yaw"),m.getNumOfRow())));
+            executor.execute(() -> selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,m.getNumOfRow())));
+            //executor.execute(() -> selectedAttributePoints.add(new Point(m.getNumOfRow(), ts.getDataFromSpecificRowAndColumn(properties.propertyName("speed"),m.getNumOfRow()))));
+
+
+
+            //selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,m.getNumOfRow()));
+
+            //System.out.println(selectedAttributePoints.get());
+            /*
+            synchronized (selectedAttributePoints) {
+
+                selectedAttributePoints.add(new Point(m.getNumOfRow(), 7));
+            }
+
+             */
+            //selectedAttributePoints.add(new Point(m.getNumOfRow(), 1.7));
+
         }
     }
 }

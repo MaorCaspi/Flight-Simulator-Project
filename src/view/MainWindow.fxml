@@ -14,8 +14,7 @@
    <MyAttributes fx:id="attributes" layoutX="5.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0"/>
    <MyJoystick fx:id="joystick" layoutX="1100.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0"/>
    <MyClocksPanel fx:id="clocksPanel" layoutX="850.0" layoutY="300.0" prefHeight="74.0" prefWidth="92.0"/>
-   <MyAnomalyDetectionGraph fx:id="anomaly" layoutX="230.0"  prefHeight="440" prefWidth="612"
-                            minHeight="440" maxHeight="440" minWidth="612" maxWidth="612"/>
+   <MyAnomalyDetectionGraph fx:id="graphs" layoutX="230.0"  prefHeight="440" prefWidth="612" minHeight="440" maxHeight="440" minWidth="612" maxWidth="612"/>
    <Button layoutX="162.0" layoutY="564.0" mnemonicParsing="false" onAction="#pressButtonPlay" prefHeight="74.0"
            prefWidth="70.0" style="-fx-background-color: none;" text="▶">
       <font>

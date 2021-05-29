@@ -27,7 +27,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                 minimumCircle = new Circle(boundary.get(0), boundary.get(1));
             }
             else if (points.size() == 1 && boundary.isEmpty()) {
-                minimumCircle = new Circle(points.get(0).x, points.get(0).y, 0);
+                minimumCircle = new Circle(points.get(0).getX(), points.get(0).getY(), 0);
             }
             else if (points.size() == 1 && boundary.size() == 1) {
                 minimumCircle = new Circle(points.get(0), boundary.get(0));
@@ -144,21 +144,21 @@ class Circle {
     }
 
     public Circle(final Point p1, final Point p2) {
-        center = new Point(((p1.x + p2.x) * 0.5), ((p1.y + p2.y) * 0.5));
+        center = new Point(((p1.getX() + p2.getX()) * 0.5), ((p1.getY() + p2.getY()) * 0.5));
         radius = center.distanceTo(p1);
     }
 
     public Circle(final Point p1, final Point p2, final Point p3) {
-        final double P2_MINUS_P1_Y = p2.y - p1.y;
-        final double P3_MINUS_P2_Y =  p3.y - p2.y;
+        final double P2_MINUS_P1_Y = p2.getY() - p1.getY();
+        final double P3_MINUS_P2_Y =  p3.getY() - p2.getY();
 
         if (P2_MINUS_P1_Y == 0.0 || P3_MINUS_P2_Y == 0.0) {
             center = new Point(0,0);
             radius = 0;
         }
         else {
-            final double A = -(p2.x - p1.x) / P2_MINUS_P1_Y;
-            final double A_PRIME = -(p3.x - p2.x) / P3_MINUS_P2_Y;
+            final double A = -(p2.getX() - p1.getX()) / P2_MINUS_P1_Y;
+            final double A_PRIME = -(p3.getX() - p2.getX()) / P3_MINUS_P2_Y;
             final double A_PRIME_MINUS_A = A_PRIME - A;
 
             if (A_PRIME_MINUS_A == 0.0) {
@@ -166,21 +166,21 @@ class Circle {
                 radius = 0;
             }
             else {
-                final double P2_SQUARED_X = p2.x * p2.x;
-                final double P2_SQUARED_Y = p2.y * p2.y;
+                final double P2_SQUARED_X = p2.getX() * p2.getX();
+                final double P2_SQUARED_Y = p2.getY() * p2.getY();
 
 
-                final double B = ((P2_SQUARED_X - p1.x * p1.x + P2_SQUARED_Y - p1.y * p1.y) /
+                final double B = ((P2_SQUARED_X - p1.getX() * p1.getX() + P2_SQUARED_Y - p1.getY() * p1.getY()) /
                         (2.0 * P2_MINUS_P1_Y));
-                final double B_PRIME =((p3.x * p3.x - P2_SQUARED_X + p3.y * p3.y - P2_SQUARED_Y) /
+                final double B_PRIME =((p3.getX() * p3.getX() - P2_SQUARED_X + p3.getY() * p3.getY() - P2_SQUARED_Y) /
                         (2.0 * P3_MINUS_P2_Y));
 
 
                 final double XC = (B - B_PRIME) / A_PRIME_MINUS_A;
                 final double YC = A * XC + B;
 
-                final double DXC = p1.x - XC;
-                final double DYC = p1.y - YC;
+                final double DXC = p1.getX() - XC;
+                final double DYC = p1.getY() - YC;
 
                 center = new Point(XC, YC);
                 radius = Math.sqrt(DXC * DXC + DYC * DYC);

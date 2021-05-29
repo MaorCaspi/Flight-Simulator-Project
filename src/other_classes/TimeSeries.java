@@ -1,10 +1,16 @@
 package other_classes;
 
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TimeSeries {
@@ -39,6 +45,14 @@ public class TimeSeries {
 
     public ArrayList<Double> getAttributeData(int id){
         return ts.get(id);
+    }
+
+    public ListProperty<Point> getListOfPointsUntilSpecificRow(int id, int rowNumber){
+        ListProperty<Point> tempList=new SimpleListProperty<>(FXCollections.observableArrayList());
+        for(int i=0; i<rowNumber;i++){
+            tempList.add(new Point(i,ts.get(id).get(i)));
+        }
+        return tempList;
     }
 
     public ArrayList<String> getAttributes(){

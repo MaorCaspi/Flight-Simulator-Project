@@ -1,9 +1,8 @@
 package view;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.io.File;
@@ -11,6 +10,8 @@ import java.util.Observable;
 import java.util.Observer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import other_classes.Point;
+import view.AnomalyDetectionGraph.MyAnomalyDetectionGraph;
 import view.AttributesView.MyAttributes;
 import view.ClocksPanel.MyClocksPanel;
 import view.Joystick.MyJoystick;
@@ -27,6 +28,7 @@ public class MainWindowController implements Observer{
     @FXML private MyJoystick joystick;
     @FXML private MyClocksPanel clocksPanel;
     @FXML private MyAttributes attributes;
+    @FXML private MyAnomalyDetectionGraph graphs;
 
     public void setViewModel(ViewModel vm){
         this.vm=vm;
@@ -48,6 +50,7 @@ public class MainWindowController implements Observer{
         clocksPanel.getRoll().bind(vm.getRoll());
         clocksPanel.getPitch().bind(vm.getPitch());
         clocksPanel.getYaw().bind(vm.getYaw());
+        graphs.getSelectedAttributePoints().bind(vm.getSelectedAttributePoints());
         attributes.setXml("settings.xml"); //the default path for the properties file
     }
     public void showErrorMessage(String message)

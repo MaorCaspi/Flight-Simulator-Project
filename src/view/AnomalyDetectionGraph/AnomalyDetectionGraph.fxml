@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="214.0" prefWidth="243.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AnomalyDetectionGraph.AnomalyDetectionGraphController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="519.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AnomalyDetectionGraph.AnomalyDetectionGraphController">
    <children>
-
-      <!--<TextField layoutX="8.0" layoutY="-1.0" prefHeight="214.0" prefWidth="233.0" text="קנבס שמציג את גרף גילוי החריגות">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>-->
-
+      <LineChart fx:id="selectedAttributeGraph" layoutX="133.0" layoutY="69.0" prefHeight="221.0" prefWidth="254.0">
+          <xAxis>
+              <NumberAxis side="BOTTOM" />
+          </xAxis>
+          <yAxis>
+              <NumberAxis side="LEFT" />
+          </yAxis>
+      </LineChart>
    </children>
 </Pane>
