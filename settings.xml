@@ -11,7 +11,7 @@
    <int>5400</int>
   </void>
   <void property="normalFlightCsvPath">
-   <string>\media\reg_flight.csv</string>
+   <string>src/media/reg_flight.csv</string>
   </void>
   <void property="rate">
    <float>100.0</float>

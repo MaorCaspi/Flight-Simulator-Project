@@ -48,6 +48,7 @@ public class MainWindowController implements Observer{
         clocksPanel.getPitch().bind(vm.getPitch());
         clocksPanel.getYaw().bind(vm.getYaw());
         graphs.getSelectedAttributePoints().bind(vm.getSelectedAttributePoints());
+        graphs.getTheMostCorrelativeAttributePoints().bind(vm.getTheMostCorrelativeAttributePoints());
         attributes.setXml("settings.xml"); //the default path for the properties file
     }
     public void showErrorMessage(String message)

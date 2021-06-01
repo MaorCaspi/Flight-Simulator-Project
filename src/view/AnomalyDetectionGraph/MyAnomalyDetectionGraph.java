@@ -25,5 +25,6 @@ public class MyAnomalyDetectionGraph extends Pane{
         }
     }
     public ListProperty<Point> getSelectedAttributePoints() { return anomalyDetectionGraphController.getSelectedAttributePoints(); }
+    public ListProperty<Point> getTheMostCorrelativeAttributePoints() { return anomalyDetectionGraphController.getTheMostCorrelativeAttributePoints(); }
     public StringProperty getSelectedFeature(){return anomalyDetectionGraphController.getSelectedFeature();}
 }

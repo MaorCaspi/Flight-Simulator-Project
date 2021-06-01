@@ -15,12 +15,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AnomalyDetectionGraphController implements Initializable {
-    @FXML private LineChart<Number, Number> selectedAttributeGraph;
-    private ListProperty<Point> selectedAttributePoints;
+    @FXML private LineChart<Number, Number> selectedAttributeGraph,theMostCorrelativeAttributeGraph,anomalyDetectGraph;
+    private ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
     private StringProperty selectedFeature;
     private String localSelectedFeature;
+    private int localRowNumber;
 
     public ListProperty<Point> getSelectedAttributePoints() { return selectedAttributePoints; }
+    public ListProperty<Point> getTheMostCorrelativeAttributePoints() { return theMostCorrelativeAttributePoints; }
     public StringProperty getSelectedFeature(){return selectedFeature;}
 
     public void UpdateLineChart(ObservableList<XYChart.Data<Number, Number>> seriesData, ObservableList<Point> points){
@@ -33,19 +35,27 @@ public class AnomalyDetectionGraphController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // Deactivate features that cause slow down
-        selectedAttributeGraph.setCreateSymbols(false);
-        selectedAttributeGraph.setAnimated(false);
         selectedAttributePoints = new SimpleListProperty<>(FXCollections.observableArrayList());
+        theMostCorrelativeAttributePoints = new SimpleListProperty<>(FXCollections.observableArrayList());
         selectedFeature = new SimpleStringProperty();
+        localRowNumber=0;
 
         XYChart.Series<Number, Number> selectedAttributeSeries = new XYChart.Series<>();
         selectedAttributeSeries.setName("Selected attribute");
         selectedAttributeGraph.getData().add(selectedAttributeSeries);
 
+        XYChart.Series<Number, Number> theMostCorrelativeAttributeSeries = new XYChart.Series<>();
+        theMostCorrelativeAttributeSeries.setName("The most correlative attribute");
+        theMostCorrelativeAttributeGraph.getData().add(theMostCorrelativeAttributeSeries);
+
+        XYChart.Series<Number, Number> anomalyDetectSeries = new XYChart.Series<>();
+        anomalyDetectSeries.setName("Anomaly detect");
+        anomalyDetectGraph.getData().add(anomalyDetectSeries);
+
+
         selectedAttributePoints.addListener((observable, oldValue, newValue) -> {
             if (selectedAttributePoints.size() > 0) {
-                if(localSelectedFeature.equals(selectedFeature.getValue())) {
+                if(localSelectedFeature.equals(selectedFeature.getValue()) && localRowNumber+1==newValue.size()) {
                 Point newPoint = newValue.get(newValue.size() - 1);
                 selectedAttributeSeries.getData().add(new XYChart.Data(newPoint.getX(), newPoint.getY()));
                 }
@@ -54,6 +64,19 @@ public class AnomalyDetectionGraphController implements Initializable {
                     localSelectedFeature=selectedFeature.getValue();
                 }
             }
+            localRowNumber=newValue.size();
+        });
+        theMostCorrelativeAttributePoints.addListener((observable, oldValue, newValue) -> {
+            if (theMostCorrelativeAttributePoints.size() > 0) {
+                if(localSelectedFeature.equals(selectedFeature.getValue()) && localRowNumber+1==newValue.size()) {
+                    Point newPoint = newValue.get(newValue.size() - 1);
+                    theMostCorrelativeAttributeSeries.getData().add(new XYChart.Data(newPoint.getX(), newPoint.getY()));
+                }
+                else {
+                    UpdateLineChart(theMostCorrelativeAttributeSeries.getData(), newValue);
+                }
+            }
+            localRowNumber=newValue.size();
         });
         selectedFeature.addListener((observable, oldValue, newValue) -> {
             if(localSelectedFeature==null) {
@@ -62,4 +85,3 @@ public class AnomalyDetectionGraphController implements Initializable {
         });
     }
 }
-//theMostCorrelativeAttributeSeries,anomalyDetectSeries

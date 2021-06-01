@@ -4,12 +4,13 @@ import other_classes.CorrelatedFeatures;
 import other_classes.Line;
 import other_classes.Point;
 import other_classes.TimeSeries;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AnomalyDetectorLinearRegression implements AnomalyDetector {
-	
+
 	private ArrayList<CorrelatedFeatures> cf;
 	private double correlationThreshold;
 	
@@ -19,11 +20,37 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		correlationThreshold=0.9;
 	}
 
+	public Map<String, String[]> getTheMostCorrelatedFeaturesMap() {
+		Map<String, String[]> tmcf=new HashMap<>();
+		for(int i=0;i<cf.size();i++){
+			CorrelatedFeatures correlatedFeature= cf.get(i);
+			String feature1 =correlatedFeature.getFeature1();
+			String feature2 =correlatedFeature.getFeature2();
+			double correlation=correlatedFeature.getCorrelation();
+
+			if(!tmcf.containsKey(feature1)){
+				tmcf.put(feature1, new String[]{feature2, String.valueOf(correlation)});
+				tmcf.put(feature2, new String[]{feature1, String.valueOf(correlation)});
+			}
+			else if(Double.parseDouble(tmcf.get(feature1)[1])>correlation) {
+					tmcf.get(feature1)[0] = feature2;
+					tmcf.get(feature1)[1] = String.valueOf(correlation);
+					if (tmcf.containsKey(feature2)) {
+						tmcf.get(feature2)[0] = feature1;
+						tmcf.get(feature2)[1] = String.valueOf(correlation);
+					}
+					else{
+						tmcf.put(feature2, new String[]{feature1, String.valueOf(correlation)});
+					}
+				}
+			}
+		return tmcf;
+	}
+
 	@Override
-	public void learnNormal(TimeSeries ts)
-	{
+	public void learnNormal(TimeSeries ts) {
 		int len=ts.getRowSize();
-		double vals[][]=new double[ts.getNumOfColumns()][len];
+		double[][] vals =new double[ts.getNumOfColumns()][len];
 		for(int i=1;i<=ts.getNumOfColumns();i++){
 			for(int j=0;j<ts.getRowSize();j++){
 				vals[i-1][j]=ts.getAttributeData(i).get(j);
@@ -69,11 +96,11 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		ArrayList<AnomalyReport> v=new ArrayList<>();
 		
 		for(CorrelatedFeatures c : cf) {
-			ArrayList<Double> x=ts.getAttributeData(ts.getIndexByFeature(c.feature1));
-			ArrayList<Double> y=ts.getAttributeData(ts.getIndexByFeature(c.feature2));
+			ArrayList<Double> x=ts.getAttributeData(ts.getIndexByFeature(c.getFeature1()));
+			ArrayList<Double> y=ts.getAttributeData(ts.getIndexByFeature(c.getFeature2()));
 			for(int i=0;i<x.size();i++){
-				if(Math.abs(y.get(i) - c.lin_reg.f(x.get(i)))>c.threshold){
-					String d=c.feature1 + "-" + c.feature2;
+				if(Math.abs(y.get(i) - c.getLin_reg().f(x.get(i)))>c.getThreshold()){
+					String d=c.getFeature1() + "-" + c.getFeature2();
 					v.add(new AnomalyReport(d,(i+1)));
 				}
 			}			
@@ -153,4 +180,3 @@ class StatLib {
 		return Math.abs(p.getY()-l.f(p.getX()));
 	}
 }
-////////////////////////////////////////////////////////////////////////////////

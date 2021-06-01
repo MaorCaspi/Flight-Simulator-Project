@@ -3,9 +3,9 @@
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="519.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AnomalyDetectionGraph.AnomalyDetectionGraphController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="515.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AnomalyDetectionGraph.AnomalyDetectionGraphController">
    <children>
-      <LineChart fx:id="selectedAttributeGraph" layoutX="133.0" layoutY="69.0" prefHeight="221.0" prefWidth="254.0">
+      <LineChart fx:id="selectedAttributeGraph" animated="false" createSymbols="false" layoutY="14.0" prefHeight="221.0" prefWidth="254.0">
           <xAxis>
               <NumberAxis side="BOTTOM" />
           </xAxis>
@@ -13,5 +13,21 @@
               <NumberAxis side="LEFT" />
           </yAxis>
       </LineChart>
+       <LineChart fx:id="theMostCorrelativeAttributeGraph" animated="false" createSymbols="false" layoutX="254.0" layoutY="14.0" prefHeight="221.0" prefWidth="254.0">
+           <xAxis>
+               <NumberAxis side="BOTTOM" />
+           </xAxis>
+           <yAxis>
+               <NumberAxis side="LEFT" />
+           </yAxis>
+       </LineChart>
+       <LineChart fx:id="anomalyDetectGraph" animated="false" createSymbols="false" layoutX="138.0" layoutY="254.0" prefHeight="221.0" prefWidth="254.0">
+           <xAxis>
+               <NumberAxis side="BOTTOM" />
+           </xAxis>
+           <yAxis>
+               <NumberAxis side="LEFT" />
+           </yAxis>
+       </LineChart>
    </children>
 </Pane>

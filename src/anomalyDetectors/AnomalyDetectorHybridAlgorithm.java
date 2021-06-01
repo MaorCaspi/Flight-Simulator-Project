@@ -75,10 +75,10 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         featuresToAlgorithm.put("Regression", new HashSet<>());
         featuresToAlgorithm.put("Welzl", new HashSet<>());
         for(CorrelatedFeatures c:mostCorrelated) {
-            if(Math.abs(c.corrlation)>=0.95)
+            if(Math.abs(c.correlation)>=0.95)
                 featuresToAlgorithm.get("Regression").add(c);
             else {
-                if(Math.abs(c.corrlation)<0.5)
+                if(Math.abs(c.correlation)<0.5)
                     featuresToAlgorithm.get("ZScore").add(c);
                 else
                     featuresToAlgorithm.get("Welzl").add(c);
