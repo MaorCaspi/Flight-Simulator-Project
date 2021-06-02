@@ -76,6 +76,9 @@ public class AnomalyDetectionGraphController implements Initializable {
                     UpdateLineChart(theMostCorrelativeAttributeSeries.getData(), newValue);
                 }
             }
+            else if (theMostCorrelativeAttributePoints.size() == 0){
+                theMostCorrelativeAttributeSeries.getData().clear();
+            }
             localRowNumber=newValue.size();
         });
         selectedFeature.addListener((observable, oldValue, newValue) -> {

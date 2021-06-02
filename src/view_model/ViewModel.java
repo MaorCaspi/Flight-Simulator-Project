@@ -18,7 +18,7 @@ public class ViewModel extends Observable implements Observer{
     private FlightSimulatorModel m;
     private TimeSeries ts;
     private Properties properties;
-    private int csvLength,selectedFeatureId,theMostCorrelativeAttributeId;
+    private int csvLength,selectedFeatureId,localSelectedFeatureId,theMostCorrelativeAttributeId,localNumOfRow;
     private ExecutorService executor;
     private DoubleProperty playSpeed,progression,throttle,rudder,aileron,elevators,heading,speed,altitude,roll,pitch,yaw;
     private StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature;
@@ -161,10 +161,25 @@ public class ViewModel extends Observable implements Observer{
             executor.execute(() -> roll.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("roll"),numOfRow)));
             executor.execute(() -> pitch.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("pitch"),numOfRow)));
             executor.execute(() -> yaw.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("yaw"),numOfRow)));
-            Platform.runLater(()-> selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,numOfRow)));
-            if(theMostCorrelativeAttributeId!=-1){
-                Platform.runLater(()-> theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttributeId,numOfRow)));
+            Platform.runLater(()->{
+            if(localSelectedFeatureId==selectedFeatureId && localNumOfRow+1==numOfRow) {
+                selectedAttributePoints.add(new Point(numOfRow,ts.getAttributeData(localSelectedFeatureId).get(numOfRow)));
+                if(theMostCorrelativeAttributeId!=-1){
+                    theMostCorrelativeAttributePoints.add(new Point(numOfRow,ts.getAttributeData(theMostCorrelativeAttributeId).get(numOfRow)));
+                }
             }
+            else {
+                selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,numOfRow));
+                localSelectedFeatureId=selectedFeatureId;
+                if(theMostCorrelativeAttributeId!=-1){
+                    theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttributeId,numOfRow));
+                }
+            }
+                localNumOfRow=numOfRow;
+            if(theMostCorrelativeAttributeId==-1){//if there is no correlative feature
+                theMostCorrelativeAttributePoints.setValue(new SimpleListProperty<>(FXCollections.observableArrayList()));
+                }
+            });
         }
     }
 }
