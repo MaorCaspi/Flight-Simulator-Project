@@ -16,9 +16,9 @@ public class MainTrainAnomalyDetector {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//AnomalyDetectorLinearRegression ad=new AnomalyDetectorLinearRegression();
+		AnomalyDetectorLinearRegression ad=new AnomalyDetectorLinearRegression();
 		//AnomalyDetectorZScoreAlgorithm ad=new AnomalyDetectorZScoreAlgorithm();
-		AnomalyDetectorHybridAlgorithm ad=new AnomalyDetectorHybridAlgorithm();
+		//AnomalyDetectorHybridAlgorithm ad=new AnomalyDetectorHybridAlgorithm();
 
 		ad.learnNormal(ts);
 	
@@ -31,7 +31,7 @@ public class MainTrainAnomalyDetector {
 		}
 		List<AnomalyReport> reports = ad.detect(ts2);
 		for(AnomalyReport ar : reports) {
-			System.out.println(ar.timeStep);
+			System.out.println(ar.timeStep + "   "+ar.description);
 		}
 
 		System.out.println("done");

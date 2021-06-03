@@ -1,7 +1,6 @@
 package other_classes;
 
 import model.FlightSimulatorModel;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;

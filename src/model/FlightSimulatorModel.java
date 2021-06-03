@@ -5,7 +5,6 @@ import other_classes.Properties;
 import other_classes.TimeSeries;
 import java.util.Observable;
 
-
 public class FlightSimulatorModel extends Observable implements Model{
     private double playSpeed;
     private FGPlayer fgPlayer;
@@ -15,22 +14,24 @@ public class FlightSimulatorModel extends Observable implements Model{
     private int numOfRow;
     private Properties properties;
 
-
     public FlightSimulatorModel() {
-
         firstTimePlay=true;
         numOfRow=0;
         properties=new Properties();
     }
+    @Override
     public void setPlaySpeed(double val) {
         playSpeed=val;
         if(!firstTimePlay) {
             fgPlayer.setPlaySpeed(val);
         }
     }
+    @Override
     public void setProperties(Properties properties) {
         this.properties = properties;
     }
+
+    @Override
     public Properties getProperties() {
         return properties;
     }
@@ -93,7 +94,6 @@ public class FlightSimulatorModel extends Observable implements Model{
         else {
             fgPlayer.wakeUP();
         }
-
     }
 
     @Override
@@ -126,11 +126,14 @@ public class FlightSimulatorModel extends Observable implements Model{
         }
     }
 
+    @Override
     public void setNumOfRow(int numOfRow){
         this.numOfRow=numOfRow;
         setChanged();
         notifyObservers();
     }
+
+    @Override
     public int getNumOfRow(){
         return numOfRow;
     }
