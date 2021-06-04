@@ -17,15 +17,15 @@ public class MainTrainAnomalyDetector {
 			e.printStackTrace();
 		}
 		//AnomalyDetectorLinearRegression ad=new AnomalyDetectorLinearRegression();
-		//AnomalyDetectorZScoreAlgorithm ad=new AnomalyDetectorZScoreAlgorithm();
-		AnomalyDetectorHybridAlgorithm ad=new AnomalyDetectorHybridAlgorithm();
+		AnomalyDetectorZScoreAlgorithm ad=new AnomalyDetectorZScoreAlgorithm();
+		//AnomalyDetectorHybridAlgorithm ad=new AnomalyDetectorHybridAlgorithm();
 
 		ad.learnNormal(ts);
 	
 		// test the anomaly detector
 		TimeSeries ts2= null;
 		try {
-			ts2 = new TimeSeries("C:\\Users\\Administrator\\Desktop\\anomaly_flight.csv");
+			ts2 = new TimeSeries("C:\\Users\\Administrator\\Desktop\\anomaly_flight2.csv");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

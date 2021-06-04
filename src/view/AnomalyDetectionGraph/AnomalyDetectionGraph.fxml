@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import view.AnomalyDetectionGraph.coordinateSystem.* ?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AnomalyDetectionGraph.AnomalyDetectionGraphController">
    <children>
@@ -36,5 +37,6 @@
            <Font size="20.0" />
        </font>
       </Label>
+       <CoordinateSystemDisplayer fx:id="selectedParameter" layoutX="0.0" layoutY="0.0" prefHeight="50.0" prefWidth="50.0"/>
    </children>
 </Pane>

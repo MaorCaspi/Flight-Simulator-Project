@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="314.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AnomalyDetectionGraph.coordinateSystem.CoordinateSystemController">
+   <children>
+      <AnchorPane fx:id="board" layoutX="5.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0">
+         <children>
+            <Line endX="150.0" endY="300.0" startX="150.0" strokeWidth="1.0" />
+            <Line endX="300.0" endY="150.0" startY="150.0" strokeWidth="1.0"/>
+         </children>
+      </AnchorPane>
+   </children>
+</Pane>

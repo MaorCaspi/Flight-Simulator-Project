@@ -49,8 +49,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
 	@Override
 	public void learnNormal(TimeSeries ts) {
-		int len=ts.getRowSize();
-		double[][] vals =new double[ts.getNumOfColumns()][len];
+		double[][] vals =new double[ts.getNumOfColumns()][ts.getRowSize()];
 		for(int i=1;i<=ts.getNumOfColumns();i++){
 			for(int j=0;j<ts.getRowSize();j++){
 				vals[i-1][j]=ts.getAttributeData(i).get(j);

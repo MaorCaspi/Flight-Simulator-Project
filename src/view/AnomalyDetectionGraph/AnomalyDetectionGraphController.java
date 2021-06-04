@@ -11,13 +11,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Paint;
+import other_classes.Line;
 import other_classes.Point;
+import view.AnomalyDetectionGraph.coordinateSystem.CoordinateSystemDisplayer;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AnomalyDetectionGraphController implements Initializable {
     @FXML private LineChart<Number, Number> selectedAttributeGraph,theMostCorrelativeAttributeGraph,anomalyDetectGraph;
     @FXML public Label theMostCorrelativeAttribute;
+    @FXML public CoordinateSystemDisplayer selectedParameter;
     private String localSelectedFeature;
     private int localRowNumber;
     public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
@@ -84,5 +89,12 @@ public class AnomalyDetectionGraphController implements Initializable {
                 localSelectedFeature = newValue;
             }
         });
+        selectedParameter.controller.addPoint(new Point(1,8), Paint.valueOf("red"));
+        selectedParameter.controller.addPoint(new Point(150,8), Paint.valueOf("red"));
+        selectedParameter.controller.addPoint(new Point(300,-500), Paint.valueOf("red"));
+
+        //selectedParameter.controller.addPoint(new Point(1,5), Paint.valueOf("blue"));
+        selectedParameter.controller.addCircle(new Point(0,0),50,Paint.valueOf("red"));
+        selectedParameter.controller.addLine(new Line(5,9),Paint.valueOf("red"));
     }
 }
