@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class MyJoystick extends Pane {
 
-    private DoubleProperty throttle, rudder,aileron,elevators;
+    public DoubleProperty throttle, rudder,aileron,elevators;
 
     public MyJoystick(){
         super();
@@ -27,21 +27,5 @@ public class MyJoystick extends Pane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public DoubleProperty getThrottle() {
-        return throttle;
-    }
-
-    public DoubleProperty getRudder() {
-        return rudder;
-    }
-
-    public DoubleProperty getAileron() {
-        return aileron;
-    }
-
-    public DoubleProperty getElevators() {
-        return elevators;
     }
 }

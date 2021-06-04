@@ -5,7 +5,6 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import other_classes.Point;
-
 import java.io.IOException;
 
 public class MyAnomalyDetectionGraph extends Pane{
@@ -24,7 +23,8 @@ public class MyAnomalyDetectionGraph extends Pane{
             e.printStackTrace();
         }
     }
-    public ListProperty<Point> getSelectedAttributePoints() { return anomalyDetectionGraphController.getSelectedAttributePoints(); }
-    public ListProperty<Point> getTheMostCorrelativeAttributePoints() { return anomalyDetectionGraphController.getTheMostCorrelativeAttributePoints(); }
-    public StringProperty getSelectedFeature(){return anomalyDetectionGraphController.getSelectedFeature();}
+    public ListProperty<Point> getSelectedAttributePoints() { return anomalyDetectionGraphController.selectedAttributePoints; }
+    public ListProperty<Point> getTheMostCorrelativeAttributePoints() { return anomalyDetectionGraphController.theMostCorrelativeAttributePoints; }
+    public StringProperty getSelectedFeature(){return anomalyDetectionGraphController.selectedFeature; }
+    public StringProperty getTheMostCorrelativeAttribute(){return anomalyDetectionGraphController.theMostCorrelativeAttribute.textProperty(); }
 }

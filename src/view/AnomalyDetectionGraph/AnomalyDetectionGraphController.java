@@ -10,20 +10,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import other_classes.Point;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AnomalyDetectionGraphController implements Initializable {
     @FXML private LineChart<Number, Number> selectedAttributeGraph,theMostCorrelativeAttributeGraph,anomalyDetectGraph;
-    private ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
-    private StringProperty selectedFeature;
+    @FXML public Label theMostCorrelativeAttribute;
     private String localSelectedFeature;
     private int localRowNumber;
-
-    public ListProperty<Point> getSelectedAttributePoints() { return selectedAttributePoints; }
-    public ListProperty<Point> getTheMostCorrelativeAttributePoints() { return theMostCorrelativeAttributePoints; }
-    public StringProperty getSelectedFeature(){return selectedFeature;}
+    public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
+    public StringProperty selectedFeature;
 
     public void UpdateLineChart(ObservableList<XYChart.Data<Number, Number>> seriesData, ObservableList<Point> points){
         seriesData.clear();

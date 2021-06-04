@@ -15,7 +15,7 @@ import java.util.Map;
 public class MyAttributes extends Pane {
 
     private  String csv,xml;
-    private StringProperty selectedFeature;
+    public StringProperty selectedFeature;
 
     public void setCsv(String csv) {
         this.csv = csv;
@@ -25,8 +25,6 @@ public class MyAttributes extends Pane {
         this.xml = xml;
     }
 
-    public StringProperty getSelectedFeature() { return selectedFeature; }
-
     public void LoadList() {
         if(!new File(xml).exists()||!new File(csv).exists())
             return;
@@ -34,7 +32,7 @@ public class MyAttributes extends Pane {
         try {
             Pane attr = fxl.load(getClass().getResource("AttributesView.fxml").openStream());
             AttributesViewController attributesViewController = fxl.getController();
-            ListView<String> attributesListView = attributesViewController.getAttributeslistView();
+            ListView<String> attributesListView = attributesViewController.attributeslistView;
             TimeSeries ts = new TimeSeries(csv);
             ArrayList<String> as = ts.getAttributes();
 

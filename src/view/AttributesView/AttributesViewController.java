@@ -6,9 +6,5 @@ import javafx.scene.control.ListView;
 
 public class AttributesViewController{
 
-    @FXML private ListView<String> attributeslistView;
-
-    public ListView<String> getAttributeslistView() {
-        return attributeslistView;
-    }
+    @FXML public ListView<String> attributeslistView;
 }

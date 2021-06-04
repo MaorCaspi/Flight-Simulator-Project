@@ -20,10 +20,10 @@ public class ViewModel extends Observable implements Observer{
     private Properties properties;
     private int csvLength,selectedFeatureId,localSelectedFeatureId,theMostCorrelativeAttributeId,localNumOfRow;
     private ExecutorService executor;
-    private DoubleProperty playSpeed,progression,throttle,rudder,aileron,elevators,heading,speed,altitude,roll,pitch,yaw;
-    private StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature;
-    private ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
     private Map<String, String[]> correlatedFeaturesMap;
+    public DoubleProperty playSpeed,progression,throttle,rudder,aileron,elevators,heading,speed,altitude,roll,pitch,yaw;
+    public StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature,theMostCorrelativeAttribute;
+    public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
@@ -44,6 +44,7 @@ public class ViewModel extends Observable implements Observer{
         propertiesPath=new SimpleStringProperty();
         currentTime = new SimpleStringProperty("0:0");
         selectedFeature=new SimpleStringProperty();
+        theMostCorrelativeAttribute=new SimpleStringProperty();
         selectedAttributePoints=new SimpleListProperty<>(FXCollections.observableArrayList());
         theMostCorrelativeAttributePoints=new SimpleListProperty<>(FXCollections.observableArrayList());
         properties=new Properties();
@@ -89,10 +90,12 @@ public class ViewModel extends Observable implements Observer{
             if(ts!=null){
                 selectedFeatureId=ts.getIndexByFeature(newValue);
                 if(correlatedFeaturesMap.containsKey(newValue)){
-                    theMostCorrelativeAttributeId=ts.getIndexByFeature(newValue);
+                    theMostCorrelativeAttribute.setValue(correlatedFeaturesMap.get(newValue)[0]);
+                    theMostCorrelativeAttributeId=ts.getIndexByFeature(theMostCorrelativeAttribute.getValue());
                 }
                 else{
                     theMostCorrelativeAttributeId=-1;// -1  =  there is no correlative feature
+                    theMostCorrelativeAttribute.setValue("");
                 }
             }
         });
@@ -104,36 +107,6 @@ public class ViewModel extends Observable implements Observer{
         int minutes=((totalMilliseconds / (60000)) % 60);
         Platform.runLater(() -> currentTime.set((minutes+":"+seconds)));
     }
-    public DoubleProperty getProgression() {
-        return progression;
-    }
-    public DoubleProperty getPlaySpeed() {
-        return playSpeed;
-    }
-    public StringProperty getAnomalyFlightPath() {
-        return anomalyFlightPath;
-    }
-    public StringProperty getPropertiesPath() {
-        return propertiesPath;
-    }
-    public StringProperty getCurrentTime() {
-        return currentTime;
-    }
-    public StringProperty getSelectedFeature() {
-        return selectedFeature;
-    }
-    public DoubleProperty getThrottle() { return throttle; }
-    public DoubleProperty getRudder() { return rudder; }
-    public DoubleProperty getAileron() { return aileron; }
-    public DoubleProperty getElevators() { return elevators; }
-    public DoubleProperty getHeading() { return heading; }
-    public DoubleProperty getSpeed() { return speed; }
-    public DoubleProperty getAltitude() { return altitude; }
-    public DoubleProperty getRoll() { return roll; }
-    public DoubleProperty getPitch() { return pitch; }
-    public DoubleProperty getYaw() { return yaw; }
-    public ListProperty<Point> getSelectedAttributePoints() { return selectedAttributePoints; }
-    public ListProperty<Point> getTheMostCorrelativeAttributePoints() { return theMostCorrelativeAttributePoints; }
     public void shutdownExecutor() { executor.shutdown(); }
 
     public void play(){

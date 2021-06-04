@@ -15,12 +15,12 @@ public class MyClocksPanel extends Pane {
             Pane cp = fxl.load(getClass().getResource("ClocksPanel.fxml").openStream());
             ClocksPanelController clocksPanelController = fxl.getController();
 
-            heading=clocksPanelController.getHeading().valueProperty();
-            speed=clocksPanelController.getSpeed().valueProperty();
-            altitude=clocksPanelController.getAltitude().valueProperty();
-            roll=clocksPanelController.getRoll().valueProperty();
-            pitch=clocksPanelController.getPitch().valueProperty();
-            yaw=clocksPanelController.getYaw().valueProperty();
+            heading=clocksPanelController.heading.valueProperty();
+            speed=clocksPanelController.speed.valueProperty();
+            altitude=clocksPanelController.altitude.valueProperty();
+            roll=clocksPanelController.roll.valueProperty();
+            pitch=clocksPanelController.pitch.valueProperty();
+            yaw=clocksPanelController.yaw.valueProperty();
 
             this.getChildren().add(cp);
 

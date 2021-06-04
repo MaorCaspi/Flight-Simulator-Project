@@ -16,8 +16,8 @@ import view_model.ViewModel;
 
 public class MainWindowController implements Observer{
     private ViewModel vm;
-    private DoubleProperty playSpeed;
-    private StringProperty anomalyFlightPath,propertiesPath;
+    public DoubleProperty playSpeed;
+    public StringProperty anomalyFlightPath,propertiesPath;
 
     @FXML private TextField playSpeedTF;
     @FXML private Slider progressBar;
@@ -30,25 +30,26 @@ public class MainWindowController implements Observer{
     public void setViewModel(ViewModel vm){
         this.vm=vm;
         playSpeed=new SimpleDoubleProperty(1.0);
-        vm.getPlaySpeed().bind(playSpeed);
+        vm.playSpeed.bind(playSpeed);
         anomalyFlightPath=new SimpleStringProperty();
-        vm.getAnomalyFlightPath().bind(anomalyFlightPath);
+        vm.anomalyFlightPath.bind(anomalyFlightPath);
         propertiesPath=new SimpleStringProperty();
-        vm.getPropertiesPath().bind(propertiesPath);
-        progressBar.valueProperty().bindBidirectional(vm.getProgression());
-        currentTime.textProperty().bind(vm.getCurrentTime());
-        joystick.getRudder().bind(vm.getRudder());
-        joystick.getThrottle().bind(vm.getThrottle());
-        joystick.getAileron().bind(vm.getAileron());
-        joystick.getElevators().bind(vm.getElevators());
-        clocksPanel.getHeading().bind(vm.getHeading());
-        clocksPanel.getSpeed().bind(vm.getSpeed());
-        clocksPanel.getAltitude().bind(vm.getAltitude());
-        clocksPanel.getRoll().bind(vm.getRoll());
-        clocksPanel.getPitch().bind(vm.getPitch());
-        clocksPanel.getYaw().bind(vm.getYaw());
-        graphs.getSelectedAttributePoints().bind(vm.getSelectedAttributePoints());
-        graphs.getTheMostCorrelativeAttributePoints().bind(vm.getTheMostCorrelativeAttributePoints());
+        vm.propertiesPath.bind(propertiesPath);
+        progressBar.valueProperty().bindBidirectional(vm.progression);
+        currentTime.textProperty().bind(vm.currentTime);
+        joystick.rudder.bind(vm.rudder);
+        joystick.throttle.bind(vm.throttle);
+        joystick.aileron.bind(vm.aileron);
+        joystick.elevators.bind(vm.elevators);
+        clocksPanel.getHeading().bind(vm.heading);
+        clocksPanel.getSpeed().bind(vm.speed);
+        clocksPanel.getAltitude().bind(vm.altitude);
+        clocksPanel.getRoll().bind(vm.roll);
+        clocksPanel.getPitch().bind(vm.pitch);
+        clocksPanel.getYaw().bind(vm.yaw);
+        graphs.getSelectedAttributePoints().bind(vm.selectedAttributePoints);
+        graphs.getTheMostCorrelativeAttributePoints().bind(vm.theMostCorrelativeAttributePoints);
+        graphs.getTheMostCorrelativeAttribute().bind(vm.theMostCorrelativeAttribute);
         attributes.setXml("settings.xml"); //the default path for the properties file
     }
     public void showErrorMessage(String message)
@@ -102,8 +103,8 @@ public class MainWindowController implements Observer{
             anomalyFlightPath.setValue(filePath);
             attributes.setCsv(filePath);
             attributes.LoadList();
-            vm.getSelectedFeature().bind(attributes.getSelectedFeature());
-            graphs.getSelectedFeature().bind(attributes.getSelectedFeature());
+            vm.selectedFeature.bind(attributes.selectedFeature);
+            graphs.getSelectedFeature().bind(attributes.selectedFeature);
         }
     }
     @FXML
