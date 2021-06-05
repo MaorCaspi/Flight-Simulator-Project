@@ -25,7 +25,7 @@ public class MainTrainAnomalyDetector {
 		// test the anomaly detector
 		TimeSeries ts2= null;
 		try {
-			ts2 = new TimeSeries("C:\\Users\\Administrator\\Desktop\\anomaly_flight2.csv");
+			ts2 = new TimeSeries("C:\\Users\\Administrator\\Desktop\\anomaly_flight.csv");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

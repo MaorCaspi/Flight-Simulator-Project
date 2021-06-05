@@ -1,5 +1,11 @@
 package anomalyDetectors;
 
+import javafx.collections.ObservableList;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import other_classes.Point;
 import other_classes.TimeSeries;
 
 import java.util.*;
@@ -75,9 +81,48 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector{
         }
         return reports;
     }
+    private void UpdateLineChart(ObservableList<XYChart.Data<Number, Number>> seriesData, ObservableList<Point> points){
+        seriesData.clear();
+        for(int i =0;i<points.size();i++) {
+            seriesData.add(new XYChart.Data(points.get(i).getX(), points.get(i).getY()));
+        }
+    }
+    /*
+    selectedAttributePoints.addListener((observable, oldValue, newValue) -> {
+            if (selectedAttributePoints.size() > 0) {
+                if(localSelectedFeature.equals(selectedFeature.getValue()) && localRowNumber+1==newValue.size()) {
+                Point newPoint = newValue.get(newValue.size() - 1);
+                selectedAttributeSeries.getData().add(new XYChart.Data(newPoint.getX(), newPoint.getY()));
+                }
+                else {
+                    UpdateLineChart(selectedAttributeSeries.getData(), newValue);
+                    localSelectedFeature=selectedFeature.getValue();
+                }
+            }
+            localRowNumber=newValue.size();
+        });
+     */
 
     @Override
-    public void paint() {
+    public void paint(AnchorPane board,String feature,TimeSeries ts,int numOfRow) {
+        /*
+        private LineChart<Number, Number> selectedAttributeGraph;
+         private String localSelectedFeature;
+         private int localRowNumber;
+          localRowNumber=0;
+
+        XYChart.Series<Number, Number> selectedAttributeSeries = new XYChart.Series<>();
+        selectedAttributeSeries.setName("Selected attribute");
+        selectedAttributeGraph.getData().add(selectedAttributeSeries);
+
+         lineChart.setPrefHeight(220);
+        lineChart.setMinHeight(220);
+        lineChart.setMaxHeight(220);
+         */
+
+
+        Label testt=new Label("shalom");
+        board.getChildren().add(testt);
 
     }
 }

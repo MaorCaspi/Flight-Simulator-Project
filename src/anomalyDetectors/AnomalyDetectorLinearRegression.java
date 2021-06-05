@@ -1,5 +1,10 @@
 package anomalyDetectors;
 
+import javafx.geometry.Orientation;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Paint;
 import other_classes.CorrelatedFeatures;
 import other_classes.Line;
 import other_classes.Point;
@@ -112,8 +117,23 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	}
 
 	@Override
-	public void paint() {
+	public void paint(AnchorPane board,String feature,TimeSeries ts,int numOfRow) {
+		double maxCorrelationFound=Double.MIN_VALUE;
+		int indexOfMaxCorrelation=-1;
+		for(int i=0;i<cf.size();i++){
+			if(cf.get(i).feature1.equals(feature) || cf.get(i).feature2.equals(feature)){
+				if(cf.get(i).correlation>maxCorrelationFound){
+					indexOfMaxCorrelation=i;
+					maxCorrelationFound=cf.get(i).correlation;
+				}
+			}
+		}
+		if(indexOfMaxCorrelation>=cf.size() || indexOfMaxCorrelation<0){return;}
+		CorrelatedFeatures currentCorrelatedFeatures=cf.get(indexOfMaxCorrelation);
+		Line line=currentCorrelatedFeatures.getLin_reg();
 
+		Label testt=new Label("shalom");
+		board.getChildren().add(testt);
 	}
 }
 //////////////////////////////////////////////////////////////////////////////

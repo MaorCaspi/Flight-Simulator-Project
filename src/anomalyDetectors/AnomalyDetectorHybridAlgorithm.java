@@ -1,7 +1,7 @@
 package anomalyDetectors;
 
+import javafx.scene.layout.AnchorPane;
 import other_classes.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -122,7 +122,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
     }
 
     @Override
-    public void paint() {
+    public void paint(AnchorPane board,String feature,TimeSeries ts,int numOfRow) {
 
     }
 
