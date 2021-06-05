@@ -50,7 +50,6 @@ public class MainWindowController implements Observer{
         graphs.getSelectedAttributePoints().bind(vm.selectedAttributePoints);
         graphs.getTheMostCorrelativeAttributePoints().bind(vm.theMostCorrelativeAttributePoints);
         graphs.getTheMostCorrelativeAttribute().bind(vm.theMostCorrelativeAttribute);
-        attributes.setXml("settings.xml"); //the default path for the properties file
     }
     public void showErrorMessage(String message)
     {
@@ -101,8 +100,8 @@ public class MainWindowController implements Observer{
         String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
         if (filePath != null) {
             anomalyFlightPath.setValue(filePath);
-            attributes.setCsv(filePath);
             attributes.LoadList();
+            attributes.features.bind(vm.features);
             vm.selectedFeature.bind(attributes.selectedFeature);
             graphs.getSelectedFeature().bind(attributes.selectedFeature);
         }
@@ -112,7 +111,6 @@ public class MainWindowController implements Observer{
         String filePath=uploadFile("Upload properties file - XML","XML file","*.xml*");
         if (filePath != null) {
             propertiesPath.setValue(filePath);
-            attributes.setXml(filePath);
         }
     }
     @FXML

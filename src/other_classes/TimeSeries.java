@@ -13,15 +13,15 @@ import java.util.Map;
 public class TimeSeries {
 
     private Map<Integer, ArrayList<Double>> ts;
-    private ArrayList<String> atts;
+    private ListProperty<String> atts;
 
     public TimeSeries() {
         ts=new HashMap<>();
-        atts=new ArrayList<>();
+        atts=new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     public TimeSeries(String csvFileName) throws IOException {
         ts=new HashMap<>();
-        atts=new ArrayList<>();
+        atts=new SimpleListProperty<>(FXCollections.observableArrayList());
         BufferedReader in=new BufferedReader(new FileReader(csvFileName));
         String line=in.readLine();
         int i=1;
@@ -52,7 +52,7 @@ public class TimeSeries {
         return tempList;
     }
 
-    public ArrayList<String> getAttributes(){
+    public ListProperty<String> getAttributes(){
         return atts;
     }
 

@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 public class ViewModel extends Observable implements Observer{
     private FlightSimulatorModel m;
-    private TimeSeries ts;
+    private TimeSeries ts,regTs;
     private Properties properties;
     private int csvLength,selectedFeatureId,localSelectedFeatureId,theMostCorrelativeAttributeId,localNumOfRow;
     private ExecutorService executor;
@@ -24,6 +24,7 @@ public class ViewModel extends Observable implements Observer{
     public DoubleProperty playSpeed,progression,throttle,rudder,aileron,elevators,heading,speed,altitude,roll,pitch,yaw;
     public StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature,theMostCorrelativeAttribute;
     public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
+    public ListProperty<String> features;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
@@ -47,6 +48,7 @@ public class ViewModel extends Observable implements Observer{
         theMostCorrelativeAttribute=new SimpleStringProperty();
         selectedAttributePoints=new SimpleListProperty<>(FXCollections.observableArrayList());
         theMostCorrelativeAttributePoints=new SimpleListProperty<>(FXCollections.observableArrayList());
+        features=new SimpleListProperty<>(FXCollections.observableArrayList());
         properties=new Properties();
         properties.deserializeFromXML("settings.xml");//the default path for the properties file
         m.setProperties(properties);
@@ -57,10 +59,11 @@ public class ViewModel extends Observable implements Observer{
                 AnomalyDetectorLinearRegression anomalyDetectorLinearRegression=new AnomalyDetectorLinearRegression();
                 try {
                     ts = new TimeSeries(newValue);
-                    if (ts.getNumOfColumns() != 42) {
+                    regTs =new TimeSeries(properties.getNormalFlightCsvPath());
+                    if ((ts.getNumOfColumns() != 42) || (regTs.getNumOfColumns() != 42)) {
                         throw new Exception();
                     }
-                    anomalyDetectorLinearRegression.learnNormal(new TimeSeries(properties.getNormalFlightCsvPath()));
+                    anomalyDetectorLinearRegression.learnNormal(regTs);
                 }
                 catch (Exception e) {
                     setChanged();
@@ -70,6 +73,7 @@ public class ViewModel extends Observable implements Observer{
                 m.setTimeSeries(ts);
                 csvLength = ts.getRowSize();
                 correlatedFeaturesMap=anomalyDetectorLinearRegression.getTheMostCorrelatedFeaturesMap();
+                features.set(ts.getAttributes());
             }
         });
 

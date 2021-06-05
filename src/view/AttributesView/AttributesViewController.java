@@ -7,4 +7,5 @@ import javafx.scene.control.ListView;
 public class AttributesViewController{
 
     @FXML public ListView<String> attributeslistView;
+
 }
