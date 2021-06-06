@@ -1,4 +1,4 @@
-package view.AnomalyDetectionGraph;
+package view.Graphs;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.StringProperty;
@@ -7,15 +7,15 @@ import javafx.scene.layout.Pane;
 import other_classes.Point;
 import java.io.IOException;
 
-public class MyAnomalyDetectionGraph extends Pane{
+public class MyGraphs extends Pane{
 
-    private AnomalyDetectionGraphController anomalyDetectionGraphController;
+    private GraphsController anomalyDetectionGraphController;
 
-    public MyAnomalyDetectionGraph(){
+    public MyGraphs(){
         super();
         FXMLLoader fxl=new FXMLLoader();
         try {
-            Pane adg=fxl.load(getClass().getResource("AnomalyDetectionGraph.fxml").openStream());
+            Pane adg=fxl.load(getClass().getResource("Graphs.fxml").openStream());
             anomalyDetectionGraphController=fxl.getController();
             this.getChildren().add(adg);
         }

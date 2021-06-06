@@ -32,7 +32,7 @@ public class Main extends Application {
         //when press the x button
         primaryStage.setOnCloseRequest(event -> {
             vm.shutdownExecutor();
-            mwc.pressButtonStop();
+           /////////////////////////////////////////////// mwc.pressButtonStop();
             Platform.exit();
             System.exit(0);
         });

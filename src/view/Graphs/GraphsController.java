@@ -1,6 +1,5 @@
-package view.AnomalyDetectionGraph;
+package view.Graphs;
 
-import anomalyDetectors.AnomalyDetectorLinearRegression;
 import anomalyDetectors.AnomalyDetectorZScoreAlgorithm;
 import anomalyDetectors.AnomalyReport;
 import javafx.beans.property.ListProperty;
@@ -22,7 +21,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AnomalyDetectionGraphController implements Initializable {
+public class GraphsController implements Initializable {
     @FXML private LineChart<Number, Number> selectedAttributeGraph,theMostCorrelativeAttributeGraph;
     @FXML public Label theMostCorrelativeAttribute;
     @FXML private AnchorPane anomalyDetectAnchorPane;

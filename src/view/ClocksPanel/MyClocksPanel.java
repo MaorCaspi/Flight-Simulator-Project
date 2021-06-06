@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 
 public class MyClocksPanel extends Pane {
-    private DoubleProperty heading,speed,altitude,roll,pitch,yaw;
+    public DoubleProperty heading,speed,altitude,roll,pitch,yaw;
 
     public MyClocksPanel() {
         super();
@@ -28,10 +28,4 @@ public class MyClocksPanel extends Pane {
             e.printStackTrace();
         }
     }
-    public DoubleProperty getHeading() { return heading; }
-    public DoubleProperty getSpeed() { return speed; }
-    public DoubleProperty getAltitude() { return altitude; }
-    public DoubleProperty getRoll() { return roll; }
-    public DoubleProperty getPitch() { return pitch; }
-    public DoubleProperty getYaw() { return yaw; }
 }

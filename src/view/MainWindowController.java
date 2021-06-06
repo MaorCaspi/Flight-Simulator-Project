@@ -8,7 +8,8 @@ import java.util.Observable;
 import java.util.Observer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import view.AnomalyDetectionGraph.MyAnomalyDetectionGraph;
+import view.Controllers.MyControllers;
+import view.Graphs.MyGraphs;
 import view.AttributesView.MyAttributes;
 import view.ClocksPanel.MyClocksPanel;
 import view.Joystick.MyJoystick;
@@ -16,37 +17,43 @@ import view_model.ViewModel;
 
 public class MainWindowController implements Observer{
     private ViewModel vm;
-    public DoubleProperty playSpeed;
     public StringProperty anomalyFlightPath,propertiesPath;
 
-    @FXML private TextField playSpeedTF;
-    @FXML private Slider progressBar;
-    @FXML private Label currentTime;
     @FXML private MyJoystick joystick;
     @FXML private MyClocksPanel clocksPanel;
     @FXML private MyAttributes attributes;
-    @FXML private MyAnomalyDetectionGraph graphs;
+    @FXML private MyGraphs graphs;
+    @FXML private MyControllers controllers;
 
     public void setViewModel(ViewModel vm){
         this.vm=vm;
-        playSpeed=new SimpleDoubleProperty(1.0);
-        vm.playSpeed.bind(playSpeed);
         anomalyFlightPath=new SimpleStringProperty();
         vm.anomalyFlightPath.bind(anomalyFlightPath);
         propertiesPath=new SimpleStringProperty();
         vm.propertiesPath.bind(propertiesPath);
-        progressBar.valueProperty().bindBidirectional(vm.progression);
-        currentTime.textProperty().bind(vm.currentTime);
+        controllers.controller.progressBar.valueProperty().bindBidirectional(vm.progression);
+        controllers.controller.currentTime.textProperty().bind(vm.currentTime);
+        vm.playSpeed.bind(controllers.controller.playSpeed);
+        controllers.controller.onPlay=()->{
+            if(anomalyFlightPath.getValue()==null) {
+                showErrorMessage("Problem with flight recording file!\nYou must upload a CSV file.");
+                return;
+            }
+            vm.play();
+        };
+        controllers.controller.onPause=()->vm.pause();
+        controllers.controller.onForward=()->vm.forward();
+        controllers.controller.onRewind=()->vm.rewind();
         joystick.rudder.bind(vm.rudder);
         joystick.throttle.bind(vm.throttle);
         joystick.aileron.bind(vm.aileron);
         joystick.elevators.bind(vm.elevators);
-        clocksPanel.getHeading().bind(vm.heading);
-        clocksPanel.getSpeed().bind(vm.speed);
-        clocksPanel.getAltitude().bind(vm.altitude);
-        clocksPanel.getRoll().bind(vm.roll);
-        clocksPanel.getPitch().bind(vm.pitch);
-        clocksPanel.getYaw().bind(vm.yaw);
+        clocksPanel.heading.bind(vm.heading);
+        clocksPanel.speed.bind(vm.speed);
+        clocksPanel.altitude.bind(vm.altitude);
+        clocksPanel.roll.bind(vm.roll);
+        clocksPanel.pitch.bind(vm.pitch);
+        clocksPanel.yaw.bind(vm.yaw);
         graphs.getSelectedAttributePoints().bind(vm.selectedAttributePoints);
         graphs.getTheMostCorrelativeAttributePoints().bind(vm.theMostCorrelativeAttributePoints);
         graphs.getTheMostCorrelativeAttribute().bind(vm.theMostCorrelativeAttribute);
@@ -70,32 +77,6 @@ public class MainWindowController implements Observer{
     }
 
     @FXML
-    public void pressButtonPlay(){
-        if(anomalyFlightPath.getValue()==null) {
-            showErrorMessage("Problem with flight recording file!\nYou must upload a CSV file.");
-            return;
-        }
-        vm.play();
-        progressBar.setDisable(false);
-    }
-    @FXML
-    public void pressButtonPause(){
-        vm.pause();
-        progressBar.setDisable(true);
-    }
-    @FXML
-    public void pressButtonForward(){
-        vm.forward();
-    }
-    @FXML
-    public void pressButtonRewind(){ vm.rewind(); }
-    @FXML
-    public void pressButtonStop() {
-        if (!progressBar.isDisabled()) {
-            progressBar.setValue(1);
-        }
-    }
-    @FXML
     public void pressButtonLoadCSV(){
         String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
         if (filePath != null) {
@@ -111,20 +92,6 @@ public class MainWindowController implements Observer{
         String filePath=uploadFile("Upload properties file - XML","XML file","*.xml*");
         if (filePath != null) {
             propertiesPath.setValue(filePath);
-        }
-    }
-    @FXML
-    public void playSpeedWasChanged(){
-        try {
-            double newPlaySpeed = Double.parseDouble(playSpeedTF.textProperty().getValue());
-            if(playSpeed.getValue().equals(newPlaySpeed)) { return;} //if yes-it doesn't really changed- so do nothing.
-            if(newPlaySpeed<=0.0)
-                throw new Exception();
-            playSpeed.setValue(newPlaySpeed);
-        }
-        catch (Exception e)
-        {
-            showErrorMessage("Problem with the play speed!\nYou must enter a valid play speed number.");
         }
     }
 
