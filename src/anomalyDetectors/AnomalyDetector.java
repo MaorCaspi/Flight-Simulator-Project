@@ -2,11 +2,11 @@ package anomalyDetectors;
 
 import javafx.scene.layout.AnchorPane;
 import other_classes.TimeSeries;
-
 import java.util.List;
+import java.util.Observer;
 
-public interface AnomalyDetector {
+public interface AnomalyDetector extends Observer {
     public void learnNormal(TimeSeries ts);
     public List<AnomalyReport> detect(TimeSeries ts);
-    public void paint(AnchorPane board,String feature,TimeSeries ts,int numOfRow);
+    public AnchorPane paint();
 }

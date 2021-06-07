@@ -19,41 +19,40 @@ public class ControllersController {
         playSpeed=new SimpleDoubleProperty(1.0);
     }
 
-
     @FXML
-    public void pressButtonPlay(){
+    private void pressButtonPlay(){
         if(onPlay!=null){
             onPlay.run();
         }
         progressBar.setDisable(false);
     }
     @FXML
-    public void pressButtonPause(){
+    private void pressButtonPause(){
         if(onPause!=null){
             onPause.run();
         }
         progressBar.setDisable(true);
     }
     @FXML
-    public void pressButtonForward(){
+    private void pressButtonForward(){
         if(onForward!=null){
             onForward.run();
         }
     }
     @FXML
-    public void pressButtonRewind(){
+    private void pressButtonRewind(){
         if(onRewind!=null){
             onRewind.run();
         }
     }
     @FXML
-    public void pressButtonStop() {
+    private void pressButtonStop() {
         if (!progressBar.isDisabled()) {
             progressBar.setValue(1);
         }
     }
     @FXML
-    public void playSpeedWasChanged(){
+    private void playSpeedWasChanged(){
         try {
             double newPlaySpeed = Double.parseDouble(playSpeedTF.textProperty().getValue());
             if(playSpeed.getValue().equals(newPlaySpeed)) { return;} //if yes-it doesn't really changed- so do nothing.
@@ -66,7 +65,7 @@ public class ControllersController {
         }
     }
 
-    public void showErrorMessage(String message) {
+    private void showErrorMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(message);

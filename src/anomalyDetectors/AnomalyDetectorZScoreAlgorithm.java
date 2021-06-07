@@ -2,30 +2,30 @@ package anomalyDetectors;
 
 import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import other_classes.Point;
 import other_classes.TimeSeries;
-
 import java.util.*;
 
-public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector{
+public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
 
     private List<Double> thresholds;
+    private TimeSeries anomalyTs;
     public AnomalyDetectorZScoreAlgorithm(){
-        this.thresholds = new LinkedList<>();
+        thresholds = new LinkedList<>();
     }
 
     private static double calcAvg(ArrayList<Double> values) {
-        double sum = 0.0;
+        double sum = 0;
         for (double value : values)
             sum += value;
         return sum / values.size();
     }
 
     private static float calculateSD(ArrayList<Double> values) {
-        double standardDeviation = 0.0;
+        double standardDeviation = 0;
         int length = values.size();
         double mean = calcAvg(values);
 
@@ -37,7 +37,7 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector{
 
     private double zScore(ArrayList<Double> arr, double value) {
         float sDeviation = calculateSD(arr);
-        if (sDeviation == 0) return 0.0f;
+        if (sDeviation == 0) return 0;
 
         double zScore = value - calcAvg(arr);
         return (Math.abs(zScore)) / calculateSD(arr);
@@ -66,6 +66,7 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector{
 
     @Override
     public List<AnomalyReport> detect(TimeSeries ts) {
+        anomalyTs=ts;
         List<AnomalyReport> reports = new ArrayList<>();
         int thresholdIndex = 0;
         for (String feature : ts.getAttributes()) {
@@ -104,25 +105,29 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector{
      */
 
     @Override
-    public void paint(AnchorPane board,String feature,TimeSeries ts,int numOfRow) {
-        /*
-        private LineChart<Number, Number> selectedAttributeGraph;
-         private String localSelectedFeature;
-         private int localRowNumber;
-          localRowNumber=0;
+    public AnchorPane paint() {
+        AnchorPane board=new AnchorPane();
+
+        LineChart<Number, Number> zscoreGraph=new LineChart<>(new NumberAxis(), new NumberAxis());
+
+        String localSelectedFeature;
+        int localRowNumber;
 
         XYChart.Series<Number, Number> selectedAttributeSeries = new XYChart.Series<>();
-        selectedAttributeSeries.setName("Selected attribute");
-        selectedAttributeGraph.getData().add(selectedAttributeSeries);
+        selectedAttributeSeries.setName("Zscore Graph");
+        zscoreGraph.getData().add(selectedAttributeSeries);
 
-         lineChart.setPrefHeight(220);
-        lineChart.setMinHeight(220);
-        lineChart.setMaxHeight(220);
-         */
+        zscoreGraph.setPrefSize(300, 300);
+        zscoreGraph.setMinSize(300, 300);
+        zscoreGraph.setMaxSize(300, 300);
 
+        board.getChildren().add(zscoreGraph);
 
-        Label testt=new Label("shalom");
-        board.getChildren().add(testt);
+        return board;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
 
     }
 }

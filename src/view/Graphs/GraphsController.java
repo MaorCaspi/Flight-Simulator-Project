@@ -1,7 +1,5 @@
 package view.Graphs;
 
-import anomalyDetectors.AnomalyDetectorZScoreAlgorithm;
-import anomalyDetectors.AnomalyReport;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -13,18 +11,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import other_classes.Point;
-import other_classes.TimeSeries;
-import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class GraphsController implements Initializable {
     @FXML private LineChart<Number, Number> selectedAttributeGraph,theMostCorrelativeAttributeGraph;
     @FXML public Label theMostCorrelativeAttribute;
-    @FXML private AnchorPane anomalyDetectAnchorPane;
     private String localSelectedFeature;
     private int localRowNumber;
     public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
@@ -87,34 +80,5 @@ public class GraphsController implements Initializable {
                 localSelectedFeature = newValue;
             }
         });
-
-
-
-
-
-
-        TimeSeries ts = null;
-        try {
-            ts = new TimeSeries("C:\\Users\\Administrator\\Desktop\\reg_flight.csv");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //AnomalyDetectorLinearRegression ad=new AnomalyDetectorLinearRegression();
-        AnomalyDetectorZScoreAlgorithm ad=new AnomalyDetectorZScoreAlgorithm();
-        //AnomalyDetectorHybridAlgorithm ad=new AnomalyDetectorHybridAlgorithm();
-
-        ad.learnNormal(ts);
-
-        // test the anomaly detector
-        TimeSeries ts2= null;
-        try {
-            ts2 = new TimeSeries("C:\\Users\\Administrator\\Desktop\\anomaly_flight.csv");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        List<AnomalyReport> reports = ad.detect(ts2);
-       ad.paint(anomalyDetectAnchorPane,"throttle",ts2,0);
-
-
     }
 }

@@ -1,9 +1,13 @@
 package model;
 
+import anomalyDetectors.AnomalyDetector;
+import anomalyDetectors.AnomalyDetectorZScoreAlgorithm;
+import javafx.scene.layout.AnchorPane;
 import other_classes.FGPlayer;
 import other_classes.Properties;
 import other_classes.TimeSeries;
 import java.util.Observable;
+import java.util.concurrent.Callable;
 
 public class FlightSimulatorModel extends Observable implements Model{
     private double playSpeed;
@@ -13,12 +17,32 @@ public class FlightSimulatorModel extends Observable implements Model{
     private Thread thread;
     private int numOfRow;
     private Properties properties;
+    private AnomalyDetector ad;
 
     public FlightSimulatorModel() {
         firstTimePlay=true;
         numOfRow=0;
         properties=new Properties();
     }
+
+    @Override
+    public boolean setAnomalyDetector(AnomalyDetector ad) {
+
+        //flightGearModel.addObserver(vm);
+        return false;
+    }
+
+    @Override
+    public Callable<AnchorPane> getPainter() {
+        ad=new AnomalyDetectorZScoreAlgorithm();
+        addObserver(ad);
+
+        if(ad!=null){
+            return ()->ad.paint();
+        }
+        return null;
+    }
+
     @Override
     public void setPlaySpeed(double val) {
         playSpeed=val;
@@ -34,12 +58,6 @@ public class FlightSimulatorModel extends Observable implements Model{
     @Override
     public Properties getProperties() {
         return properties;
-    }
-
-    @Override
-    public boolean getPainter(Runnable r) {
-        ///!
-        return false;
     }
 
     @Override

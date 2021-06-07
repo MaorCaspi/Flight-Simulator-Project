@@ -4,6 +4,7 @@ import anomalyDetectors.AnomalyDetectorLinearRegression;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.scene.layout.AnchorPane;
 import model.FlightSimulatorModel;
 import other_classes.Point;
 import other_classes.Properties;
@@ -11,6 +12,7 @@ import other_classes.TimeSeries;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -122,6 +124,11 @@ public class ViewModel extends Observable implements Observer{
     public void forward(){ m.forward(); }
     public void rewind(){ m.rewind(); }
 
+    public Callable<AnchorPane> getPainter(){
+
+        return m.getPainter();
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         if(o==m){
@@ -152,7 +159,7 @@ public class ViewModel extends Observable implements Observer{
                     theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttributeId,numOfRow));
                 }
             }
-                localNumOfRow=numOfRow;
+            localNumOfRow=numOfRow;
             if(theMostCorrelativeAttributeId==-1){//if there is no correlative feature
                 theMostCorrelativeAttributePoints.setValue(new SimpleListProperty<>(FXCollections.observableArrayList()));
                 }

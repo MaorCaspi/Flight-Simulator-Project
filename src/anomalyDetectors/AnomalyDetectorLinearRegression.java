@@ -9,10 +9,8 @@ import other_classes.CorrelatedFeatures;
 import other_classes.Line;
 import other_classes.Point;
 import other_classes.TimeSeries;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
@@ -117,7 +115,8 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	}
 
 	@Override
-	public void paint(AnchorPane board,String feature,TimeSeries ts,int numOfRow) {
+	public AnchorPane paint() {
+		/*
 		double maxCorrelationFound=Double.MIN_VALUE;
 		int indexOfMaxCorrelation=-1;
 		for(int i=0;i<cf.size();i++){
@@ -134,6 +133,14 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
 		Label testt=new Label("shalom");
 		board.getChildren().add(testt);
+
+		 */
+		return null;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
 	}
 }
 //////////////////////////////////////////////////////////////////////////////

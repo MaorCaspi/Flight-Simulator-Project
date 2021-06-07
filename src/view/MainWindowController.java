@@ -6,6 +6,9 @@ import javafx.scene.control.*;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.Callable;
+
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.Controllers.MyControllers;
@@ -24,6 +27,7 @@ public class MainWindowController implements Observer{
     @FXML private MyAttributes attributes;
     @FXML private MyGraphs graphs;
     @FXML private MyControllers controllers;
+    @FXML private AnchorPane anomalyDetectAnchorPane;
 
     public void setViewModel(ViewModel vm){
         this.vm=vm;
@@ -58,14 +62,14 @@ public class MainWindowController implements Observer{
         graphs.getTheMostCorrelativeAttributePoints().bind(vm.theMostCorrelativeAttributePoints);
         graphs.getTheMostCorrelativeAttribute().bind(vm.theMostCorrelativeAttribute);
     }
-    public void showErrorMessage(String message)
+    private void showErrorMessage(String message)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(message);
         alert.showAndWait();
     }
-    public String uploadFile(String title,String description,String extensions){
+    private String uploadFile(String title,String description,String extensions){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(description, extensions));
@@ -76,8 +80,12 @@ public class MainWindowController implements Observer{
         return null;
     }
 
+    public AnchorPane getPainter() throws Exception {
+        return vm.getPainter().call();
+    }
+
     @FXML
-    public void pressButtonLoadCSV(){
+    private void pressButtonLoadCSV(){
         String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
         if (filePath != null) {
             anomalyFlightPath.setValue(filePath);
@@ -88,10 +96,25 @@ public class MainWindowController implements Observer{
         }
     }
     @FXML
-    public void pressButtonLoadProperties(){
+    private void pressButtonLoadProperties(){
         String filePath=uploadFile("Upload properties file - XML","XML file","*.xml*");
         if (filePath != null) {
             propertiesPath.setValue(filePath);
+        }
+    }
+    @FXML
+    private void pressButtonLoadAdAlgorithm(){
+        /*
+        String filePath=uploadFile("Upload anomaly detection algorithm","XML file","*.xml*");
+        if (filePath != null) {
+            propertiesPath.setValue(filePath);
+        }
+         */
+        try {
+            anomalyDetectAnchorPane.getChildren().setAll(getPainter());
+        }
+        catch (Exception e) {
+            e.printStackTrace();////////////////////
         }
     }
 

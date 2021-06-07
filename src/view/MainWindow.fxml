@@ -24,11 +24,12 @@
                    text="Load properties file"/>
          <MenuItem mnemonicParsing="false" onAction="#pressButtonLoadCSV" style="-fx-font-size: 20.0 pt;"
                    text="Load flight recording file"/>
-         <MenuItem mnemonicParsing="false" onAction="#pressButtonLoadCSV" style="-fx-font-size: 20.0 pt;"
+         <MenuItem mnemonicParsing="false" onAction="#pressButtonLoadAdAlgorithm" style="-fx-font-size: 20.0 pt;"
                    text="Load anomaly detection algorithm"/>
       </items>
       <font>
          <Font size="20.0"/>
       </font>
    </MenuButton>
+   <AnchorPane fx:id="anomalyDetectAnchorPane" layoutX="300.0" layoutY="242.0" prefHeight="251.0" prefWidth="264.0" />
 </AnchorPane>

@@ -1,10 +1,15 @@
 package model;
 
+import anomalyDetectors.AnomalyDetector;
+import javafx.scene.layout.AnchorPane;
 import other_classes.Properties;
 import other_classes.TimeSeries;
 
+import java.util.concurrent.Callable;
+
 public interface Model {
-    public boolean getPainter(Runnable r);
+    public boolean setAnomalyDetector(AnomalyDetector ad);
+    public Callable<AnchorPane> getPainter();
     public void setPlaySpeed(double val);
     public void setProperties(Properties properties);
     public void setTimeSeries(TimeSeries ts);

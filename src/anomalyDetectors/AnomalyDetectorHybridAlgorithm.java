@@ -122,7 +122,12 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
     }
 
     @Override
-    public void paint(AnchorPane board,String feature,TimeSeries ts,int numOfRow) {
+    public AnchorPane paint() {
+        return null;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
 
     }
 
