@@ -53,23 +53,24 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
 	@Override
 	public void learnNormal(TimeSeries ts) {
+
 		double[][] vals =new double[ts.getNumOfColumns()][ts.getRowSize()];
-		for(int i=1;i<=ts.getNumOfColumns();i++){
+		for(int i=0;i<ts.getNumOfColumns();i++){
 			for(int j=0;j<ts.getRowSize();j++){
-				vals[i-1][j]=ts.getAttributeData(i).get(j);
+				vals[i][j]=ts.getAttributeData(ts.getAttributes().get(i)).get(j);
 			}
 		}
 
-		for(int i=1;i<=ts.getNumOfColumns();i++){
-			for(int j=i+1;j<=ts.getNumOfColumns();j++){
-				double p=StatLib.pearson(vals[i-1],vals[j-1]);
+		for(int i=0;i<ts.getNumOfColumns();i++){
+			for(int j=i+1;j<ts.getNumOfColumns();j++){
+				double p=StatLib.pearson(vals[i],vals[j]);
 				if(Math.abs(p)>correlationThreshold){
 
-					Point ps[]=toPoints(ts.getAttributeData(i),ts.getAttributeData(j));
+					Point ps[]=toPoints(ts.getAttributeData(ts.getAttributes().get(i)),ts.getAttributeData(ts.getAttributes().get(j)));
 					Line lin_reg=StatLib.linear_reg(ps);
 					double threshold=findThreshold(ps,lin_reg)*1.1f; // 10% increase
 
-					CorrelatedFeatures c=new CorrelatedFeatures(ts.getFeatureByIndex(i), ts.getFeatureByIndex(j), p, lin_reg, threshold);
+					CorrelatedFeatures c=new CorrelatedFeatures(ts.getAttributes().get(i), ts.getAttributes().get(j), p, lin_reg, threshold);
 
 					cf.add(c);
 				}
@@ -99,8 +100,8 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		ArrayList<AnomalyReport> v=new ArrayList<>();
 		
 		for(CorrelatedFeatures c : cf) {
-			ArrayList<Double> x=ts.getAttributeData(ts.getIndexByFeature(c.getFeature1()));
-			ArrayList<Double> y=ts.getAttributeData(ts.getIndexByFeature(c.getFeature2()));
+			ArrayList<Double> x=ts.getAttributeData(c.getFeature1());
+			ArrayList<Double> y=ts.getAttributeData(c.getFeature2());
 			for(int i=0;i<x.size();i++){
 				if(Math.abs(y.get(i) - c.getLin_reg().f(x.get(i)))>c.getThreshold()){
 					String d=c.getFeature1() + "-" + c.getFeature2();

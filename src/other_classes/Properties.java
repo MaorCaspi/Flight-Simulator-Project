@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Properties {
 
-    private Map<String, Integer> rowsIndex;
+    private Map<String, String> rowsIndex;
     private Float rate;
     private String flightGearIP;
     private int flightGearPort;
@@ -20,7 +20,7 @@ public class Properties {
         rowsIndex=new HashMap<>();
     }
 
-    public void setRowsIndex(Map<String, Integer> rowsIndex) {
+    public void setRowsIndex(Map<String, String> rowsIndex) {
         this.rowsIndex = rowsIndex;
     }
 
@@ -44,7 +44,7 @@ public class Properties {
         this.anomalyDetectionFilePath = anomalyDetectionFilePath;
     }
 
-    public Map<String, Integer> getRowsIndex() {
+    public Map<String, String> getRowsIndex() {
         return rowsIndex;
     }
 
@@ -68,7 +68,7 @@ public class Properties {
         return anomalyDetectionFilePath;
     }
 
-    public int propertyName(String propertyName){ return rowsIndex.get(propertyName);}
+    public String propertyName(String propertyName){ return rowsIndex.get(propertyName);}
 
     public void setFromAnotherProperties(Properties properties){
         setRowsIndex(properties.getRowsIndex());

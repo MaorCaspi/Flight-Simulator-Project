@@ -89,12 +89,12 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         }
         for(CorrelatedFeatures c:featuresToAlgorithm.get("Welzl")) {
             welzlCircleModel.put(c,algorithm.miniDisk(
-                    getListPoint(ts.getAttributeData(ts.getIndexByFeature(c.feature1)), ts.getAttributeData(ts.getIndexByFeature(c.feature2)))));
+                    getListPoint(ts.getAttributeData(c.feature1), ts.getAttributeData(c.feature2))));
         }
         TimeSeries trainZScoreAlgorithm=new TimeSeries();
         for(CorrelatedFeatures c:featuresToAlgorithm.get("ZScore")) {
-            trainZScoreAlgorithm.addCol(c.feature1,ts.getAttributeData(ts.getIndexByFeature(c.feature1)));
-            trainZScoreAlgorithm.addCol(c.feature2,ts.getAttributeData(ts.getIndexByFeature(c.feature2)));
+            trainZScoreAlgorithm.addCol(c.feature1,ts.getAttributeData(c.feature1));
+            trainZScoreAlgorithm.addCol(c.feature2,ts.getAttributeData(c.feature2));
         }
         zScoreDetector=new AnomalyDetectorZScoreAlgorithm();
         zScoreDetector.learnNormal(trainZScoreAlgorithm);
@@ -108,13 +108,13 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         TimeSeries testZScoreAlgorithm=new TimeSeries();
         // ------build new TimeSeries-----
         for(CorrelatedFeatures c:featuresToAlgorithm.get("ZScore")) {
-            testZScoreAlgorithm.addCol(c.feature1,ts.getAttributeData(ts.getIndexByFeature(c.feature1)));
-            testZScoreAlgorithm.addCol(c.feature2,ts.getAttributeData(ts.getIndexByFeature(c.feature2)));
+            testZScoreAlgorithm.addCol(c.feature1,ts.getAttributeData(c.feature1));
+            testZScoreAlgorithm.addCol(c.feature2,ts.getAttributeData(c.feature2));
         }
         detected.addAll(zScoreDetector.detect(testZScoreAlgorithm));
         for(CorrelatedFeatures c:featuresToAlgorithm.get("Welzl")) {
             int count=1;
-            List<Point> dataFeature=getListPoint(ts.getAttributeData(ts.getIndexByFeature(c.feature1)), ts.getAttributeData(ts.getIndexByFeature(c.feature2)));
+            List<Point> dataFeature=getListPoint(ts.getAttributeData(c.feature1), ts.getAttributeData(c.feature2));
             for(Point p:dataFeature) {
                 if(!welzlCircleModel.get(c).containsPoint(p))
                     detected.add(new AnomalyReport(c.feature1+"-"+c.feature2, count));

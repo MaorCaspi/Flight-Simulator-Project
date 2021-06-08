@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class TimeSeries {
 
-    private Map<Integer, ArrayList<Double>> ts;
+    private Map<String, ArrayList<Double>> ts;
     private ListProperty<String> atts;
 
     public TimeSeries() {
@@ -24,34 +24,28 @@ public class TimeSeries {
         atts=new SimpleListProperty<>(FXCollections.observableArrayList());
         BufferedReader in=new BufferedReader(new FileReader(csvFileName));
         String line=in.readLine();
-        int i=1;
         for(String att : line.split(",")) {
             atts.add(att);
-            ts.put(i, new ArrayList<>());
-            i++;
+            ts.put(att, new ArrayList<>());
         }
         while((line=in.readLine())!=null) {
-            i=1;
+            int i=0;
             for(String val : line.split(",")) {
-                ts.get(i).add(Double.parseDouble(val));
+                ts.get(atts.get(i)).add(Double.parseDouble(val));
                 i++;
             }
         }
         in.close();
     }
 
-    public ArrayList<Double> getAttributeData(int id){
-        return ts.get(id);
-    }
-
     public ArrayList<Double> getAttributeData(String featureName){
-        return ts.get(getIndexByFeature(featureName));
+        return ts.get(featureName);
     }
 
-    public ListProperty<Point> getListOfPointsUntilSpecificRow(int id, int rowNumber){
+    public ListProperty<Point> getListOfPointsUntilSpecificRow(String featureName, int rowNumber){
         ListProperty<Point> tempList=new SimpleListProperty<>(FXCollections.observableArrayList());
         for(int i=0; i<rowNumber;i++){
-            tempList.add(new Point(i,ts.get(id).get(i)));
+            tempList.add(new Point(i,ts.get(featureName).get(i)));
         }
         return tempList;
     }
@@ -61,38 +55,27 @@ public class TimeSeries {
     }
 
     public int getRowSize() {
-        return ts.get(1).size();
+        return ts.get(atts.get(0)).size();
     }
     public int getNumOfColumns(){
         return ts.size();
     }
 
-    public String getRowByRowNumber(int rowNumber)
-    {
+    public String getRowByRowNumber(int rowNumber) {
         StringBuilder result= new StringBuilder();
-        for(int i=1;i<atts.size();i++)
-        {
-            result.append(ts.get(i).get(rowNumber)+",");
+        for(int i=0;i<atts.size()-1;i++) {
+            result.append(ts.get(atts.get(i)).get(rowNumber)+",");
         }
-        result.append(ts.get(atts.size()).get(rowNumber));
+        result.append(ts.get(atts.get(atts.size()-1)).get(rowNumber));
         return result.toString();
     }
-    public double getDataFromSpecificRowAndColumn(int columnNumber,int rowNumber){
-        return ts.get(columnNumber).get(rowNumber);
+    public double getDataFromSpecificRowAndColumn(String featureName,int rowNumber){
+        return ts.get(featureName).get(rowNumber);
     }
-    public int getIndexByFeature(String featureName){
-        for(int i=0;i<atts.size();i++) {
-            if(atts.get(i).equals(featureName)) {
-                return i+1;
-            }
-        }
-        return 0;
-    }
-    public String getFeatureByIndex(int index){
-        return atts.get(index-1);
-    }
+
     public void addCol(String feature,ArrayList<Double> data) {
         atts.add(feature);
-        ts.put(getNumOfColumns(), data);
+        ts.put(String.valueOf(getNumOfColumns()), data);
     }
 }
+

@@ -19,43 +19,43 @@
   <void property="rowsIndex">
    <void method="put">
     <string>throttle</string>
-    <int>7</int>
+    <string>throttle</string>
    </void>
    <void method="put">
     <string>altitude</string>
-    <int>26</int>
+    <string>altimeter_indicated-altitude-ft</string>
    </void>
    <void method="put">
     <string>heading</string>
-    <int>37</int>
+    <string>indicated-heading-deg</string>
    </void>
    <void method="put">
     <string>elevators</string>
-    <int>2</int>
+    <string>elevator</string>
    </void>
    <void method="put">
     <string>rudder</string>
-    <int>3</int>
+    <string>rudder</string>
    </void>
    <void method="put">
     <string>roll</string>
-    <int>29</int>
+    <string>attitude-indicator_indicated-roll-deg</string>
    </void>
    <void method="put">
     <string>aileron</string>
-    <int>1</int>
+    <string>aileron</string>
    </void>
    <void method="put">
     <string>pitch</string>
-    <int>30</int>
+    <string>attitude-indicator_internal-pitch-deg</string>
    </void>
    <void method="put">
     <string>speed</string>
-    <int>25</int>
+    <string>airspeed-indicator_indicated-speed-kt</string>
    </void>
    <void method="put">
     <string>yaw</string>
-    <int>21</int>
+    <string>side-slip-deg</string>
    </void>
   </void>
  </object>
