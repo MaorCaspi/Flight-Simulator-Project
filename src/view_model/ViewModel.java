@@ -1,6 +1,8 @@
 package view_model;
 
+import anomalyDetectors.AnomalyDetector;
 import anomalyDetectors.AnomalyDetectorLinearRegression;
+import anomalyDetectors.AnomalyDetectorZScoreAlgorithm;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -27,10 +29,13 @@ public class ViewModel extends Observable implements Observer{
     public StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature,theMostCorrelativeAttribute;
     public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
     public ListProperty<String> features;
+    public IntegerProperty numOfRow;
 
     public ViewModel(FlightSimulatorModel m){
         this.m=m;
         executor = Executors.newSingleThreadExecutor();
+        numOfRow= new SimpleIntegerProperty();
+        numOfRow.bind(m.numOfRow);
         playSpeed = new SimpleDoubleProperty();
         progression = new SimpleDoubleProperty();
         throttle = new SimpleDoubleProperty();
@@ -105,6 +110,39 @@ public class ViewModel extends Observable implements Observer{
                 }
             }
         });
+        numOfRow.addListener((observable, oldValue, newValue) -> {
+            executor.execute(() -> progression.setValue((double)numOfRow.getValue()/csvLength));
+            executor.execute(() -> setTime(numOfRow.getValue()));
+            executor.execute(() -> throttle.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("throttle"),numOfRow.getValue())));
+            executor.execute(() -> rudder.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("rudder"),numOfRow.getValue())));
+            executor.execute(() -> aileron.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("aileron"),numOfRow.getValue())*40));
+            executor.execute(() -> elevators.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("elevators"),numOfRow.getValue())*40));
+            executor.execute(() -> heading.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("heading"),numOfRow.getValue())));
+            executor.execute(() -> speed.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("speed"),numOfRow.getValue())));
+            executor.execute(() -> altitude.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("altitude"),numOfRow.getValue())));
+            executor.execute(() -> roll.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("roll"),numOfRow.getValue())));
+            executor.execute(() -> pitch.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("pitch"),numOfRow.getValue())));
+            executor.execute(() -> yaw.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("yaw"),numOfRow.getValue())));
+            Platform.runLater(()->{
+                if(localSelectedFeatureId==selectedFeatureId && localNumOfRow+1==numOfRow.getValue()) {
+                    selectedAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(localSelectedFeatureId).get(numOfRow.getValue())));
+                    if(theMostCorrelativeAttributeId!=-1){
+                        theMostCorrelativeAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(theMostCorrelativeAttributeId).get(numOfRow.getValue())));
+                    }
+                }
+                else {
+                    selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,numOfRow.getValue()));
+                    localSelectedFeatureId=selectedFeatureId;
+                    if(theMostCorrelativeAttributeId!=-1){
+                        theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttributeId,numOfRow.getValue()));
+                    }
+                }
+                localNumOfRow=numOfRow.getValue();
+                if(theMostCorrelativeAttributeId==-1){//if there is no correlative feature
+                    theMostCorrelativeAttributePoints.setValue(new SimpleListProperty<>(FXCollections.observableArrayList()));
+                }
+            });
+        });
     }
     private void setTime(int rowNumber)
     {
@@ -125,45 +163,20 @@ public class ViewModel extends Observable implements Observer{
     public void rewind(){ m.rewind(); }
 
     public Callable<AnchorPane> getPainter(){
-
+        setAnomalyDetector("maorrrrrr");////////////////
         return m.getPainter();
+    }
+
+    public void setAnomalyDetector(String adPath) {
+        AnomalyDetector ad=new AnomalyDetectorZScoreAlgorithm();////////////
+        if(!m.setAnomalyDetector(ad,selectedFeature)){
+
+        }
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if(o==m){
-            int numOfRow=m.getNumOfRow();
-            executor.execute(() -> progression.setValue((double)numOfRow/csvLength));
-            executor.execute(() -> setTime(numOfRow));
-            executor.execute(() -> throttle.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("throttle"),numOfRow)));
-            executor.execute(() -> rudder.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("rudder"),numOfRow)));
-            executor.execute(() -> aileron.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("aileron"),numOfRow)*40));
-            executor.execute(() -> elevators.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("elevators"),numOfRow)*40));
-            executor.execute(() -> heading.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("heading"),numOfRow)));
-            executor.execute(() -> speed.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("speed"),numOfRow)));
-            executor.execute(() -> altitude.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("altitude"),numOfRow)));
-            executor.execute(() -> roll.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("roll"),numOfRow)));
-            executor.execute(() -> pitch.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("pitch"),numOfRow)));
-            executor.execute(() -> yaw.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("yaw"),numOfRow)));
-            Platform.runLater(()->{
-            if(localSelectedFeatureId==selectedFeatureId && localNumOfRow+1==numOfRow) {
-                selectedAttributePoints.add(new Point(numOfRow,ts.getAttributeData(localSelectedFeatureId).get(numOfRow)));
-                if(theMostCorrelativeAttributeId!=-1){
-                    theMostCorrelativeAttributePoints.add(new Point(numOfRow,ts.getAttributeData(theMostCorrelativeAttributeId).get(numOfRow)));
-                }
-            }
-            else {
-                selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeatureId,numOfRow));
-                localSelectedFeatureId=selectedFeatureId;
-                if(theMostCorrelativeAttributeId!=-1){
-                    theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttributeId,numOfRow));
-                }
-            }
-            localNumOfRow=numOfRow;
-            if(theMostCorrelativeAttributeId==-1){//if there is no correlative feature
-                theMostCorrelativeAttributePoints.setValue(new SimpleListProperty<>(FXCollections.observableArrayList()));
-                }
-            });
         }
     }
 }

@@ -80,10 +80,6 @@ public class MainWindowController implements Observer{
         return null;
     }
 
-    public AnchorPane getPainter() throws Exception {
-        return vm.getPainter().call();
-    }
-
     @FXML
     private void pressButtonLoadCSV(){
         String filePath=uploadFile("Upload flight recording file - CSV","CSV file","*.csv*");
@@ -101,6 +97,10 @@ public class MainWindowController implements Observer{
         if (filePath != null) {
             propertiesPath.setValue(filePath);
         }
+    }
+
+    public AnchorPane getPainter() throws Exception {
+        return vm.getPainter().call();
     }
     @FXML
     private void pressButtonLoadAdAlgorithm(){

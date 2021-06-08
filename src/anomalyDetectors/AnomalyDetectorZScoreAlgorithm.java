@@ -13,9 +13,11 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
 
     private List<Double> thresholds;
     private TimeSeries anomalyTs;
+
     public AnomalyDetectorZScoreAlgorithm(){
         thresholds = new LinkedList<>();
     }
+
 
     private static double calcAvg(ArrayList<Double> values) {
         double sum = 0;
@@ -110,12 +112,9 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
 
         LineChart<Number, Number> zscoreGraph=new LineChart<>(new NumberAxis(), new NumberAxis());
 
-        String localSelectedFeature;
-        int localRowNumber;
-
-        XYChart.Series<Number, Number> selectedAttributeSeries = new XYChart.Series<>();
-        selectedAttributeSeries.setName("Zscore Graph");
-        zscoreGraph.getData().add(selectedAttributeSeries);
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Zscore Graph");
+        zscoreGraph.getData().add(series);
 
         zscoreGraph.setPrefSize(300, 300);
         zscoreGraph.setMinSize(300, 300);
@@ -123,11 +122,10 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
 
         board.getChildren().add(zscoreGraph);
 
+        numOfRow.addListener((observable, oldValue, newValue) -> {
+           // series.getData().add(new XYChart.Data(numOfRow.getValue(), zScore(anomalyTs.)));
+        });
+
         return board;
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
     }
 }

@@ -1,5 +1,7 @@
 package anomalyDetectors;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.layout.AnchorPane;
 import other_classes.*;
 import java.util.ArrayList;
@@ -9,6 +11,17 @@ import java.util.*;
 import java.util.Random;
 
 public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
+
+    HashMap<String,HashSet<CorrelatedFeatures>> featuresToAlgorithm;
+    HashMap<CorrelatedFeatures,Circle> welzlCircleModel;//storing circles for each
+    //pair of correlated features
+    AnomalyDetectorLinearRegression regressionDetector;
+    AnomalyDetectorZScoreAlgorithm zScoreDetector;
+
+    public AnomalyDetectorHybridAlgorithm() {
+        welzlCircleModel=new HashMap<>();
+    }
+
 
     private class WelzlAlgorithm{
         private Random rand = new Random();
@@ -51,16 +64,6 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         for(int i=0;i<x.size();i++)
             result.add(new Point(x.get(i),y.get(i)));
         return result;
-    }
-
-    HashMap<String,HashSet<CorrelatedFeatures>> featuresToAlgorithm;
-    HashMap<CorrelatedFeatures,Circle> welzlCircleModel;//storing circles for each
-    //pair of correlated features
-    AnomalyDetectorLinearRegression regressionDetector;
-    AnomalyDetectorZScoreAlgorithm zScoreDetector;
-
-    public AnomalyDetectorHybridAlgorithm() {
-        welzlCircleModel=new HashMap<>();
     }
 
     @Override
@@ -124,11 +127,6 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
     @Override
     public AnchorPane paint() {
         return null;
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
     }
 
 }

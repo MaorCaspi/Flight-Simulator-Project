@@ -1,7 +1,8 @@
 package anomalyDetectors;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
@@ -136,11 +137,6 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
 		 */
 		return null;
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-
 	}
 }
 //////////////////////////////////////////////////////////////////////////////

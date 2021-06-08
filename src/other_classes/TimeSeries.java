@@ -44,6 +44,10 @@ public class TimeSeries {
         return ts.get(id);
     }
 
+    public ArrayList<Double> getAttributeData(String featureName){
+        return ts.get(getIndexByFeature(featureName));
+    }
+
     public ListProperty<Point> getListOfPointsUntilSpecificRow(int id, int rowNumber){
         ListProperty<Point> tempList=new SimpleListProperty<>(FXCollections.observableArrayList());
         for(int i=0; i<rowNumber;i++){
@@ -76,9 +80,9 @@ public class TimeSeries {
     public double getDataFromSpecificRowAndColumn(int columnNumber,int rowNumber){
         return ts.get(columnNumber).get(rowNumber);
     }
-    public int getIndexByFeature(String FeatureName){
+    public int getIndexByFeature(String featureName){
         for(int i=0;i<atts.size();i++) {
-            if(atts.get(i).equals(FeatureName)) {
+            if(atts.get(i).equals(featureName)) {
                 return i+1;
             }
         }

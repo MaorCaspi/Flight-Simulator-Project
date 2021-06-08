@@ -1,7 +1,9 @@
 package model;
 
 import anomalyDetectors.AnomalyDetector;
-import anomalyDetectors.AnomalyDetectorZScoreAlgorithm;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.layout.AnchorPane;
 import other_classes.FGPlayer;
 import other_classes.Properties;
@@ -10,33 +12,34 @@ import java.util.Observable;
 import java.util.concurrent.Callable;
 
 public class FlightSimulatorModel extends Observable implements Model{
+    public IntegerProperty numOfRow;
     private double playSpeed;
     private FGPlayer fgPlayer;
     private boolean firstTimePlay;
     private TimeSeries ts;
     private Thread thread;
-    private int numOfRow;
     private Properties properties;
     private AnomalyDetector ad;
 
     public FlightSimulatorModel() {
         firstTimePlay=true;
-        numOfRow=0;
+        numOfRow= new SimpleIntegerProperty(0);
         properties=new Properties();
     }
 
     @Override
-    public boolean setAnomalyDetector(AnomalyDetector ad) {
-
-        //flightGearModel.addObserver(vm);
-        return false;
+    public boolean setAnomalyDetector(AnomalyDetector ad, StringProperty selectedFeature) {
+        if(selectedFeature.getValue()==null)
+            return false;
+        this.ad=ad;
+        this.ad.selectedFeature.bind(selectedFeature);
+        this.ad.numOfRow.bindBidirectional(numOfRow);
+        return true;/////
     }
 
     @Override
     public Callable<AnchorPane> getPainter() {
-        ad=new AnomalyDetectorZScoreAlgorithm();
-        addObserver(ad);
-
+        //////////
         if(ad!=null){
             return ()->ad.paint();
         }
@@ -67,7 +70,7 @@ public class FlightSimulatorModel extends Observable implements Model{
 
     @Override
     public void setProgression(int rowNumber) {
-        if (!firstTimePlay && !(rowNumber-5<this.numOfRow && this.numOfRow<rowNumber+5)) {
+        if (!firstTimePlay && !(rowNumber-5<this.numOfRow.getValue() && this.numOfRow.getValue()<rowNumber+5)) {
             thread.stop();
             thread=new Thread()
             {
@@ -136,7 +139,7 @@ public class FlightSimulatorModel extends Observable implements Model{
             thread=new Thread()
             {
                 public void run() {
-                    fgPlayer.rewind(numOfRow);
+                    fgPlayer.rewind(numOfRow.getValue());
                 }
             };
             thread.setDaemon(true);//when the main program ends-this thread will terminate too
@@ -146,14 +149,9 @@ public class FlightSimulatorModel extends Observable implements Model{
 
     @Override
     public void setNumOfRow(int numOfRow){
-        this.numOfRow=numOfRow;
+        this.numOfRow.setValue(numOfRow);
         setChanged();
-        notifyObservers();
-    }
-
-    @Override
-    public int getNumOfRow(){
-        return numOfRow;
+        notifyObservers(numOfRow);
     }
 }
 
