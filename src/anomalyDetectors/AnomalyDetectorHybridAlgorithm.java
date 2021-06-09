@@ -126,7 +126,8 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
 
     @Override
     public AnchorPane paint() {
-        return null;
+        AnchorPane board=new AnchorPane();
+        return board;
     }
 
 }

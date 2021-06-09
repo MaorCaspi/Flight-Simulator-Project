@@ -28,12 +28,15 @@ public class FlightSimulatorModel extends Observable implements Model{
     }
 
     @Override
-    public boolean setAnomalyDetector(AnomalyDetector ad, StringProperty selectedFeature) {
-        if(selectedFeature.getValue()==null)
+    public boolean setAnomalyDetector(AnomalyDetector ad, StringProperty selectedFeature,TimeSeries regTs) {
+        if(selectedFeature.getValue()==null || regTs==null)
             return false;
         this.ad=ad;
         this.ad.selectedFeature.bind(selectedFeature);
         this.ad.numOfRow.bindBidirectional(numOfRow);
+        ad.learnNormal(regTs);
+        ad.detect(ts);
+
         return true;/////
     }
 

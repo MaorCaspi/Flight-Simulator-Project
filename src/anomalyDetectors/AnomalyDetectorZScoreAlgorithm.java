@@ -1,13 +1,13 @@
 package anomalyDetectors;
 
-import javafx.collections.ObservableList;
+import javafx.application.Platform;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.AnchorPane;
-import other_classes.Point;
 import other_classes.TimeSeries;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
 
@@ -52,12 +52,10 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
 
     @Override
     public void learnNormal(TimeSeries ts) {
-
         for (String feature : ts.getAttributes()) {
             List<Double> checkList = new ArrayList<>();
-            //int featureIndex = ts.getIndexByFeature(feature);
             ArrayList<Double> column = ts.getAttributeData(feature);
-            for (int index = 1; index < column.size(); index++) {
+            for (int index = 0; index < column.size(); index++) {
                 ArrayList<Double> subColumn =subColumn(column, index);
                 double check = zScore(subColumn, column.get(index));
                 checkList.add(check);
@@ -72,7 +70,6 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         List<AnomalyReport> reports = new ArrayList<>();
         int thresholdIndex = 0;
         for (String feature : ts.getAttributes()) {
-            //int featureIndex = ts.getIndexByFeature(feature);
             ArrayList<Double> column = ts.getAttributeData(feature);
             for (int index = 1; index < column.size(); index++) {
                 ArrayList<Double> subColumn = subColumn(column, index);
@@ -84,48 +81,53 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         }
         return reports;
     }
-    private void UpdateLineChart(ObservableList<XYChart.Data<Number, Number>> seriesData, ObservableList<Point> points){
-        seriesData.clear();
-        for(int i =0;i<points.size();i++) {
-            seriesData.add(new XYChart.Data(points.get(i).getX(), points.get(i).getY()));
-        }
-    }
-    /*
-    selectedAttributePoints.addListener((observable, oldValue, newValue) -> {
-            if (selectedAttributePoints.size() > 0) {
-                if(localSelectedFeature.equals(selectedFeature.getValue()) && localRowNumber+1==newValue.size()) {
-                Point newPoint = newValue.get(newValue.size() - 1);
-                selectedAttributeSeries.getData().add(new XYChart.Data(newPoint.getX(), newPoint.getY()));
-                }
-                else {
-                    UpdateLineChart(selectedAttributeSeries.getData(), newValue);
-                    localSelectedFeature=selectedFeature.getValue();
-                }
-            }
-            localRowNumber=newValue.size();
-        });
-     */
-
     @Override
     public AnchorPane paint() {
         AnchorPane board=new AnchorPane();
 
         LineChart<Number, Number> zscoreGraph=new LineChart<>(new NumberAxis(), new NumberAxis());
+        zscoreGraph.setAnimated(false);
+        zscoreGraph.setCreateSymbols(false);
 
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Zscore Graph");
         zscoreGraph.getData().add(series);
 
-        zscoreGraph.setPrefSize(300, 300);
-        zscoreGraph.setMinSize(300, 300);
-        zscoreGraph.setMaxSize(300, 300);
+        zscoreGraph.setPrefSize(300, 250);
+        zscoreGraph.setMinSize(300, 250);
+        zscoreGraph.setMaxSize(300, 250);
 
         board.getChildren().add(zscoreGraph);
 
-        numOfRow.addListener((observable, oldValue, newValue) -> {
-           // series.getData().add(new XYChart.Data(numOfRow.getValue(), zScore(anomalyTs.)));
-        });
+        ArrayList<Double> selectedAttributeData = anomalyTs.getAttributeData(selectedFeature.getValue());
 
+        AtomicInteger localNumOfRow= new AtomicInteger(0);
+
+        selectedFeature.addListener((observable, oldValue, newValue) -> {
+            selectedAttributeData.clear();
+            selectedAttributeData.addAll(anomalyTs.getAttributeData(selectedFeature.getValue()));
+            localNumOfRow.set(-1);
+        });
+        numOfRow.addListener((observable, oldValue, newValue) -> {
+            if(localNumOfRow.get() +1==numOfRow.getValue()){
+                double zScoreGrade=zScore(selectedAttributeData,selectedAttributeData.get(numOfRow.getValue()));
+                Platform.runLater(()->{
+                series.getData().add(new XYChart.Data(numOfRow.getValue(),zScoreGrade));
+                });
+            }
+            else{
+                Platform.runLater(()->{
+                series.getData().clear();
+                for(int i =0;i< numOfRow.getValue();i++) {
+                    double zScoreGrade=zScore(selectedAttributeData,selectedAttributeData.get(numOfRow.getValue()));
+                    series.getData().add(new XYChart.Data(i, zScoreGrade));
+                }
+                });
+            }
+            if(localNumOfRow.get()!=(-1)) {
+                localNumOfRow.set(numOfRow.getValue());
+            }
+        });
         return board;
     }
 }

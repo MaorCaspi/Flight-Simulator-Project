@@ -9,7 +9,7 @@ import other_classes.TimeSeries;
 import java.util.concurrent.Callable;
 
 public interface Model {
-    public boolean setAnomalyDetector(AnomalyDetector ad, StringProperty selectedFeature);
+    public boolean setAnomalyDetector(AnomalyDetector ad, StringProperty selectedFeature,TimeSeries regTs);
     public Callable<AnchorPane> getPainter();
     public void setPlaySpeed(double val);
     public void setProperties(Properties properties);

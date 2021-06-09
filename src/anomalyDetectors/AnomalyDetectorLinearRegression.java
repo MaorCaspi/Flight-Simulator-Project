@@ -137,7 +137,8 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		board.getChildren().add(testt);
 
 		 */
-		return null;
+		AnchorPane board=new AnchorPane();
+		return board;
 	}
 }
 //////////////////////////////////////////////////////////////////////////////
