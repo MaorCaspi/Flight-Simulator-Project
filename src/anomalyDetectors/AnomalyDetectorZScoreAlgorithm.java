@@ -1,10 +1,15 @@
 package anomalyDetectors;
 
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import other_classes.TimeSeries;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,10 +17,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
 
     private List<Double> thresholds;
+    private Map<String, List<Integer>> reportsFromDetect;
     private TimeSeries anomalyTs;
 
     public AnomalyDetectorZScoreAlgorithm(){
         thresholds = new LinkedList<>();
+        reportsFromDetect=new HashMap<>();
     }
 
 
@@ -55,7 +62,7 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         for (String feature : ts.getAttributes()) {
             List<Double> checkList = new ArrayList<>();
             ArrayList<Double> column = ts.getAttributeData(feature);
-            for (int index = 0; index < column.size(); index++) {
+            for (int index = 1; index < column.size(); index++) {
                 ArrayList<Double> subColumn =subColumn(column, index);
                 double check = zScore(subColumn, column.get(index));
                 checkList.add(check);
@@ -74,8 +81,13 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
             for (int index = 1; index < column.size(); index++) {
                 ArrayList<Double> subColumn = subColumn(column, index);
                 double check = zScore(subColumn, column.get(index));
-                if (check > thresholds.get(thresholdIndex))
+                if (check > thresholds.get(thresholdIndex)) {
                     reports.add(new AnomalyReport(feature, index));
+                    if(!reportsFromDetect.containsKey(feature)){
+                        reportsFromDetect.put(feature,new ArrayList<>());
+                    }
+                    reportsFromDetect.get(feature).add(index);
+                }
             }
             thresholdIndex++;
         }
@@ -83,6 +95,7 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
     }
     @Override
     public AnchorPane paint() {
+        if(anomalyTs==null){return null;}
         AnchorPane board=new AnchorPane();
 
         LineChart<Number, Number> zscoreGraph=new LineChart<>(new NumberAxis(), new NumberAxis());
@@ -108,7 +121,16 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
             selectedAttributeData.addAll(anomalyTs.getAttributeData(selectedFeature.getValue()));
             localNumOfRow.set(-1);
         });
+
+        Background redColorBackground=new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY));
+
         numOfRow.addListener((observable, oldValue, newValue) -> {
+            if((reportsFromDetect.containsKey(selectedFeature.getValue())) && (reportsFromDetect.get(selectedFeature.getValue()).contains(numOfRow.getValue()))){
+                board.setBackground(redColorBackground);
+            }
+            else{
+                board.setBackground(null);
+            }
             if(localNumOfRow.get() +1==numOfRow.getValue()){
                 double zScoreGrade=zScore(selectedAttributeData,selectedAttributeData.get(numOfRow.getValue()));
                 Platform.runLater(()->{
