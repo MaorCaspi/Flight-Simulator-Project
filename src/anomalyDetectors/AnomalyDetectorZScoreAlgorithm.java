@@ -56,7 +56,6 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         return new ArrayList<>(arr.subList(0, index));
     }
 
-
     @Override
     public void learnNormal(TimeSeries ts) {
         for (String feature : ts.getAttributes()) {
@@ -107,8 +106,6 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         zscoreGraph.getData().add(series);
 
         zscoreGraph.setPrefSize(300, 250);
-        zscoreGraph.setMinSize(300, 250);
-        zscoreGraph.setMaxSize(300, 250);
 
         board.getChildren().add(zscoreGraph);
 
@@ -123,7 +120,6 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         });
 
         Background redColorBackground=new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY));
-
         numOfRow.addListener((observable, oldValue, newValue) -> {
             if((reportsFromDetect.containsKey(selectedFeature.getValue())) && (reportsFromDetect.get(selectedFeature.getValue()).contains(numOfRow.getValue()))){
                 board.setBackground(redColorBackground);
@@ -131,22 +127,22 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
             else{
                 board.setBackground(null);
             }
-            if(localNumOfRow.get() +1==numOfRow.getValue()){
+            if(localNumOfRow.get() +1==numOfRow.getValue()){ //If the row number increases by 1 and the property has not changed
                 double zScoreGrade=zScore(selectedAttributeData,selectedAttributeData.get(numOfRow.getValue()));
                 Platform.runLater(()->{
                 series.getData().add(new XYChart.Data(numOfRow.getValue(),zScoreGrade));
                 });
             }
-            else{
+            else{//Create the graph again from scratch
                 Platform.runLater(()->{
                 series.getData().clear();
                 for(int i =0;i< numOfRow.getValue();i++) {
                     double zScoreGrade=zScore(selectedAttributeData,selectedAttributeData.get(numOfRow.getValue()));
                     series.getData().add(new XYChart.Data(i, zScoreGrade));
-                }
+                  }
                 });
             }
-            if(localNumOfRow.get()!=(-1)) {
+            if(localNumOfRow.get()!=(-1)) {//If the property has not changed
                 localNumOfRow.set(numOfRow.getValue());
             }
         });

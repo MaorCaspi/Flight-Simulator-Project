@@ -167,7 +167,8 @@ public class ViewModel extends Observable implements Observer{
     }
 
     public void setAnomalyDetector(String adPath) {
-        AnomalyDetector ad=new AnomalyDetectorZScoreAlgorithm();////////////
+        //AnomalyDetector ad=new AnomalyDetectorZScoreAlgorithm();////////////
+        AnomalyDetector ad=new AnomalyDetectorLinearRegression();
         if(!m.setAnomalyDetector(ad,selectedFeature,regTs)){
 
         }
