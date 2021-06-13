@@ -136,6 +136,14 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
                 series.getData().add(new XYChart.Data(numOfRow.getValue(),zScoreGrade));
                 });
             }
+            else if(localNumOfRow.get() -1==numOfRow.getValue()){ //this is for the rewind option
+                Platform.runLater(()->{
+                    int length=series.getData().size();
+                    if(length>0) {
+                        series.getData().remove(length - 1);
+                    }
+                });
+            }
             else{//Create the graph again from scratch
                 Platform.runLater(()->{
                 series.getData().clear();

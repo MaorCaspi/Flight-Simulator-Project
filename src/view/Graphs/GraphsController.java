@@ -48,32 +48,46 @@ public class GraphsController implements Initializable {
 
 
         selectedAttributePoints.addListener((observable, oldValue, newValue) -> {
-            if (selectedAttributePoints.size() > 0) {
-                if(localSelectedFeature.equals(selectedFeature.getValue()) && localRowNumber+1==newValue.size()) {
+            if (newValue.size() > 0) {
+                boolean theFeatureNameNotChanged=localSelectedFeature.equals(selectedFeature.getValue());
+                if(theFeatureNameNotChanged && localRowNumber+1==newValue.size()) {
                 Point newPoint = newValue.get(newValue.size() - 1);
                 selectedAttributeSeries.getData().add(new XYChart.Data(newPoint.getX(), newPoint.getY()));
+                }
+                else if(theFeatureNameNotChanged && localRowNumber-1==newValue.size()) {//this is for the rewind option
+                    int length=selectedAttributeSeries.getData().size();
+                    if(length>0) {
+                        selectedAttributeSeries.getData().remove(length - 1);
+                    }
                 }
                 else {
                     UpdateLineChart(selectedAttributeSeries.getData(), newValue);
                     localSelectedFeature=selectedFeature.getValue();
                 }
+                localRowNumber=newValue.size();
             }
-            localRowNumber=newValue.size();
         });
         theMostCorrelativeAttributePoints.addListener((observable, oldValue, newValue) -> {
-            if (theMostCorrelativeAttributePoints.size() > 0) {
-                if(localSelectedFeature.equals(selectedFeature.getValue()) && localRowNumber+1==newValue.size()) {
+            if (newValue.size() > 0) {
+                boolean theFeatureNameNotChanged=localSelectedFeature.equals(selectedFeature.getValue());
+                if(theFeatureNameNotChanged && localRowNumber+1==newValue.size()) {//If the row number increases by only one
                     Point newPoint = newValue.get(newValue.size() - 1);
                     theMostCorrelativeAttributeSeries.getData().add(new XYChart.Data(newPoint.getX(), newPoint.getY()));
+                }
+                else if(theFeatureNameNotChanged && localRowNumber-1==newValue.size()) {//this is for the rewind option
+                    int length=theMostCorrelativeAttributeSeries.getData().size();
+                    if(length>0) {
+                        theMostCorrelativeAttributeSeries.getData().remove(length - 1);
+                    }
                 }
                 else {
                     UpdateLineChart(theMostCorrelativeAttributeSeries.getData(), newValue);
                 }
+                localRowNumber=newValue.size();
             }
-            else if (theMostCorrelativeAttributePoints.size() == 0){
+            else if (theMostCorrelativeAttributePoints.size() == 0){// if there is no correlative feature at all
                 theMostCorrelativeAttributeSeries.getData().clear();
             }
-            localRowNumber=newValue.size();
         });
         selectedFeature.addListener((observable, oldValue, newValue) -> {
             if(localSelectedFeature==null) {

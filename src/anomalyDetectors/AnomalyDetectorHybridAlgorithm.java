@@ -28,6 +28,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
     private AnomalyDetectorZScoreAlgorithm zScoreDetector;
     private TimeSeries regTs,anomalyTs;
     private Map<String, List<Integer>> reportsFromDetect;
+    private Map<String, String[]> tmcf;//the most correlated feature map
     private Map<String,String> featureNameToAlgorithm;//We will use it in the paint method, so we will know which graph to display to the user
     //if the feature name is not mentioned here then we will assign it to ZScore
 
@@ -168,15 +169,43 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         }
         return "ZScore";
     }
+    //We will use it in the paint method
+    private void selectedFeatureWasChange(AtomicReference<String> algorithmName,AtomicReference<String> description,LineChart lineChart,BubbleChart bubbleChart,ArrayList<Double> selectedAttributeData,AtomicInteger localNumOfRow) {
+        String theMostCorrelativeFeature;
+        algorithmName.set(getAlgorithmNameByFeatureName(selectedFeature.getValue()));
+        switch(algorithmName.get()) {
+            case "Regression":
+                theMostCorrelativeFeature = tmcf.get(selectedFeature.getValue())[0];
+                description.set(selectedFeature.getValue() + "-" + theMostCorrelativeFeature);
+                lineChart.setVisible(true);
+                bubbleChart.setVisible(false);
+                break;
+            case "ZScore":
+                description.set(selectedFeature.getValue());
+                selectedAttributeData.clear();
+                selectedAttributeData.addAll(anomalyTs.getAttributeData(selectedFeature.getValue()));
+                localNumOfRow.set(-1);
+                lineChart.setVisible(true);
+                bubbleChart.setVisible(false);
+
+                break;
+            case "Welzl":
+                theMostCorrelativeFeature = tmcf.get(selectedFeature.getValue())[0];
+                description.set(selectedFeature.getValue() + "-" + theMostCorrelativeFeature);
+                lineChart.setVisible(false);
+                bubbleChart.setVisible(true);
+                break;
+        }
+    }
     @Override
     public AnchorPane paint() {
         if(anomalyTs==null || regTs==null){return null;}
         AnchorPane board= new AnchorPane(new AnchorPane());
 
         Background redColorBackground=new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY));
-        Map<String, String[]> tmcf=regressionDetector.getTheMostCorrelatedFeaturesMap();
-        AtomicReference<String> algorithmName=new AtomicReference (getAlgorithmNameByFeatureName(selectedFeature.getValue()));
-        AtomicReference<String> description=new AtomicReference ("");
+        tmcf=regressionDetector.getTheMostCorrelatedFeaturesMap();
+        AtomicReference<String> algorithmName=new AtomicReference();
+        AtomicReference<String> description=new AtomicReference ();
         AtomicInteger localNumOfRow= new AtomicInteger(0);
 
         XYChart.Series<Number, Number> series1 = new XYChart.Series();
@@ -189,7 +218,6 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         lineChart.setPrefSize(300, 250);
         board.getChildren().add(lineChart);
 
-        /////
         BubbleChart<Number, Number> bubbleChart=new BubbleChart(new NumberAxis(), new NumberAxis());
         bubbleChart.setAnimated(false);
         /////////lineChart.getData().addAll(series1,series2);
@@ -198,31 +226,12 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
 
 
 
-        ArrayList<Double> selectedAttributeData = anomalyTs.getAttributeData(selectedFeature.getValue());//zscore
+        ArrayList<Double> selectedAttributeData = new ArrayList();//zscore
+        selectedFeatureWasChange(algorithmName,description,lineChart, bubbleChart,selectedAttributeData,localNumOfRow);//this is for the initialization
 
         selectedFeature.addListener((observable, oldValue, newValue) -> {
-            lineChart.setVisible(false);
-            algorithmName.set(getAlgorithmNameByFeatureName(newValue));
-            String theMostCorrelativeFeature;
-            switch(algorithmName.get()) {
-                case "Regression":
-                    theMostCorrelativeFeature = tmcf.get(selectedFeature.getValue())[0];
-                    description.set(selectedFeature.getValue() + "-" + theMostCorrelativeFeature);
-                    break;
-                case "ZScore":
-                    description.set(selectedFeature.getValue());
-                    selectedAttributeData.clear();
-                    selectedAttributeData.addAll(anomalyTs.getAttributeData(selectedFeature.getValue()));
-                    localNumOfRow.set(-1);
-                    lineChart.setVisible(true);
-                    break;
-                case "Welzl":
-                   theMostCorrelativeFeature = tmcf.get(selectedFeature.getValue())[0];
-                    description.set(selectedFeature.getValue() + "-" + theMostCorrelativeFeature);
-                    break;
-            }
+            selectedFeatureWasChange(algorithmName,description,lineChart, bubbleChart,selectedAttributeData,localNumOfRow);
         });
-
 
         numOfRow.addListener((observable, oldValue, newValue) -> {
 

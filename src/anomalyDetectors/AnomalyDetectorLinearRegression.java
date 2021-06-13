@@ -37,28 +37,30 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
 	public Map<String, String[]> getTheMostCorrelatedFeaturesMap() {//return The Most Correlated Features Map, this will run after learnNormal methode
 		Map<String, String[]> tmcf=new HashMap();
+		String feature1,feature2;
+		double correlation;
 		for(int i=0;i<allCf.size();i++){
 			CorrelatedFeatures correlatedFeature= allCf.get(i);
-			String feature1 =correlatedFeature.getFeature1();
-			String feature2 =correlatedFeature.getFeature2();
-			double correlation=correlatedFeature.getCorrelation();
+			correlation=Math.abs(correlatedFeature.getCorrelation());
+			feature1 =correlatedFeature.getFeature1();
+			feature2 =correlatedFeature.getFeature2();
 
 			if(!tmcf.containsKey(feature1)){
 				tmcf.put(feature1, new String[]{feature2, String.valueOf(correlation),String.valueOf(i)});
+			}
+			else if(Double.parseDouble(tmcf.get(feature1)[1])<correlation) {
+				tmcf.get(feature1)[0] = feature2;
+				tmcf.get(feature1)[1] = String.valueOf(correlation);
+				tmcf.get(feature1)[2] = String.valueOf(i);
+			}
+
+			if(!tmcf.containsKey(feature2)){
 				tmcf.put(feature2, new String[]{feature1, String.valueOf(correlation),String.valueOf(i)});
 			}
-			else if(Double.parseDouble(tmcf.get(feature1)[1])>correlation) {
-					tmcf.get(feature1)[0] = feature2;
-					tmcf.get(feature1)[1] = String.valueOf(correlation);
-					tmcf.get(feature1)[2] =String.valueOf(i);
-					if (tmcf.containsKey(feature2)) {
-						tmcf.get(feature2)[0] = feature1;
-						tmcf.get(feature2)[1] = String.valueOf(correlation);
-						tmcf.get(feature2)[2] =String.valueOf(i);
-					}
-					else{
-						tmcf.put(feature2, new String[]{feature1, String.valueOf(correlation),String.valueOf(i)});
-					}
+			else if (Double.parseDouble(tmcf.get(feature2)[1])<correlation) {
+				tmcf.get(feature2)[0] = feature1;
+				tmcf.get(feature2)[1] = String.valueOf(correlation);
+				tmcf.get(feature2)[2] =String.valueOf(i);
 				}
 			}
 		return tmcf;
@@ -84,8 +86,9 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 				double threshold=findThreshold(ps,lin_reg)*1.1f; // 10% increase
 
 				CorrelatedFeatures c=new CorrelatedFeatures(ts.getAttributes().get(i), ts.getAttributes().get(j), p, lin_reg, threshold);
-
-				allCf.add(c);//we do this for the most correlated attribute- we want all of the correlation feature no meter what is the correlationThreshold
+				if(Math.abs(p)>0) {
+					allCf.add(c);//we do this for the most correlated attribute- we want all of the correlation feature no meter what is the correlationThreshold
+				}
 				if(Math.abs(p)>correlationThreshold){
 					cf.add(c);
 				}
@@ -151,8 +154,8 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 			maxX=(temp>maxX) ? temp:maxX;
 			minX=(temp<minX) ? temp:minX;
 		}
-		int indexAtCf=Integer.valueOf(tmcf.get(selectedFeature.getValue())[2]);
-		CorrelatedFeatures currentCorrelatedFeatures=cf.get(indexAtCf);
+		int indexAtallCf=Integer.valueOf(tmcf.get(selectedFeature.getValue())[2]);
+		CorrelatedFeatures currentCorrelatedFeatures=allCf.get(indexAtallCf);
 		Line line=currentCorrelatedFeatures.getLin_reg();
 
 		final double finalMaxX = maxX;
@@ -169,7 +172,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	public AnchorPane paint() {
 		if(anomalyTs==null || regTs==null){return null;}
 		AnchorPane board=new AnchorPane();
-		LineChart<Number, Number> algGraph=new LineChart<>(new NumberAxis(), new NumberAxis());
+		LineChart<Number, Number> algGraph=new LineChart(new NumberAxis(), new NumberAxis());
 
 		algGraph.setPrefSize(300, 250);
 
@@ -211,6 +214,14 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 			if(localNumOfRow.get() +1==numOfRow.getValue()){ //If the row number increases by 1 and the feature has not changed
 				Platform.runLater(()->{
 					pointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(),numOfRow.getValue()),anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature,numOfRow.getValue())));
+				});
+			}
+			else if(localNumOfRow.get() -1==numOfRow.getValue()){ //this is for the rewind option
+				Platform.runLater(()->{
+					int length=pointsSeries.getData().size();
+					if(length>0) {
+						pointsSeries.getData().remove(length - 1);
+					}
 				});
 			}
 			else{//Create the graph again from scratch

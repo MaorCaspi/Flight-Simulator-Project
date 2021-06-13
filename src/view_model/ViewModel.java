@@ -123,32 +123,42 @@ public class ViewModel extends Observable implements Observer{
             executor.execute(() -> roll.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("roll"),numOfRow.getValue())));
             executor.execute(() -> pitch.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("pitch"),numOfRow.getValue())));
             executor.execute(() -> yaw.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("yaw"),numOfRow.getValue())));
-            Platform.runLater(()->{
-                if(localSelectedFeature.equals(selectedFeature.getValue())&& localNumOfRow+1==numOfRow.getValue()) {
-                    selectedAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(localSelectedFeature).get(numOfRow.getValue())));
-                    if(!theMostCorrelativeAttribute.getValue().equals("")){
-                        theMostCorrelativeAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(theMostCorrelativeAttribute.getValue()).get(numOfRow.getValue())));
-                    }
+
+            boolean theFeatureNameNotChanged=localSelectedFeature.equals(selectedFeature.getValue());
+
+            if(theFeatureNameNotChanged && localNumOfRow+1==numOfRow.getValue()) {//If the row number increases by only one
+                Platform.runLater(()->selectedAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(localSelectedFeature).get(numOfRow.getValue()))));
+                if(!theMostCorrelativeAttribute.getValue().equals("")){//if there is correlative feature
+                    Platform.runLater(()->theMostCorrelativeAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(theMostCorrelativeAttribute.getValue()).get(numOfRow.getValue()))));
                 }
-                else {
-                    selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeature.getValue(),numOfRow.getValue()));
-                    localSelectedFeature=selectedFeature.getValue();
-                    if(!theMostCorrelativeAttribute.getValue().equals("")){
-                        theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttribute.getValue(),numOfRow.getValue()));
+            }
+            else if(theFeatureNameNotChanged && localNumOfRow-1==numOfRow.getValue()) {//this is for the rewind option
+                Platform.runLater(()->{
+                int length=selectedAttributePoints.size();
+                if(length>0) {
+                    selectedAttributePoints.remove(length - 1);
+                    theMostCorrelativeAttributePoints.remove(length - 1);
+                    }
+                });
+            }
+            else {
+                Platform.runLater(()-> selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeature.getValue(),numOfRow.getValue())));
+                localSelectedFeature=selectedFeature.getValue();
+                if(!theMostCorrelativeAttribute.getValue().equals("")){
+                    Platform.runLater(()->theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttribute.getValue(),numOfRow.getValue())));
                     }
                 }
                 localNumOfRow=numOfRow.getValue();
                 if(theMostCorrelativeAttribute.getValue().equals("")){//if there is no correlative feature
-                    theMostCorrelativeAttributePoints.setValue(new SimpleListProperty<>(FXCollections.observableArrayList()));
+                    Platform.runLater(()->theMostCorrelativeAttributePoints.setValue(new SimpleListProperty(FXCollections.observableArrayList())));
                 }
             });
-        });
     }
     private void setTime(int rowNumber)
     {
         int totalMilliseconds=(int)(rowNumber*properties.getRate());
         int seconds=(totalMilliseconds / 1000) % 60;
-        int minutes=((totalMilliseconds / (60000)) % 60);
+        int minutes=(totalMilliseconds / 60000) % 60;
         Platform.runLater(() -> currentTime.set((minutes+":"+seconds)));
     }
     public void shutdownExecutor() { executor.shutdown(); }
@@ -168,13 +178,11 @@ public class ViewModel extends Observable implements Observer{
     }
 
     public void setAnomalyDetector(String adPath) {
-        //AnomalyDetector ad=new AnomalyDetectorZScoreAlgorithm();////////////
-        //AnomalyDetector ad=new AnomalyDetectorLinearRegression();
-        AnomalyDetector ad=new AnomalyDetectorHybridAlgorithm();
+        //AnomalyDetector ad=new AnomalyDetectorZScoreAlgorithm();
+        AnomalyDetector ad=new AnomalyDetectorLinearRegression();
+        //AnomalyDetector ad=new AnomalyDetectorHybridAlgorithm();
         if(!m.setAnomalyDetector(ad,selectedFeature,regTs)){
 
-        }
-        else{
         }
     }
 
