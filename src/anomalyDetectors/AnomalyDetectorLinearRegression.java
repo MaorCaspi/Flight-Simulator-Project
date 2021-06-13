@@ -19,22 +19,26 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
-	private ArrayList<CorrelatedFeatures> cf;
+	private ArrayList<CorrelatedFeatures> cf,allCf;
 	private double correlationThreshold;
 	private Map<String, List<Integer>> reportsFromDetect;
 	private TimeSeries regTs,anomalyTs;
 	
 	public AnomalyDetectorLinearRegression()
 	{
-		cf=new ArrayList<>();
+		cf=new ArrayList();
 		correlationThreshold=0.9;
-		reportsFromDetect=new HashMap<>();
+		reportsFromDetect=new HashMap();
+	}
+
+	public Map<String, List<Integer>> getReportsFromDetect() {
+		return reportsFromDetect;
 	}
 
 	public Map<String, String[]> getTheMostCorrelatedFeaturesMap() {//return The Most Correlated Features Map, this will run after learnNormal methode
-		Map<String, String[]> tmcf=new HashMap<>();
-		for(int i=0;i<cf.size();i++){
-			CorrelatedFeatures correlatedFeature= cf.get(i);
+		Map<String, String[]> tmcf=new HashMap();
+		for(int i=0;i<allCf.size();i++){
+			CorrelatedFeatures correlatedFeature= allCf.get(i);
 			String feature1 =correlatedFeature.getFeature1();
 			String feature2 =correlatedFeature.getFeature2();
 			double correlation=correlatedFeature.getCorrelation();
@@ -63,6 +67,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	@Override
 	public void learnNormal(TimeSeries ts) {
 		regTs=ts;
+		allCf=new ArrayList();
 		double[][] vals =new double[ts.getNumOfColumns()][ts.getRowSize()];
 		for(int i=0;i<ts.getNumOfColumns();i++){
 			for(int j=0;j<ts.getRowSize();j++){
@@ -73,14 +78,15 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		for(int i=0;i<ts.getNumOfColumns();i++){
 			for(int j=i+1;j<ts.getNumOfColumns();j++){
 				double p=StatLib.pearson(vals[i],vals[j]);
+
+				Point ps[]=toPoints(ts.getAttributeData(ts.getAttributes().get(i)),ts.getAttributeData(ts.getAttributes().get(j)));
+				Line lin_reg=StatLib.linear_reg(ps);
+				double threshold=findThreshold(ps,lin_reg)*1.1f; // 10% increase
+
+				CorrelatedFeatures c=new CorrelatedFeatures(ts.getAttributes().get(i), ts.getAttributes().get(j), p, lin_reg, threshold);
+
+				allCf.add(c);//we do this for the most correlated attribute- we want all of the correlation feature no meter what is the correlationThreshold
 				if(Math.abs(p)>correlationThreshold){
-
-					Point ps[]=toPoints(ts.getAttributeData(ts.getAttributes().get(i)),ts.getAttributeData(ts.getAttributes().get(j)));
-					Line lin_reg=StatLib.linear_reg(ps);
-					double threshold=findThreshold(ps,lin_reg)*1.1f; // 10% increase
-
-					CorrelatedFeatures c=new CorrelatedFeatures(ts.getAttributes().get(i), ts.getAttributes().get(j), p, lin_reg, threshold);
-
 					cf.add(c);
 				}
 			}
@@ -88,7 +94,6 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	}
 
 	private Point[] toPoints(ArrayList<Double> x, ArrayList<Double> y) {
-
 		Point[] ps=new Point[x.size()];
 		for(int i=0;i<ps.length;i++)
 			ps[i]=new Point(x.get(i),y.get(i));
@@ -108,7 +113,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	@Override
 	public List<AnomalyReport> detect(TimeSeries ts) {
 		anomalyTs=ts;
-		ArrayList<AnomalyReport> v=new ArrayList<>();
+		ArrayList<AnomalyReport> v=new ArrayList();
 		
 		for(CorrelatedFeatures c : cf) {
 			ArrayList<Double> x=ts.getAttributeData(c.getFeature1());
@@ -118,7 +123,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 					String d=c.getFeature1() + "-" + c.getFeature2();
 					v.add(new AnomalyReport(d,(i+1)));
 					if(!reportsFromDetect.containsKey(d)){
-						reportsFromDetect.put(d,new ArrayList<>());
+						reportsFromDetect.put(d,new ArrayList());
 					}
 					reportsFromDetect.get(d).add(i+1);
 				}
@@ -162,6 +167,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
 	@Override
 	public AnchorPane paint() {
+		if(anomalyTs==null || regTs==null){return null;}
 		AnchorPane board=new AnchorPane();
 		LineChart<Number, Number> algGraph=new LineChart<>(new NumberAxis(), new NumberAxis());
 

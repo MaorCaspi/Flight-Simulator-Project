@@ -21,10 +21,13 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
     private TimeSeries anomalyTs;
 
     public AnomalyDetectorZScoreAlgorithm(){
-        thresholds = new LinkedList<>();
-        reportsFromDetect=new HashMap<>();
+        thresholds = new LinkedList();
+        reportsFromDetect=new HashMap();
     }
 
+    public Map<String, List<Integer>> getReportsFromDetect() {
+        return reportsFromDetect;
+    }
 
     private static double calcAvg(ArrayList<Double> values) {
         double sum = 0;
@@ -44,7 +47,7 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         return (float) (Math.sqrt(standardDeviation / length));
     }
 
-    private double zScore(ArrayList<Double> arr, double value) {
+    double zScore(ArrayList<Double> arr, double value) {
         float sDeviation = calculateSD(arr);
         if (sDeviation == 0) return 0;
 
@@ -53,13 +56,13 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
     }
 
     private ArrayList<Double> subColumn(ArrayList<Double> arr, int index) {
-        return new ArrayList<>(arr.subList(0, index));
+        return new ArrayList(arr.subList(0, index));
     }
 
     @Override
     public void learnNormal(TimeSeries ts) {
         for (String feature : ts.getAttributes()) {
-            List<Double> checkList = new ArrayList<>();
+            List<Double> checkList = new ArrayList();
             ArrayList<Double> column = ts.getAttributeData(feature);
             for (int index = 1; index < column.size(); index++) {
                 ArrayList<Double> subColumn =subColumn(column, index);
@@ -73,7 +76,7 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
     @Override
     public List<AnomalyReport> detect(TimeSeries ts) {
         anomalyTs=ts;
-        List<AnomalyReport> reports = new ArrayList<>();
+        List<AnomalyReport> reports = new ArrayList();
         int thresholdIndex = 0;
         for (String feature : ts.getAttributes()) {
             ArrayList<Double> column = ts.getAttributeData(feature);
@@ -83,7 +86,7 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
                 if (check > thresholds.get(thresholdIndex)) {
                     reports.add(new AnomalyReport(feature, index));
                     if(!reportsFromDetect.containsKey(feature)){
-                        reportsFromDetect.put(feature,new ArrayList<>());
+                        reportsFromDetect.put(feature,new ArrayList());
                     }
                     reportsFromDetect.get(feature).add(index);
                 }
@@ -97,11 +100,11 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         if(anomalyTs==null){return null;}
         AnchorPane board=new AnchorPane();
 
-        LineChart<Number, Number> zscoreGraph=new LineChart<>(new NumberAxis(), new NumberAxis());
+        LineChart<Number, Number> zscoreGraph=new LineChart(new NumberAxis(), new NumberAxis());
         zscoreGraph.setAnimated(false);
         zscoreGraph.setCreateSymbols(false);
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series = new XYChart.Series();
         series.setName("Zscore Graph");
         zscoreGraph.getData().add(series);
 

@@ -1,6 +1,7 @@
 package view_model;
 
 import anomalyDetectors.AnomalyDetector;
+import anomalyDetectors.AnomalyDetectorHybridAlgorithm;
 import anomalyDetectors.AnomalyDetectorLinearRegression;
 import anomalyDetectors.AnomalyDetectorZScoreAlgorithm;
 import javafx.application.Platform;
@@ -168,9 +169,12 @@ public class ViewModel extends Observable implements Observer{
 
     public void setAnomalyDetector(String adPath) {
         //AnomalyDetector ad=new AnomalyDetectorZScoreAlgorithm();////////////
-        AnomalyDetector ad=new AnomalyDetectorLinearRegression();
+        //AnomalyDetector ad=new AnomalyDetectorLinearRegression();
+        AnomalyDetector ad=new AnomalyDetectorHybridAlgorithm();
         if(!m.setAnomalyDetector(ad,selectedFeature,regTs)){
 
+        }
+        else{
         }
     }
 
