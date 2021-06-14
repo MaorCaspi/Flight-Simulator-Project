@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
 
     private List<Double> thresholds;
-    private Map<String, List<Integer>> reportsFromDetect;
+    private Map<String, List<Integer>> reportsFromDetect;//this map will help us at the paint method- we'll write here all the anomalies
     private TimeSeries anomalyTs;
 
     public AnomalyDetectorZScoreAlgorithm(){

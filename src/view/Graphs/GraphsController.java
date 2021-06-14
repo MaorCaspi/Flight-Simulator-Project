@@ -49,7 +49,7 @@ public class GraphsController implements Initializable {
 
         selectedAttributePoints.addListener((observable, oldValue, newValue) -> {
             if (newValue.size() > 0) {
-                boolean theFeatureNameNotChanged=localSelectedFeature.equals(selectedFeature.getValue());
+                boolean theFeatureNameNotChanged=localSelectedFeature.intern()==selectedFeature.getValue().intern();
                 if(theFeatureNameNotChanged && localRowNumber+1==newValue.size()) {
                 Point newPoint = newValue.get(newValue.size() - 1);
                 selectedAttributeSeries.getData().add(new XYChart.Data(newPoint.getX(), newPoint.getY()));
@@ -69,7 +69,7 @@ public class GraphsController implements Initializable {
         });
         theMostCorrelativeAttributePoints.addListener((observable, oldValue, newValue) -> {
             if (newValue.size() > 0) {
-                boolean theFeatureNameNotChanged=localSelectedFeature.equals(selectedFeature.getValue());
+                boolean theFeatureNameNotChanged=localSelectedFeature.intern()==selectedFeature.getValue().intern();
                 if(theFeatureNameNotChanged && localRowNumber+1==newValue.size()) {//If the row number increases by only one
                     Point newPoint = newValue.get(newValue.size() - 1);
                     theMostCorrelativeAttributeSeries.getData().add(new XYChart.Data(newPoint.getX(), newPoint.getY()));

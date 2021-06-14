@@ -17,8 +17,8 @@ public class MainTrainAnomalyDetector {
 			e.printStackTrace();
 		}
 		//AnomalyDetectorLinearRegression ad=new AnomalyDetectorLinearRegression();
-		AnomalyDetectorZScoreAlgorithm ad=new AnomalyDetectorZScoreAlgorithm();
-		//AnomalyDetectorHybridAlgorithm ad=new AnomalyDetectorHybridAlgorithm();
+		//AnomalyDetectorZScoreAlgorithm ad=new AnomalyDetectorZScoreAlgorithm();
+		AnomalyDetectorHybridAlgorithm ad=new AnomalyDetectorHybridAlgorithm();
 
 		ad.learnNormal(ts);
 	

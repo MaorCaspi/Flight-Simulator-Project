@@ -18,10 +18,70 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AnomalyDetectorLinearRegression implements AnomalyDetector {
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private static class StatLib {
+		// simple average
+		public static double avg(double[] x){
+			double sum=0;
+			for(int i=0;i<x.length;sum+=x[i],i++);
+			return sum/x.length;
+		}
+
+		// returns the variance of X and Y
+		public static double var(double[] x){
+			double av=avg(x);
+			double sum=0;
+			for(int i=0;i<x.length;i++){
+				sum+=x[i]*x[i];
+			}
+			return sum/x.length - av*av;
+		}
+
+		// returns the covariance of X and Y
+		public static double cov(double[] x, double[] y){
+			double sum=0;
+			for(int i=0;i<x.length;i++){
+				sum+=x[i]*y[i];
+			}
+			sum/=x.length;
+			return sum - avg(x)*avg(y);
+		}
+
+		// returns the Pearson correlation coefficient of X and Y
+		public static double pearson(double[] x, double[] y){
+			return (double) (cov(x,y)/(Math.sqrt(var(x))*Math.sqrt(var(y))));
+		}
+
+		// performs a linear regression and returns the line equation
+		public static Line linear_reg(Point[] points){
+			double x[]=new double[points.length];
+			double y[]=new double[points.length];
+			for(int i=0;i<points.length;i++){
+				x[i]=points[i].getX();
+				y[i]=points[i].getY();
+			}
+			double a=cov(x,y)/var(x);
+			double b=avg(y) - a*(avg(x));
+
+			return new Line(a,b);
+		}
+
+		// returns the deviation between point p and the line equation of the points
+		public static double dev(Point p,Point[] points){
+			Line l=linear_reg(points);
+			return dev(p,l);
+		}
+
+		// returns the deviation between point p and the line
+		public static double dev(Point p,Line l){
+			return Math.abs(p.getY()-l.f(p.getX()));
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private ArrayList<CorrelatedFeatures> cf,allCf;
 	private double correlationThreshold;
-	private Map<String, List<Integer>> reportsFromDetect;
+	private Map<String, List<Integer>> reportsFromDetect;//this map will help us at the paint method- we'll write here all the anomalies
 	private TimeSeries regTs,anomalyTs;
 	
 	public AnomalyDetectorLinearRegression()
@@ -35,34 +95,30 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		return reportsFromDetect;
 	}
 
-	public Map<String, String[]> getTheMostCorrelatedFeaturesMap() {//return The Most Correlated Features Map, this will run after learnNormal methode
-		Map<String, String[]> tmcf=new HashMap();
+	public Map<String, CorrelatedFeatures> getTheMostCorrelatedFeaturesMap(boolean findAllCf) {//return The Most Correlated Features Map, this will run after learnNormal methode
+		Map<String, CorrelatedFeatures> tmcf=new HashMap();
 		String feature1,feature2;
 		double correlation;
-		for(int i=0;i<allCf.size();i++){
-			CorrelatedFeatures correlatedFeature= allCf.get(i);
+		ArrayList<CorrelatedFeatures> arrayListOfCf;
+		if(findAllCf){
+			arrayListOfCf=allCf;
+		}
+		else{
+			arrayListOfCf=cf;
+		}
+		for(int i=0;i<arrayListOfCf.size();i++){
+			CorrelatedFeatures correlatedFeature= arrayListOfCf.get(i);
 			correlation=Math.abs(correlatedFeature.getCorrelation());
 			feature1 =correlatedFeature.getFeature1();
 			feature2 =correlatedFeature.getFeature2();
 
-			if(!tmcf.containsKey(feature1)){
-				tmcf.put(feature1, new String[]{feature2, String.valueOf(correlation),String.valueOf(i)});
+			if(!tmcf.containsKey(feature1) || tmcf.get(feature1).correlation<correlation){
+				tmcf.put(feature1, correlatedFeature);
 			}
-			else if(Double.parseDouble(tmcf.get(feature1)[1])<correlation) {
-				tmcf.get(feature1)[0] = feature2;
-				tmcf.get(feature1)[1] = String.valueOf(correlation);
-				tmcf.get(feature1)[2] = String.valueOf(i);
+			if(!tmcf.containsKey(feature2) || tmcf.get(feature2).correlation<correlation){
+				tmcf.put(feature2, correlatedFeature);
 			}
-
-			if(!tmcf.containsKey(feature2)){
-				tmcf.put(feature2, new String[]{feature1, String.valueOf(correlation),String.valueOf(i)});
-			}
-			else if (Double.parseDouble(tmcf.get(feature2)[1])<correlation) {
-				tmcf.get(feature2)[0] = feature1;
-				tmcf.get(feature2)[1] = String.valueOf(correlation);
-				tmcf.get(feature2)[2] =String.valueOf(i);
-				}
-			}
+		}
 		return tmcf;
 	}
 
@@ -135,18 +191,20 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		return v;
 	}
 
-	public List<CorrelatedFeatures> getNormalModel(){
-		return cf;
+	public List<CorrelatedFeatures> getAllTheCorrelatedFeatures(){
+		return allCf;
 	}
 
-	private void paintLine(XYChart.Series<Number, Number> pointsSeries,XYChart.Series<Number, Number> lineSeries,Map<String, String[]> tmcf){//draw the linear straight
-		if(!tmcf.containsKey(selectedFeature.getValue())){
+	private void paintLine(XYChart.Series<Number, Number> pointsSeries,XYChart.Series<Number, Number> lineSeries,Map<String, CorrelatedFeatures> tmcf,LineChart<Number, Number> algGraph){//draw the linear straight
+		if(!tmcf.containsKey(selectedFeature.getValue())){//if the selected feature has less then the threshold, so do nothing
 			Platform.runLater(()->{
 				pointsSeries.getData().clear();
 				lineSeries.getData().clear();
+				algGraph.setVisible(false);
 			});
 			return;
 		}
+		algGraph.setVisible(true);
 		double maxX=Double.MIN_VALUE,minX=Double.MIN_VALUE;//The two points from which we construct the linear straight are x1 = the maximum value and x2 = the minimum value
 		double temp;
 		for(int i=0;i<regTs.getRowSize();i++) {
@@ -154,9 +212,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 			maxX=(temp>maxX) ? temp:maxX;
 			minX=(temp<minX) ? temp:minX;
 		}
-		int indexAtallCf=Integer.valueOf(tmcf.get(selectedFeature.getValue())[2]);
-		CorrelatedFeatures currentCorrelatedFeatures=allCf.get(indexAtallCf);
-		Line line=currentCorrelatedFeatures.getLin_reg();
+		Line line=tmcf.get(selectedFeature.getValue()).getLin_reg();
 
 		final double finalMaxX = maxX;
 		final double finalMinX = minX;
@@ -184,12 +240,12 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		board.getChildren().add(algGraph);
 		board.getStylesheets().add("anomalyDetectors/styleAnomalyGraphs.css");
 
-		Map<String, String[]> tmcf=getTheMostCorrelatedFeaturesMap();
+		Map<String, CorrelatedFeatures> tmcf=getTheMostCorrelatedFeaturesMap(false);
 
-		paintLine(pointsSeries,lineSeries,tmcf);//this is for the initialization
+		paintLine(pointsSeries,lineSeries,tmcf,algGraph);//this is for the initialization
 
 		selectedFeature.addListener((observable, oldValue, newValue) -> {
-			paintLine(pointsSeries,lineSeries,tmcf);
+			paintLine(pointsSeries,lineSeries,tmcf,algGraph);
 		});
 
 		Background redColorBackground=new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY));
@@ -203,7 +259,12 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 				});
 				return;
 			}
-			String theMostCorrelativeFeature=tmcf.get(selectedFeature.getValue())[0];
+			String theMostCorrelativeFeature;
+			theMostCorrelativeFeature=tmcf.get(selectedFeature.getValue()).feature1;//find who is the MostCorrelativeAttribute from the map
+			if(theMostCorrelativeFeature.equals(selectedFeature.getValue())) {
+				theMostCorrelativeFeature=tmcf.get(selectedFeature.getValue()).feature2;
+			}
+
 			String d=selectedFeature.getValue()+"-"+ theMostCorrelativeFeature;
 			if((reportsFromDetect.containsKey(d)) && (reportsFromDetect.get(d).contains(numOfRow.getValue()))){
 				board.setBackground(redColorBackground);
@@ -212,8 +273,9 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 				board.setBackground(null);
 			}
 			if(localNumOfRow.get() +1==numOfRow.getValue()){ //If the row number increases by 1 and the feature has not changed
+				final String finalTheMostCorrelativeFeature1 = theMostCorrelativeFeature;
 				Platform.runLater(()->{
-					pointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(),numOfRow.getValue()),anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature,numOfRow.getValue())));
+					pointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(),numOfRow.getValue()),anomalyTs.getDataFromSpecificRowAndColumn(finalTheMostCorrelativeFeature1,numOfRow.getValue())));
 				});
 			}
 			else if(localNumOfRow.get() -1==numOfRow.getValue()){ //this is for the rewind option
@@ -225,10 +287,11 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 				});
 			}
 			else{//Create the graph again from scratch
+				final String finalTheMostCorrelativeFeature = theMostCorrelativeFeature;
 				Platform.runLater(()->{
 					pointsSeries.getData().clear();
 					for(int i =0;i< numOfRow.getValue();i++) {
-						pointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(),i),anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature,i)));
+						pointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(),i),anomalyTs.getDataFromSpecificRowAndColumn(finalTheMostCorrelativeFeature,i)));
 					}
 				});
 			}
@@ -237,64 +300,4 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		return board;
 	}
 }
-//////////////////////////////////////////////////////////////////////////////
 
-class StatLib {
-
-	// simple average
-	public static double avg(double[] x){
-		double sum=0;
-		for(int i=0;i<x.length;sum+=x[i],i++);
-		return sum/x.length;
-	}
-
-	// returns the variance of X and Y
-	public static double var(double[] x){
-		double av=avg(x);
-		double sum=0;
-		for(int i=0;i<x.length;i++){
-			sum+=x[i]*x[i];
-		}
-		return sum/x.length - av*av;
-	}
-
-	// returns the covariance of X and Y
-	public static double cov(double[] x, double[] y){
-		double sum=0;
-		for(int i=0;i<x.length;i++){
-			sum+=x[i]*y[i];
-		}
-		sum/=x.length;
-		return sum - avg(x)*avg(y);
-	}
-
-	// returns the Pearson correlation coefficient of X and Y
-	public static double pearson(double[] x, double[] y){
-		return (double) (cov(x,y)/(Math.sqrt(var(x))*Math.sqrt(var(y))));
-	}
-
-	// performs a linear regression and returns the line equation
-	public static Line linear_reg(Point[] points){
-		double x[]=new double[points.length];
-		double y[]=new double[points.length];
-		for(int i=0;i<points.length;i++){
-			x[i]=points[i].getX();
-			y[i]=points[i].getY();
-		}
-		double a=cov(x,y)/var(x);
-		double b=avg(y) - a*(avg(x));
-
-		return new Line(a,b);
-	}
-
-	// returns the deviation between point p and the line equation of the points
-	public static double dev(Point p,Point[] points){
-		Line l=linear_reg(points);
-		return dev(p,l);
-	}
-
-	// returns the deviation between point p and the line
-	public static double dev(Point p,Line l){
-		return Math.abs(p.getY()-l.f(p.getX()));
-	}
-}

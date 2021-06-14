@@ -15,10 +15,6 @@ public class TimeSeries {
     private Map<String, ArrayList<Double>> ts;
     private ListProperty<String> atts;
 
-    public TimeSeries() {
-        ts=new HashMap<>();
-        atts=new SimpleListProperty<>(FXCollections.observableArrayList());
-    }
     public TimeSeries(String csvFileName) throws IOException {
         ts=new HashMap<>();
         atts=new SimpleListProperty<>(FXCollections.observableArrayList());
@@ -72,10 +68,4 @@ public class TimeSeries {
     public double getDataFromSpecificRowAndColumn(String featureName,int rowNumber){
         return ts.get(featureName).get(rowNumber);
     }
-
-    public void addCol(String feature,ArrayList<Double> data) {
-        atts.add(feature);
-        ts.put(String.valueOf(getNumOfColumns()), data);
-    }
 }
-

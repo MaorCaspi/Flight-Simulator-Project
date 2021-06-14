@@ -9,6 +9,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.AnchorPane;
 import model.FlightSimulatorModel;
+import other_classes.CorrelatedFeatures;
 import other_classes.Point;
 import other_classes.Properties;
 import other_classes.TimeSeries;
@@ -26,7 +27,7 @@ public class ViewModel extends Observable implements Observer{
     private int csvLength,localNumOfRow;
     private String localSelectedFeature;
     private ExecutorService executor;
-    private Map<String, String[]> correlatedFeaturesMap;
+    private Map<String, CorrelatedFeatures> correlatedFeaturesMap;
     public DoubleProperty playSpeed,progression,throttle,rudder,aileron,elevators,heading,speed,altitude,roll,pitch,yaw;
     public StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature,theMostCorrelativeAttribute;
     public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
@@ -82,7 +83,7 @@ public class ViewModel extends Observable implements Observer{
                 }
                 m.setTimeSeries(ts);
                 csvLength = ts.getRowSize();
-                correlatedFeaturesMap=anomalyDetectorLinearRegression.getTheMostCorrelatedFeaturesMap();
+                correlatedFeaturesMap=anomalyDetectorLinearRegression.getTheMostCorrelatedFeaturesMap(true);
                 features.set(ts.getAttributes());
             }
         });
@@ -102,8 +103,14 @@ public class ViewModel extends Observable implements Observer{
                 m.setProgression((int)(ts.getRowSize() * newValue.doubleValue()));});
         selectedFeature.addListener((observable, oldValue, newValue) -> {
             if(ts!=null){
-                if(correlatedFeaturesMap.containsKey(newValue)){
-                    theMostCorrelativeAttribute.setValue(correlatedFeaturesMap.get(newValue)[0]);
+                if(correlatedFeaturesMap.containsKey(newValue)){//find who is the MostCorrelativeAttribute from the map
+                    String temp=correlatedFeaturesMap.get(newValue).feature1;
+                    if(!temp.equals(selectedFeature.getValue())) {
+                        theMostCorrelativeAttribute.setValue(temp);
+                    }
+                    else{
+                        theMostCorrelativeAttribute.setValue(correlatedFeaturesMap.get(newValue).feature2);
+                    }
                 }
                 else{
                     theMostCorrelativeAttribute.setValue(""); //there is no correlative feature
@@ -124,11 +131,11 @@ public class ViewModel extends Observable implements Observer{
             executor.execute(() -> pitch.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("pitch"),numOfRow.getValue())));
             executor.execute(() -> yaw.setValue(ts.getDataFromSpecificRowAndColumn(properties.propertyName("yaw"),numOfRow.getValue())));
 
-            boolean theFeatureNameNotChanged=localSelectedFeature.equals(selectedFeature.getValue());
+            boolean theFeatureNameNotChanged=localSelectedFeature.intern()==selectedFeature.getValue().intern();
 
             if(theFeatureNameNotChanged && localNumOfRow+1==numOfRow.getValue()) {//If the row number increases by only one
                 Platform.runLater(()->selectedAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(localSelectedFeature).get(numOfRow.getValue()))));
-                if(!theMostCorrelativeAttribute.getValue().equals("")){//if there is correlative feature
+                if(theMostCorrelativeAttribute.getValue().intern()!=("").intern()){//if there is correlative feature
                     Platform.runLater(()->theMostCorrelativeAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(theMostCorrelativeAttribute.getValue()).get(numOfRow.getValue()))));
                 }
             }
@@ -137,19 +144,21 @@ public class ViewModel extends Observable implements Observer{
                 int length=selectedAttributePoints.size();
                 if(length>0) {
                     selectedAttributePoints.remove(length - 1);
-                    theMostCorrelativeAttributePoints.remove(length - 1);
+                    if(theMostCorrelativeAttribute.getValue().intern()!=("").intern()) {//if there is correlative feature
+                        theMostCorrelativeAttributePoints.remove(length - 1);
+                      }
                     }
                 });
             }
             else {
                 Platform.runLater(()-> selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeature.getValue(),numOfRow.getValue())));
                 localSelectedFeature=selectedFeature.getValue();
-                if(!theMostCorrelativeAttribute.getValue().equals("")){
+                if(theMostCorrelativeAttribute.getValue().intern()!=("").intern()){
                     Platform.runLater(()->theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttribute.getValue(),numOfRow.getValue())));
                     }
                 }
                 localNumOfRow=numOfRow.getValue();
-                if(theMostCorrelativeAttribute.getValue().equals("")){//if there is no correlative feature
+                if(theMostCorrelativeAttribute.getValue().intern()==("").intern()){//if there is no correlative feature
                     Platform.runLater(()->theMostCorrelativeAttributePoints.setValue(new SimpleListProperty(FXCollections.observableArrayList())));
                 }
             });
@@ -179,8 +188,8 @@ public class ViewModel extends Observable implements Observer{
 
     public void setAnomalyDetector(String adPath) {
         //AnomalyDetector ad=new AnomalyDetectorZScoreAlgorithm();
-        AnomalyDetector ad=new AnomalyDetectorLinearRegression();
-        //AnomalyDetector ad=new AnomalyDetectorHybridAlgorithm();
+        //AnomalyDetector ad=new AnomalyDetectorLinearRegression();
+        AnomalyDetector ad=new AnomalyDetectorHybridAlgorithm();
         if(!m.setAnomalyDetector(ad,selectedFeature,regTs)){
 
         }
