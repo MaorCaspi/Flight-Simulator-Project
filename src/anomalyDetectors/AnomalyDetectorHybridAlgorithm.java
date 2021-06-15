@@ -14,7 +14,6 @@ import javafx.scene.paint.Color;
 import other_classes.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.*;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -163,7 +162,12 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                     featureNameToAlgorithm.put(feature, "Regression");
                 } else if (Math.abs(c.correlation) >= 0.5) {
                     featureNameToAlgorithm.put(feature, "Welzl");
-                    welzlCircleModel.put(feature, algorithm.miniDisk(getListPoint(ts.getAttributeData(c.feature1), ts.getAttributeData(c.feature2))));
+                    //find who is the MostCorrelativeAttribute from the map
+                    String theMostCorrelativeFeature=allTmcf.get(feature).feature1;
+                    if(theMostCorrelativeFeature.equals(feature)) {
+                        theMostCorrelativeFeature=allTmcf.get(feature).feature2;
+                    }
+                    welzlCircleModel.put(feature, algorithm.miniDisk(getListPoint(ts.getAttributeData(feature), ts.getAttributeData(theMostCorrelativeFeature))));
                 }
                 else{
                     featureNameToAlgorithm.put(feature, "ZScore");
@@ -189,13 +193,24 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         for (String feature : ts.getAttributes()) {
             switch (getAlgorithmNameByFeatureName(feature)){
                 case "Regression":
-                    if(reportsFromRegressionDetect.containsKey(feature)) {
-                        reportsFromDetect.put(feature, reportsFromRegressionDetect.get(feature));
+                    c = allTmcf.get(feature);
+                    if(reportsFromRegressionDetect.containsKey(c.feature1+"-"+c.feature2)) {
+                        reportsFromDetect.put(c.feature1+"-"+c.feature2, reportsFromRegressionDetect.get(c.feature1+"-"+c.feature2));
+                    }
+                    else if(reportsFromRegressionDetect.containsKey(c.feature2+"-"+c.feature1)) {
+                        reportsFromDetect.put(c.feature2+"-"+c.feature1, reportsFromRegressionDetect.get(c.feature2+"-"+c.feature1));
                     }
                     break;
                 case "Welzl":
                     c = allTmcf.get(feature);
-                    dataFeature = getListPoint(ts.getAttributeData(c.feature1), ts.getAttributeData(c.feature2));
+
+                   //find who is the MostCorrelativeAttribute from the map
+                    String theMostCorrelativeFeature=allTmcf.get(feature).feature1;
+                    if(theMostCorrelativeFeature.equals(feature)) {
+                        theMostCorrelativeFeature=allTmcf.get(feature).feature2;
+                    }
+
+                    dataFeature = getListPoint(ts.getAttributeData(feature), ts.getAttributeData(theMostCorrelativeFeature));
                     List<Integer> rowNumbersWithAnomalies = new ArrayList();
                     for (int i = 0; i < dataFeature.size(); i++) {
                         if (!welzlCircleModel.get(feature).containsPoint(dataFeature.get(i))) {

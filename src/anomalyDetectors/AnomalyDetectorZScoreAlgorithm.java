@@ -80,7 +80,7 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         int thresholdIndex = 0;
         for (String feature : ts.getAttributes()) {
             ArrayList<Double> column = ts.getAttributeData(feature);
-            for (int index = 1; index < column.size(); index++) {
+            for (int index = 0; index < column.size(); index++) {
                 ArrayList<Double> subColumn = subColumn(column, index);
                 double check = zScore(subColumn, column.get(index));
                 if (check > thresholds.get(thresholdIndex)) {

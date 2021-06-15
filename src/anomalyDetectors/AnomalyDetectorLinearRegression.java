@@ -180,11 +180,11 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 			for(int i=0;i<x.size();i++){
 				if(Math.abs(y.get(i) - c.getLin_reg().f(x.get(i)))>c.getThreshold()){
 					String d=c.getFeature1() + "-" + c.getFeature2();
-					v.add(new AnomalyReport(d,(i+1)));
+					v.add(new AnomalyReport(d,(i)));
 					if(!reportsFromDetect.containsKey(d)){
 						reportsFromDetect.put(d,new ArrayList());
 					}
-					reportsFromDetect.get(d).add(i+1);
+					reportsFromDetect.get(d).add(i);
 				}
 			}			
 		}
@@ -266,7 +266,11 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 			}
 
 			String d=selectedFeature.getValue()+"-"+ theMostCorrelativeFeature;
+			String d2=theMostCorrelativeFeature+"-"+selectedFeature.getValue();
 			if((reportsFromDetect.containsKey(d)) && (reportsFromDetect.get(d).contains(numOfRow.getValue()))){
+				board.setBackground(redColorBackground);
+			}
+			else if((reportsFromDetect.containsKey(d2)) && (reportsFromDetect.get(d2).contains(numOfRow.getValue()))){
 				board.setBackground(redColorBackground);
 			}
 			else{
