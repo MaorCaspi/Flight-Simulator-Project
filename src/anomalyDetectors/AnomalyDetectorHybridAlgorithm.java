@@ -235,30 +235,37 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
     }
 
     //We will use it in the paint method
-    private void selectedFeatureWasChange(AtomicReference<String> algorithmName,AtomicReference<String> description,LineChart zscoreLineChart,LineChart regressionLineChart,BubbleChart bubbleChart,ArrayList<Double> selectedAttributeData,AtomicInteger localNumOfRow,AtomicReference<String> theMostCorrelativeFeature,XYChart.Series<Number, Number> regressionPointsSeries, XYChart.Series<Number, Number> regressionLineSeries,AnchorPane board) {
+    private void selectedFeatureWasChange(AtomicReference<String> algorithmName,AtomicReference<String> description,LineChart zscoreLineChart,LineChart regressionLineChart,BubbleChart welzlChart,ArrayList<Double> selectedAttributeData,AtomicInteger localNumOfRow,AtomicReference<String> theMostCorrelativeFeature,XYChart.Series<Number, Number> regressionPointsSeries, XYChart.Series<Number, Number> regressionLineSeries,AnchorPane board,XYChart.Series<Number, Number> welzlPointsSeries,XYChart.Series<Number, Number> welzlCircleSeries) {
         algorithmName.set(getAlgorithmNameByFeatureName(selectedFeature.getValue()));
-        String temp;
+        if(allTmcf.containsKey(selectedFeature.getValue())) {
+            String temp = allTmcf.get(selectedFeature.getValue()).feature1;//find who is the MostCorrelativeAttribute from the map
+            if (!temp.equals(selectedFeature.getValue())) {
+                theMostCorrelativeFeature.set(temp);
+            } else {
+                theMostCorrelativeFeature.set(allTmcf.get(selectedFeature.getValue()).feature2);
+            }
+        }
         switch(algorithmName.get()) {
             case "Regression":
-                temp=allTmcf.get(selectedFeature.getValue()).feature1;//find who is the MostCorrelativeAttribute from the map
-                if(!temp.equals(selectedFeature.getValue())) {
-                    theMostCorrelativeFeature.set(temp);
-                }
-                else{
-                    theMostCorrelativeFeature.set(allTmcf.get(selectedFeature.getValue()).feature2);
-                }
                 description.set(selectedFeature.getValue() + "-" + theMostCorrelativeFeature.get());
                 board.getStylesheets().add("anomalyDetectors/styleAnomalyGraphs.css");
                 regressionDetector.paintLine(regressionPointsSeries,regressionLineSeries,allTmcf,regressionLineChart);
                 regressionLineChart.setVisible(true);
-                bubbleChart.setVisible(false);
+                welzlChart.setVisible(false);
                 zscoreLineChart.setVisible(false);
                 break;
             case "Welzl":
                 description.set(selectedFeature.getValue());
                 board.getStylesheets().clear();
+                Circle centerCircle=welzlCircleModel.get(selectedFeature.getValue());
+                XYChart.Data centerCirclePoint=new XYChart.Data(centerCircle.center.getX(),centerCircle.center.getY(),centerCircle.radius);
+                Platform.runLater(()->{
+                    welzlPointsSeries.getData().clear();
+                    welzlCircleSeries.getData().clear();
+                    welzlCircleSeries.getData().add(centerCirclePoint);
+                });
                 regressionLineChart.setVisible(false);
-                bubbleChart.setVisible(true);
+                welzlChart.setVisible(true);
                 zscoreLineChart.setVisible(false);
                 break;
             case "ZScore":
@@ -268,7 +275,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                 selectedAttributeData.addAll(anomalyTs.getAttributeData(selectedFeature.getValue()));
                 localNumOfRow.set(-1);
                 regressionLineChart.setVisible(false);
-                bubbleChart.setVisible(false);
+                welzlChart.setVisible(false);
                 zscoreLineChart.setVisible(true);
                 break;
         }
@@ -286,6 +293,8 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         ///////////////////////////////////Regression:
         XYChart.Series<Number, Number> regressionPointsSeries = new XYChart.Series();//points
         XYChart.Series<Number, Number> regressionLineSeries = new XYChart.Series();//line
+        regressionPointsSeries.setName("Regression Points");
+        regressionLineSeries.setName("Regression line");
         LineChart<Number, Number> regressionLineChart=new LineChart(new NumberAxis(), new NumberAxis());
         regressionLineChart.setPrefSize(300, 250);
         regressionLineChart.getData().addAll(regressionPointsSeries,regressionLineSeries);
@@ -293,6 +302,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         board.getChildren().add(regressionLineChart);
         ///////////////////////////////////zscore:
         XYChart.Series<Number, Number> zscoreSeries = new XYChart.Series();
+        zscoreSeries.setName("Zscore");
         LineChart<Number, Number> zscoreLineChart=new LineChart(new NumberAxis(), new NumberAxis());
         zscoreLineChart.setAnimated(false);
         zscoreLineChart.setCreateSymbols(false);
@@ -301,16 +311,21 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         board.getChildren().add(zscoreLineChart);
         ArrayList<Double> selectedAttributeData = new ArrayList();//zscore
         /////////////////////////////////////Welzl:
-        BubbleChart<Number, Number> bubbleChart=new BubbleChart(new NumberAxis(), new NumberAxis());
-        bubbleChart.setAnimated(false);
-        bubbleChart.setPrefSize(300, 250);
-        board.getChildren().add(bubbleChart);
+        BubbleChart<Number, Number> welzlChart=new BubbleChart(new NumberAxis(), new NumberAxis());
+        welzlChart.setAnimated(false);
+        welzlChart.setPrefSize(300, 250);
+        board.getChildren().add(welzlChart);
+        XYChart.Series<Number, Number> welzlPointsSeries = new XYChart.Series();
+        XYChart.Series<Number, Number> welzlCircleSeries = new XYChart.Series();
+        welzlPointsSeries.setName("Welzl points");
+        welzlCircleSeries.setName("Welzl circle");
+        welzlChart.getData().addAll(welzlPointsSeries,welzlCircleSeries);
 
 
-        selectedFeatureWasChange(algorithmName,description,zscoreLineChart,regressionLineChart, bubbleChart,selectedAttributeData,localNumOfRow,theMostCorrelativeFeature,regressionPointsSeries,regressionLineSeries,board);
+        selectedFeatureWasChange(algorithmName,description,zscoreLineChart,regressionLineChart, welzlChart,selectedAttributeData,localNumOfRow,theMostCorrelativeFeature,regressionPointsSeries,regressionLineSeries,board,welzlPointsSeries,welzlCircleSeries);
 
         selectedFeature.addListener((observable, oldValue, newValue) -> {
-            selectedFeatureWasChange(algorithmName,description,zscoreLineChart,regressionLineChart, bubbleChart,selectedAttributeData,localNumOfRow,theMostCorrelativeFeature,regressionPointsSeries,regressionLineSeries,board);
+            selectedFeatureWasChange(algorithmName,description,zscoreLineChart,regressionLineChart, welzlChart,selectedAttributeData,localNumOfRow,theMostCorrelativeFeature,regressionPointsSeries,regressionLineSeries,board,welzlPointsSeries,welzlCircleSeries);
         });
 
         numOfRow.addListener((observable, oldValue, newValue) -> {
@@ -346,7 +361,27 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                     }
                     break;
                case "Welzl":
-
+                   if (localNumOfRow.get() + 1 == numOfRow.getValue()) { //If the row number increases by 1 and the feature has not changed
+                       Platform.runLater(() -> {
+                           welzlPointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), numOfRow.getValue()), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), numOfRow.getValue())));
+                       });
+                   }
+                   else if (localNumOfRow.get() - 1 == numOfRow.getValue()) { //this is for the rewind option
+                       Platform.runLater(() -> {
+                           int length = welzlPointsSeries.getData().size();
+                           if (length > 0) {
+                               welzlPointsSeries.getData().remove(length - 1);
+                           }
+                       });
+                   }
+                   else {//Create the graph again from scratch
+                       Platform.runLater(() -> {
+                           welzlPointsSeries.getData().clear();
+                           for (int i = 0; i < numOfRow.getValue(); i++) {
+                               welzlPointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), i), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), i)));
+                           }
+                       });
+                   }
                    break;
                case "ZScore":
                    if (localNumOfRow.get() + 1 == numOfRow.getValue()) { //If the row number increases by 1 and the property has not changed

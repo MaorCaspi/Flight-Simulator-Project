@@ -6,8 +6,6 @@ import javafx.scene.control.*;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.Callable;
-
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -62,8 +60,7 @@ public class MainWindowController implements Observer{
         graphs.getTheMostCorrelativeAttributePoints().bind(vm.theMostCorrelativeAttributePoints);
         graphs.getTheMostCorrelativeAttribute().bind(vm.theMostCorrelativeAttribute);
     }
-    private void showErrorMessage(String message)
-    {
+    private void showErrorMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(message);
@@ -104,6 +101,10 @@ public class MainWindowController implements Observer{
     }
     @FXML
     private void pressButtonLoadAdAlgorithm(){
+        if(anomalyFlightPath.getValue()==null){
+            showErrorMessage("You must upload flight recording file before doing this!");
+            return;
+        }
         /*
         String filePath=uploadFile("Upload anomaly detection algorithm","XML file","*.xml*");
         if (filePath != null) {
@@ -116,6 +117,7 @@ public class MainWindowController implements Observer{
         catch (Exception e) {
             e.printStackTrace();////////////////////
         }
+
     }
 
     @Override

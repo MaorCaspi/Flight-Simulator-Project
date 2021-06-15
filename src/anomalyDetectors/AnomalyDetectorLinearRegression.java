@@ -186,17 +186,13 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		}
 	}
 
-	public List<CorrelatedFeatures> getAllTheCorrelatedFeatures(){
-		return allCf;
-	}
-
 	void paintLine(XYChart.Series<Number, Number> pointsSeries, XYChart.Series<Number, Number> lineSeries, Map<String, CorrelatedFeatures> tmcf, LineChart<Number, Number> algGraph){//draw the linear straight
 		if(!tmcf.containsKey(selectedFeature.getValue())){//if the selected feature has less then the threshold, so do nothing
 			Platform.runLater(()->{
 				pointsSeries.getData().clear();
 				lineSeries.getData().clear();
-				algGraph.setVisible(false);
 			});
+			algGraph.setVisible(false);
 			return;
 		}
 		algGraph.setVisible(true);
@@ -229,8 +225,10 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 
 		XYChart.Series<Number, Number> pointsSeries = new XYChart.Series();//points
 		XYChart.Series<Number, Number> lineSeries = new XYChart.Series();//line
-
+		pointsSeries.setName("Regression Points");
+		lineSeries.setName("Regression line");
 		algGraph.getData().addAll(pointsSeries,lineSeries);
+
 		algGraph.setAnimated(false);
 		board.getChildren().add(algGraph);
 		board.getStylesheets().add("anomalyDetectors/styleAnomalyGraphs.css");

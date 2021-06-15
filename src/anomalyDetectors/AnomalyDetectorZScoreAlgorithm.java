@@ -102,15 +102,12 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
         zscoreGraph.setCreateSymbols(false);
 
         XYChart.Series<Number, Number> series = new XYChart.Series();
-        series.setName("Zscore Graph");
+        series.setName("Zscore");
         zscoreGraph.getData().add(series);
 
         zscoreGraph.setPrefSize(300, 250);
-
         board.getChildren().add(zscoreGraph);
-
         ArrayList<Double> selectedAttributeData = anomalyTs.getAttributeData(selectedFeature.getValue());
-
         AtomicInteger localNumOfRow= new AtomicInteger(0);
 
         selectedFeature.addListener((observable, oldValue, newValue) -> {
