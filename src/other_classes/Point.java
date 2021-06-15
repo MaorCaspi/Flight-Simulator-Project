@@ -24,14 +24,20 @@ public class Point {
         final double dy = getY() - p.getY();
         return dx * dx + dy * dy;
     }
-
-    public float distanceTo(final Point p) {
-        return (float)Math.sqrt(distanceSquaredTo(p));
+/*
+    public double distanceTo(final Point p) {
+        return Math.sqrt(distanceSquaredTo(p));
     }
-
-    @Override
-    public String toString() {
-        return "X: " + getX() + ", Y: " + getY();
+ */
+    public double distanceTo(Point p) {
+         return Math.hypot(x.getValue() - p.x.getValue(), y.getValue() - p.y.getValue());
+    }
+    // Signed area / determinant thing
+    public double cross(Point p) {
+        return x.getValue() * p.y.getValue() - y.getValue() * p.x.getValue();
+    }
+    public Point subtract(Point p) {
+        return new Point(x.getValue() - p.x.getValue(), y.getValue() - p.y.getValue());
     }
 
 }

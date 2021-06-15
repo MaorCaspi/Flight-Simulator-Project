@@ -10,8 +10,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import other_classes.CorrelatedFeatures;
-import other_classes.Line;
 import other_classes.Point;
 import other_classes.TimeSeries;
 import java.util.*;
@@ -170,17 +168,15 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 	}
 
 	@Override
-	public List<AnomalyReport> detect(TimeSeries ts) {
+	public void detect(TimeSeries ts) {
 		anomalyTs=ts;
-		ArrayList<AnomalyReport> v=new ArrayList();
-		
+
 		for(CorrelatedFeatures c : cf) {
 			ArrayList<Double> x=ts.getAttributeData(c.getFeature1());
 			ArrayList<Double> y=ts.getAttributeData(c.getFeature2());
 			for(int i=0;i<x.size();i++){
 				if(Math.abs(y.get(i) - c.getLin_reg().f(x.get(i)))>c.getThreshold()){
 					String d=c.getFeature1() + "-" + c.getFeature2();
-					v.add(new AnomalyReport(d,(i)));
 					if(!reportsFromDetect.containsKey(d)){
 						reportsFromDetect.put(d,new ArrayList());
 					}
@@ -188,14 +184,13 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 				}
 			}			
 		}
-		return v;
 	}
 
 	public List<CorrelatedFeatures> getAllTheCorrelatedFeatures(){
 		return allCf;
 	}
 
-	private void paintLine(XYChart.Series<Number, Number> pointsSeries,XYChart.Series<Number, Number> lineSeries,Map<String, CorrelatedFeatures> tmcf,LineChart<Number, Number> algGraph){//draw the linear straight
+	void paintLine(XYChart.Series<Number, Number> pointsSeries, XYChart.Series<Number, Number> lineSeries, Map<String, CorrelatedFeatures> tmcf, LineChart<Number, Number> algGraph){//draw the linear straight
 		if(!tmcf.containsKey(selectedFeature.getValue())){//if the selected feature has less then the threshold, so do nothing
 			Platform.runLater(()->{
 				pointsSeries.getData().clear();

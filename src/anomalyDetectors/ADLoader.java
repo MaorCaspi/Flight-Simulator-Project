@@ -1,4 +1,4 @@
-package other_classes;
+package anomalyDetectors;
 
 public class ADLoader {
 }

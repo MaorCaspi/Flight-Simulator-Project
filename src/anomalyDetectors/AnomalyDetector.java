@@ -9,9 +9,9 @@ import other_classes.TimeSeries;
 import java.util.List;
 
 public interface AnomalyDetector{
-    public StringProperty selectedFeature=new SimpleStringProperty();
-    public IntegerProperty numOfRow= new SimpleIntegerProperty();
-    public void learnNormal(TimeSeries ts);
-    public List<AnomalyReport> detect(TimeSeries ts);
-    public AnchorPane paint();
+    StringProperty selectedFeature=new SimpleStringProperty();
+    IntegerProperty numOfRow= new SimpleIntegerProperty();
+    void learnNormal(TimeSeries ts);
+    void detect(TimeSeries ts);
+    AnchorPane paint();
 }

@@ -74,9 +74,8 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
     }
 
     @Override
-    public List<AnomalyReport> detect(TimeSeries ts) {
+    public void detect(TimeSeries ts) {
         anomalyTs=ts;
-        List<AnomalyReport> reports = new ArrayList();
         int thresholdIndex = 0;
         for (String feature : ts.getAttributes()) {
             ArrayList<Double> column = ts.getAttributeData(feature);
@@ -84,7 +83,6 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
                 ArrayList<Double> subColumn = subColumn(column, index);
                 double check = zScore(subColumn, column.get(index));
                 if (check > thresholds.get(thresholdIndex)) {
-                    reports.add(new AnomalyReport(feature, index));
                     if(!reportsFromDetect.containsKey(feature)){
                         reportsFromDetect.put(feature,new ArrayList());
                     }
@@ -93,7 +91,6 @@ public class AnomalyDetectorZScoreAlgorithm implements AnomalyDetector {
             }
             thresholdIndex++;
         }
-        return reports;
     }
     @Override
     public AnchorPane paint() {
