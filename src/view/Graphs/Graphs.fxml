@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="261.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Graphs.GraphsController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="261.0" prefWidth="811.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Graphs.GraphsController">
    <children>
       <LineChart fx:id="selectedAttributeGraph" animated="false" createSymbols="false" layoutY="29.0" prefHeight="221.0" prefWidth="254.0">
           <xAxis>
@@ -23,10 +23,15 @@
                <NumberAxis side="LEFT" />
            </yAxis>
        </LineChart>
-      <Label fx:id="theMostCorrelativeAttribute" layoutX="281.0" prefHeight="35.0" prefWidth="280.0">
+      <Label fx:id="theMostCorrelativeAttribute" layoutX="281.0" prefHeight="35.0" prefWidth="524.0">
        <font>
            <Font size="20.0" />
        </font>
+      </Label>
+      <Label fx:id="correlationPercents" layoutX="525.0" layoutY="60.0">
+          <font>
+              <Font size="20.0" />
+          </font>
       </Label>
    </children>
 </Pane>

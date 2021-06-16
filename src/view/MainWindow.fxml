@@ -10,12 +10,12 @@
 <?import view.Controllers.* ?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
-            prefWidth="1350.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1250.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="view.MainWindowController">
    <MyAttributes fx:id="attributes" layoutX="5.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0"/>
-   <MyJoystick fx:id="joystick" layoutX="1100.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0"/>
+   <MyJoystick fx:id="joystick" layoutX="1000.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0"/>
    <MyControllers fx:id="controllers" layoutX="100.0" layoutY="520.0" prefHeight="200.0" prefWidth="200.0"/>
-   <MyClocksPanel fx:id="clocksPanel" layoutX="850.0" layoutY="300.0" prefHeight="74.0" prefWidth="92.0"/>
+   <MyClocksPanel fx:id="clocksPanel" layoutX="750.0" layoutY="270.0" prefHeight="74.0" prefWidth="92.0"/>
    <MyGraphs fx:id="graphs" layoutX="230.0" prefHeight="440" prefWidth="612" minHeight="440" maxHeight="440" minWidth="612" maxWidth="612"/>
 
    <MenuButton mnemonicParsing="false" text="Load files">

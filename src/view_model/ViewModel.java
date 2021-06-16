@@ -25,7 +25,7 @@ public class ViewModel extends Observable implements Observer{
     private ExecutorService executor;
     private Map<String, CorrelatedFeatures> correlatedFeaturesMap;
     public DoubleProperty playSpeed,progression,throttle,rudder,aileron,elevators,heading,speed,altitude,roll,pitch,yaw;
-    public StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature,theMostCorrelativeAttribute;
+    public StringProperty anomalyFlightPath,propertiesPath,currentTime,selectedFeature,theMostCorrelativeAttribute,correlationPercents;
     public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
     public ListProperty<String> features;
     public IntegerProperty numOfRow;
@@ -52,9 +52,10 @@ public class ViewModel extends Observable implements Observer{
         currentTime = new SimpleStringProperty("0:0");
         selectedFeature=new SimpleStringProperty();
         theMostCorrelativeAttribute=new SimpleStringProperty("");
-        selectedAttributePoints=new SimpleListProperty<>(FXCollections.observableArrayList());
-        theMostCorrelativeAttributePoints=new SimpleListProperty<>(FXCollections.observableArrayList());
-        features=new SimpleListProperty<>(FXCollections.observableArrayList());
+        selectedAttributePoints=new SimpleListProperty(FXCollections.observableArrayList());
+        theMostCorrelativeAttributePoints=new SimpleListProperty(FXCollections.observableArrayList());
+        features=new SimpleListProperty(FXCollections.observableArrayList());
+        correlationPercents= new SimpleStringProperty();
         properties=new Properties();
         properties.deserializeFromXML("settings.xml");//the default path for the properties file
         m.setProperties(properties);
@@ -107,9 +108,11 @@ public class ViewModel extends Observable implements Observer{
                     else{
                         theMostCorrelativeAttribute.setValue(correlatedFeaturesMap.get(newValue).feature2);
                     }
+                    correlationPercents.set(String.valueOf(Math.abs(correlatedFeaturesMap.get(newValue).correlation*100)).substring(0,5)+"% of coronation");
                 }
                 else{
                     theMostCorrelativeAttribute.setValue(""); //there is no correlative feature
+                    correlationPercents.set("");
                 }
             }
         });

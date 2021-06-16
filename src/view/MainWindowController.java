@@ -59,6 +59,7 @@ public class MainWindowController implements Observer{
         graphs.getSelectedAttributePoints().bind(vm.selectedAttributePoints);
         graphs.getTheMostCorrelativeAttributePoints().bind(vm.theMostCorrelativeAttributePoints);
         graphs.getTheMostCorrelativeAttribute().bind(vm.theMostCorrelativeAttribute);
+        graphs.getCorrelationPercents().bind(vm.correlationPercents);
     }
     private void showErrorMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 public class GraphsController implements Initializable {
     @FXML private LineChart<Number, Number> selectedAttributeGraph,theMostCorrelativeAttributeGraph;
-    @FXML public Label theMostCorrelativeAttribute;
+    @FXML public Label theMostCorrelativeAttribute,correlationPercents;
     private String localSelectedFeature;
     private int localRowNumber;
     public ListProperty<Point> selectedAttributePoints,theMostCorrelativeAttributePoints;
