@@ -130,9 +130,11 @@ public class ViewModel extends Observable implements Observer{
             boolean theFeatureNameNotChanged=localSelectedFeature.intern()==selectedFeature.getValue().intern();
 
             if(theFeatureNameNotChanged && localNumOfRow+1==numOfRow.getValue()) {//If the row number increases by only one
-                Platform.runLater(()->selectedAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(localSelectedFeature).get(numOfRow.getValue()))));
-                if(theMostCorrelativeAttribute.getValue().intern()!=("").intern()){//if there is correlative feature
-                    Platform.runLater(()->theMostCorrelativeAttributePoints.add(new Point(numOfRow.getValue(),ts.getAttributeData(theMostCorrelativeAttribute.getValue()).get(numOfRow.getValue()))));
+                Point newPoint=new Point(numOfRow.getValue(),ts.getAttributeData(localSelectedFeature).get(numOfRow.getValue()));
+                Platform.runLater(()->selectedAttributePoints.add(newPoint));
+                if(theMostCorrelativeAttribute.getValue().intern()!=("")){//if there is correlative feature
+                    Point newPoint2=new Point(numOfRow.getValue(),ts.getAttributeData(theMostCorrelativeAttribute.getValue()).get(numOfRow.getValue()));
+                    Platform.runLater(()->theMostCorrelativeAttributePoints.add(newPoint2));
                 }
             }
             else if(theFeatureNameNotChanged && localNumOfRow-1==numOfRow.getValue()) {//this is for the rewind option
@@ -140,17 +142,19 @@ public class ViewModel extends Observable implements Observer{
                 int length=selectedAttributePoints.size();
                 if(length>0) {
                     selectedAttributePoints.remove(length - 1);
-                    if(theMostCorrelativeAttribute.getValue().intern()!=("").intern()) {//if there is correlative feature
+                    if(theMostCorrelativeAttribute.getValue().intern()!=("")) {//if there is correlative feature
                         theMostCorrelativeAttributePoints.remove(length - 1);
                       }
                     }
                 });
             }
             else {
-                Platform.runLater(()-> selectedAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(selectedFeature.getValue(),numOfRow.getValue())));
+                ListProperty tempList=ts.getListOfPointsUntilSpecificRow(selectedFeature.getValue(),numOfRow.getValue());
+                Platform.runLater(()-> selectedAttributePoints.setValue(tempList));
                 localSelectedFeature=selectedFeature.getValue();
                 if(theMostCorrelativeAttribute.getValue().intern()!=("").intern()){
-                    Platform.runLater(()->theMostCorrelativeAttributePoints.setValue(ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttribute.getValue(),numOfRow.getValue())));
+                    ListProperty tempList2=ts.getListOfPointsUntilSpecificRow(theMostCorrelativeAttribute.getValue(),numOfRow.getValue());
+                    Platform.runLater(()->theMostCorrelativeAttributePoints.setValue(tempList2));
                     }
                 }
                 localNumOfRow=numOfRow.getValue();
