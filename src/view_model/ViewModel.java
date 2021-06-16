@@ -1,14 +1,11 @@
 package view_model;
 
-import anomalyDetectors.AnomalyDetector;
-import anomalyDetectors.AnomalyDetectorHybridAlgorithm;
-import anomalyDetectors.AnomalyDetectorLinearRegression;
+import anomalyDetectors.*;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.AnchorPane;
 import model.FlightSimulatorModel;
-import anomalyDetectors.CorrelatedFeatures;
 import other_classes.Point;
 import other_classes.Properties;
 import other_classes.TimeSeries;

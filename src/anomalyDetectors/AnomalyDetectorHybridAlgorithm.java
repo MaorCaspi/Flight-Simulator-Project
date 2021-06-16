@@ -31,10 +31,6 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
             center = new Point(x, y);
             this.radius = radius;
         }
-        public Circle(Point p, double radius) {
-            center = p;
-            this.radius = radius;
-        }
 
         public Circle(final Point p1, final Point p2) {
             center = new Point(((p1.getX() + p2.getX()) * 0.5), ((p1.getY() + p2.getY()) * 0.5));
@@ -208,7 +204,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                 case "Welzl":
                     c = allTmcf.get(feature);
 
-                   //find who is the MostCorrelativeAttribute from the map
+                    //find who is the MostCorrelativeAttribute from the map
                     String theMostCorrelativeFeature=allTmcf.get(feature).feature1;
                     if(theMostCorrelativeFeature.equals(feature)) {
                         theMostCorrelativeFeature=allTmcf.get(feature).feature2;
@@ -296,7 +292,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         regressionPointsSeries.setName("Regression Points");
         regressionLineSeries.setName("Regression line");
         LineChart<Number, Number> regressionLineChart=new LineChart(new NumberAxis(), new NumberAxis());
-        regressionLineChart.setPrefSize(300, 250);
+        regressionLineChart.setPrefSize(270, 270);
         regressionLineChart.getData().addAll(regressionPointsSeries,regressionLineSeries);
         regressionLineChart.setAnimated(false);
         board.getChildren().add(regressionLineChart);
@@ -307,20 +303,19 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         zscoreLineChart.setAnimated(false);
         zscoreLineChart.setCreateSymbols(false);
         zscoreLineChart.getData().add(zscoreSeries);
-        zscoreLineChart.setPrefSize(300, 250);
+        zscoreLineChart.setPrefSize(270, 270);
         board.getChildren().add(zscoreLineChart);
         ArrayList<Double> selectedAttributeData = new ArrayList();//zscore
         /////////////////////////////////////Welzl:
         BubbleChart<Number, Number> welzlChart=new BubbleChart(new NumberAxis(), new NumberAxis());
         welzlChart.setAnimated(false);
-        welzlChart.setPrefSize(300, 250);
+        welzlChart.setPrefSize(270, 270);
         board.getChildren().add(welzlChart);
         XYChart.Series<Number, Number> welzlPointsSeries = new XYChart.Series();
         XYChart.Series<Number, Number> welzlCircleSeries = new XYChart.Series();
         welzlPointsSeries.setName("Welzl points");
         welzlCircleSeries.setName("Welzl circle");
         welzlChart.getData().addAll(welzlPointsSeries,welzlCircleSeries);
-
 
         selectedFeatureWasChange(algorithmName,description,zscoreLineChart,regressionLineChart, welzlChart,selectedAttributeData,localNumOfRow,theMostCorrelativeFeature,regressionPointsSeries,regressionLineSeries,board,welzlPointsSeries,welzlCircleSeries);
 
@@ -339,78 +334,70 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
             switch (algorithmName.get()) {
                 case "Regression":
                     if (localNumOfRow.get() + 1 == numOfRow.getValue()) { //If the row number increases by 1 and the feature has not changed
+                        XYChart.Data newPoint=new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), numOfRow.getValue()), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), numOfRow.getValue()));
+                        Platform.runLater(() -> regressionPointsSeries.getData().add(newPoint));
+                    }
+                    else if (localNumOfRow.get() - 1 == numOfRow.getValue()) { //this is for the rewind option
+                        int length = regressionPointsSeries.getData().size();
+                        if (length > 0) {
+                            Platform.runLater(() ->regressionPointsSeries.getData().remove(length - 1));
+                        }
+                    }
+                    else {//Create the graph again from scratch
+                        Platform.runLater(() ->regressionPointsSeries.getData().clear());
+                        for (int i = 0; i < numOfRow.getValue(); i++) {
+                            XYChart.Data newPoint=new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), i), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), i));
+                            Platform.runLater(() ->regressionPointsSeries.getData().add(newPoint));
+                        }
+                    }
+                    break;
+                case "Welzl":
+                    if (localNumOfRow.get() + 1 == numOfRow.getValue()) { //If the row number increases by 1 and the feature has not changed
+                        XYChart.Data newPoint=new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), numOfRow.getValue()), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), numOfRow.getValue()));
+                        Platform.runLater(() -> welzlPointsSeries.getData().add(newPoint));
+                    }
+                    else if (localNumOfRow.get() - 1 == numOfRow.getValue()) { //this is for the rewind option
+                        int length = welzlPointsSeries.getData().size();
+                        if (length > 0) {
+                            Platform.runLater(() ->welzlPointsSeries.getData().remove(length - 1));
+                        }
+                    }
+                    else {//Create the graph again from scratch
+                        Platform.runLater(() -> welzlPointsSeries.getData().clear());
+                        for (int i = 0; i < numOfRow.getValue(); i++) {
+                            XYChart.Data newPoint=new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), i), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), i));
+                            Platform.runLater(() ->welzlPointsSeries.getData().add(newPoint));
+                        }
+                    }
+                    break;
+                case "ZScore":
+                    if (localNumOfRow.get() + 1 == numOfRow.getValue()) { //If the row number increases by 1 and the property has not changed
+                        double zScoreGrade = zScoreDetector.zScore(selectedAttributeData, selectedAttributeData.get(numOfRow.getValue()));
                         Platform.runLater(() -> {
-                            regressionPointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), numOfRow.getValue()), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), numOfRow.getValue())));
+                            zscoreSeries.getData().add(new XYChart.Data(numOfRow.getValue(), zScoreGrade));
                         });
                     }
                     else if (localNumOfRow.get() - 1 == numOfRow.getValue()) { //this is for the rewind option
                         Platform.runLater(() -> {
-                            int length = regressionPointsSeries.getData().size();
+                            int length = zscoreSeries.getData().size();
                             if (length > 0) {
-                                regressionPointsSeries.getData().remove(length - 1);
+                                zscoreSeries.getData().remove(length - 1);
                             }
                         });
                     }
                     else {//Create the graph again from scratch
                         Platform.runLater(() -> {
-                            regressionPointsSeries.getData().clear();
+                            zscoreSeries.getData().clear();
                             for (int i = 0; i < numOfRow.getValue(); i++) {
-                                regressionPointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), i), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), i)));
+                                double zScoreGrade = zScoreDetector.zScore(selectedAttributeData, selectedAttributeData.get(numOfRow.getValue()));
+                                zscoreSeries.getData().add(new XYChart.Data(i, zScoreGrade));
                             }
                         });
                     }
+                    if (localNumOfRow.get() != (-1)) {//If the property has not changed
+                        localNumOfRow.set(numOfRow.getValue());
+                    }
                     break;
-               case "Welzl":
-                   if (localNumOfRow.get() + 1 == numOfRow.getValue()) { //If the row number increases by 1 and the feature has not changed
-                       Platform.runLater(() -> {
-                           welzlPointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), numOfRow.getValue()), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), numOfRow.getValue())));
-                       });
-                   }
-                   else if (localNumOfRow.get() - 1 == numOfRow.getValue()) { //this is for the rewind option
-                       Platform.runLater(() -> {
-                           int length = welzlPointsSeries.getData().size();
-                           if (length > 0) {
-                               welzlPointsSeries.getData().remove(length - 1);
-                           }
-                       });
-                   }
-                   else {//Create the graph again from scratch
-                       Platform.runLater(() -> {
-                           welzlPointsSeries.getData().clear();
-                           for (int i = 0; i < numOfRow.getValue(); i++) {
-                               welzlPointsSeries.getData().add(new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), i), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), i)));
-                           }
-                       });
-                   }
-                   break;
-               case "ZScore":
-                   if (localNumOfRow.get() + 1 == numOfRow.getValue()) { //If the row number increases by 1 and the property has not changed
-                       double zScoreGrade = zScoreDetector.zScore(selectedAttributeData, selectedAttributeData.get(numOfRow.getValue()));
-                       Platform.runLater(() -> {
-                           zscoreSeries.getData().add(new XYChart.Data(numOfRow.getValue(), zScoreGrade));
-                       });
-                   }
-                   else if (localNumOfRow.get() - 1 == numOfRow.getValue()) { //this is for the rewind option
-                       Platform.runLater(() -> {
-                           int length = zscoreSeries.getData().size();
-                           if (length > 0) {
-                               zscoreSeries.getData().remove(length - 1);
-                           }
-                       });
-                   }
-                   else {//Create the graph again from scratch
-                       Platform.runLater(() -> {
-                           zscoreSeries.getData().clear();
-                           for (int i = 0; i < numOfRow.getValue(); i++) {
-                               double zScoreGrade = zScoreDetector.zScore(selectedAttributeData, selectedAttributeData.get(numOfRow.getValue()));
-                               zscoreSeries.getData().add(new XYChart.Data(i, zScoreGrade));
-                           }
-                       });
-                   }
-                   if (localNumOfRow.get() != (-1)) {//If the property has not changed
-                       localNumOfRow.set(numOfRow.getValue());
-                   }
-                   break;
             }
         });
 

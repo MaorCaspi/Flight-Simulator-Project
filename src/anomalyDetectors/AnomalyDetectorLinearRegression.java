@@ -221,7 +221,7 @@ public class AnomalyDetectorLinearRegression implements AnomalyDetector {
 		AnchorPane board=new AnchorPane();
 		LineChart<Number, Number> algGraph=new LineChart(new NumberAxis(), new NumberAxis());
 
-		algGraph.setPrefSize(300, 250);
+		algGraph.setPrefSize(270, 270);
 
 		XYChart.Series<Number, Number> pointsSeries = new XYChart.Series();//points
 		XYChart.Series<Number, Number> lineSeries = new XYChart.Series();//line
