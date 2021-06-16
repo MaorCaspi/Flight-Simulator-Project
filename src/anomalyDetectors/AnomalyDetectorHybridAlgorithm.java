@@ -44,7 +44,8 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
             if (p2MinusP1Y == 0 || p3MinusP2Y == 0) {
                 center = new Point(0, 0);
                 radius = 0;
-            } else {
+            }
+            else {
                 final double a = -(p2.getX() - p1.getX()) / p2MinusP1Y;
                 final double aPrime = -(p3.getX() - p2.getX()) / p3MinusP2Y;
                 final double aPrimeMinusA = aPrime - a;
@@ -52,23 +53,16 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                 if (aPrimeMinusA == 0) {
                     center = new Point(0, 0);
                     radius = 0;
-                } else {
+                }
+                else {
                     final double p2SquaredX = p2.getX() * p2.getX();
                     final double p2SquaredY = p2.getY() * p2.getY();
-
-
-                    final double b = ((p2SquaredX - p1.getX() * p1.getX() + p2SquaredY - p1.getY() * p1.getY()) /
-                            (2 * p2MinusP1Y));
-                    final double bPrime = ((p3.getX() * p3.getX() - p2SquaredX + p3.getY() * p3.getY() - p2SquaredY) /
-                            (2 * p3MinusP2Y));
-
-
+                    final double b = ((p2SquaredX - p1.getX() * p1.getX() + p2SquaredY - p1.getY() * p1.getY()) / (2 * p2MinusP1Y));
+                    final double bPrime = ((p3.getX() * p3.getX() - p2SquaredX + p3.getY() * p3.getY() - p2SquaredY) / (2 * p3MinusP2Y));
                     final double xc = (b - bPrime) / aPrimeMinusA;
                     final double yc = a * xc + b;
-
                     final double dxc = p1.getX() - xc;
                     final double dyc = p1.getY() - yc;
-
                     center = new Point(xc, yc);
                     radius = Math.sqrt(dxc * dxc + dyc * dyc);
                 }
@@ -81,8 +75,8 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    private class WelzlAlgorithm {
-        private Random rand = new Random();
+    private static class WelzlAlgorithm {
+        private final Random rand = new Random();
 
         public Circle makeCircle(final List<Point> points) {
             return bMinidisk(points, new ArrayList());
@@ -115,7 +109,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private Map<String, Circle> welzlCircleModel;//storing circles for each pair of correlated features
+    private Map<String, Circle>welzlCircleModel;//storing circles for each pair of correlated features
     private AnomalyDetectorLinearRegression regressionDetector;
     private AnomalyDetectorZScoreAlgorithm zScoreDetector;
     private TimeSeries regTs, anomalyTs;
@@ -202,7 +196,6 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                     }
                     break;
                 case "Welzl":
-                    c = allTmcf.get(feature);
 
                     //find who is the MostCorrelativeAttribute from the map
                     String theMostCorrelativeFeature=allTmcf.get(feature).feature1;
@@ -307,7 +300,11 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
         board.getChildren().add(zscoreLineChart);
         ArrayList<Double> selectedAttributeData = new ArrayList();//zscore
         /////////////////////////////////////Welzl:
-        BubbleChart<Number, Number> welzlChart=new BubbleChart(new NumberAxis(), new NumberAxis());
+        NumberAxis welzlX=new NumberAxis();
+        welzlX.setForceZeroInRange(false);
+        NumberAxis welzlY=new NumberAxis();
+        welzlY.setForceZeroInRange(false);
+        BubbleChart<Number, Number> welzlChart=new BubbleChart(welzlX,welzlY);
         welzlChart.setAnimated(false);
         welzlChart.setPrefSize(270, 270);
         board.getChildren().add(welzlChart);
@@ -353,7 +350,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                     break;
                 case "Welzl":
                     if (localNumOfRow.get() + 1 == numOfRow.getValue()) { //If the row number increases by 1 and the feature has not changed
-                        XYChart.Data newPoint=new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), numOfRow.getValue()), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), numOfRow.getValue()));
+                        XYChart.Data newPoint=new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), numOfRow.getValue()), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), numOfRow.getValue()),welzlCircleModel.get(selectedFeature.getValue()).radius/20);
                         Platform.runLater(() -> welzlPointsSeries.getData().add(newPoint));
                     }
                     else if (localNumOfRow.get() - 1 == numOfRow.getValue()) { //this is for the rewind option
@@ -365,7 +362,7 @@ public class AnomalyDetectorHybridAlgorithm implements AnomalyDetector {
                     else {//Create the graph again from scratch
                         Platform.runLater(() -> welzlPointsSeries.getData().clear());
                         for (int i = 0; i < numOfRow.getValue(); i++) {
-                            XYChart.Data newPoint=new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), i), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), i));
+                            XYChart.Data newPoint=new XYChart.Data(anomalyTs.getDataFromSpecificRowAndColumn(selectedFeature.getValue(), i), anomalyTs.getDataFromSpecificRowAndColumn(theMostCorrelativeFeature.get(), i),welzlCircleModel.get(selectedFeature.getValue()).radius/20);
                             Platform.runLater(() ->welzlPointsSeries.getData().add(newPoint));
                         }
                     }
