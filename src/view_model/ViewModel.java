@@ -193,7 +193,7 @@ public class ViewModel extends Observable implements Observer{
     public void setAnomalyDetector(String className) throws Exception {
         // load class directory
         URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[] {
-                new URL("file://"+"C:\\Users\\Administrator\\Desktop\\test")
+                new URL("file://"+"/C:/Users/Administrator/Desktop/test/")
         });
         Class<?> c=urlClassLoader.loadClass(className);
         AnomalyDetector ad=(AnomalyDetector) c.newInstance();
