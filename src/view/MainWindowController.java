@@ -112,13 +112,14 @@ public class MainWindowController implements Observer{
             propertiesPath.setValue(filePath);
         }
          */
+
         try {
+            vm.setAnomalyDetector("anomalyDetectors.AnomalyDetectorZScoreAlgorithm");
             anomalyDetectAnchorPane.getChildren().setAll(getPainter());
         }
         catch (Exception e) {
-            e.printStackTrace();////////////////////
+            e.printStackTrace();////////////////////////////////////////////
         }
-
     }
 
     @Override

@@ -9,6 +9,8 @@ import model.FlightSimulatorModel;
 import other_classes.Point;
 import other_classes.Properties;
 import other_classes.TimeSeries;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -185,16 +187,18 @@ public class ViewModel extends Observable implements Observer{
     public void rewind(){ m.rewind(); }
 
     public Callable<AnchorPane> getPainter(){
-        setAnomalyDetector("maorrrrrr");////////////////
         return m.getPainter();
     }
 
-    public void setAnomalyDetector(String adPath) {
-        //AnomalyDetector ad=new AnomalyDetectorZScoreAlgorithm();
-        //AnomalyDetector ad=new AnomalyDetectorLinearRegression();
-        AnomalyDetector ad=new AnomalyDetectorHybridAlgorithm();
+    public void setAnomalyDetector(String className) throws Exception {
+        // load class directory
+        URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[] {
+                new URL("file://"+"C:\\Users\\Administrator\\Desktop\\test")
+        });
+        Class<?> c=urlClassLoader.loadClass(className);
+        AnomalyDetector ad=(AnomalyDetector) c.newInstance();
         if(!m.setAnomalyDetector(ad,selectedFeature,regTs)){
-
+            throw new Exception();
         }
     }
 
