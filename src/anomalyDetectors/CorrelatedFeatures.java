@@ -1,5 +1,7 @@
 package anomalyDetectors;
 
+import other_classes.Line;
+
 public class CorrelatedFeatures {
 
 	public final String feature1,feature2;

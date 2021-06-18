@@ -1,4 +1,4 @@
-package anomalyDetectors;
+package other_classes;
 
 public class Line {
     public final double a,b;

@@ -16,7 +16,7 @@ public class TimeSeries {
     private ListProperty<String> atts;
 
     public TimeSeries(String csvFileName) throws IOException {
-        ts=new HashMap<>();
+        ts=new HashMap();
         atts=new SimpleListProperty<>(FXCollections.observableArrayList());
         BufferedReader in=new BufferedReader(new FileReader(csvFileName));
         String line=in.readLine();
@@ -39,7 +39,7 @@ public class TimeSeries {
     }
 
     public ListProperty<Point> getListOfPointsUntilSpecificRow(String featureName, int rowNumber){
-        ListProperty<Point> tempList=new SimpleListProperty<>(FXCollections.observableArrayList());
+        ListProperty<Point> tempList=new SimpleListProperty(FXCollections.observableArrayList());
         for(int i=0; i<rowNumber;i++){
             tempList.add(new Point(i,ts.get(featureName).get(i)));
         }

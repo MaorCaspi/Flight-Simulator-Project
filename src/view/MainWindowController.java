@@ -114,7 +114,7 @@ public class MainWindowController implements Observer{
          */
 
         try {
-            vm.setAnomalyDetector("anomalyDetectors.AnomalyDetectorZScoreAlgorithm");
+            vm.setAnomalyDetector("AnomalyDetectorHybridAlgorithm");//AnomalyDetectorZScoreAlgorithm//AnomalyDetectorLinearRegression
             anomalyDetectAnchorPane.getChildren().setAll(getPainter());
         }
         catch (Exception e) {

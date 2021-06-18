@@ -6,6 +6,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.AnchorPane;
 import model.FlightSimulatorModel;
+import other_classes.PearsonCorrelation;
 import other_classes.Point;
 import other_classes.Properties;
 import other_classes.TimeSeries;
@@ -66,14 +67,12 @@ public class ViewModel extends Observable implements Observer{
         playSpeed.addListener((observable, oldValue, newValue)-> m.setPlaySpeed((double)newValue));
         anomalyFlightPath.addListener((observable, oldValue, newValue) -> {
             if(newValue!=null) {
-                AnomalyDetectorLinearRegression anomalyDetectorLinearRegression=new AnomalyDetectorLinearRegression();
                 try {
                     ts = new TimeSeries(newValue);
                     regTs =new TimeSeries(properties.getNormalFlightCsvPath());
                     if ((ts.getNumOfColumns() != 42) || (regTs.getNumOfColumns() != 42)) {
                         throw new Exception();
                     }
-                    anomalyDetectorLinearRegression.learnNormal(regTs);
                 }
                 catch (Exception e) {
                     setChanged();
@@ -82,7 +81,9 @@ public class ViewModel extends Observable implements Observer{
                 }
                 m.setTimeSeries(ts);
                 csvLength = ts.getRowSize();
-                correlatedFeaturesMap=anomalyDetectorLinearRegression.getTheMostCorrelatedFeaturesMap(true);
+
+                PearsonCorrelation pearsonCorrelation=new PearsonCorrelation();
+                correlatedFeaturesMap=pearsonCorrelation.getTheMostCorrelatedFeaturesMap(regTs);
                 features.set(ts.getAttributes());
             }
         });
@@ -192,10 +193,11 @@ public class ViewModel extends Observable implements Observer{
 
     public void setAnomalyDetector(String className) throws Exception {
         // load class directory
-        URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[] {
-                new URL("file://"+"/C:/Users/Administrator/Desktop/test/")
-        });
-        Class<?> c=urlClassLoader.loadClass(className);
+       URL[] maor= new URL[] {
+                new URL("file:///C:/Users/Administrator/Desktop/test/"+className+".jar")
+        };
+        URLClassLoader urlClassLoader = URLClassLoader.newInstance(maor);
+        Class<?> c=urlClassLoader.loadClass("anomalyDetectors."+className);
         AnomalyDetector ad=(AnomalyDetector) c.newInstance();
         if(!m.setAnomalyDetector(ad,selectedFeature,regTs)){
             throw new Exception();
