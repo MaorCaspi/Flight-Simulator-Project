@@ -5,7 +5,6 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import other_classes.Point;
-
 import java.io.IOException;
 
 public class MyGraphs extends Pane{
@@ -29,5 +28,4 @@ public class MyGraphs extends Pane{
     public StringProperty getSelectedFeature(){return controller.selectedFeature; }
     public StringProperty getTheMostCorrelativeAttribute(){return controller.theMostCorrelativeAttribute.textProperty(); }
     public StringProperty getCorrelationPercents(){return controller.correlationPercents.textProperty(); }
-
 }

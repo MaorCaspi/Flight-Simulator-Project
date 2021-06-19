@@ -5,24 +5,24 @@ import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.AnchorPane;
-import model.FlightSimulatorModel;
+import model.Model;
 import other_classes.PearsonCorrelation;
 import other_classes.Point;
 import other_classes.Properties;
 import other_classes.TimeSeries;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ViewModel extends Observable implements Observer{
-    private FlightSimulatorModel m;
-    private TimeSeries ts,regTs;
+public class ViewModel extends Observable{
+    private Model m;
     private Properties properties;
+    private TimeSeries ts,regTs;
     private int csvLength,localNumOfRow;
     private String localSelectedFeature;
     private ExecutorService executor;
@@ -33,7 +33,7 @@ public class ViewModel extends Observable implements Observer{
     public ListProperty<String> features;
     public IntegerProperty numOfRow;
 
-    public ViewModel(FlightSimulatorModel m){
+    public ViewModel(Model m){
         this.m=m;
         executor = Executors.newSingleThreadExecutor();
         numOfRow= new SimpleIntegerProperty();
@@ -187,26 +187,19 @@ public class ViewModel extends Observable implements Observer{
     public void forward(){ m.forward(); }
     public void rewind(){ m.rewind(); }
 
-    public Callable<AnchorPane> getPainter(){
+    public Callable<AnchorPane> getPainter() throws Exception {
         return m.getPainter();
     }
 
-    public void setAnomalyDetector(String className) throws Exception {
-        // load class directory
-       URL[] maor= new URL[] {
-                new URL("file:///C:/Users/Administrator/Desktop/test/"+className+".jar")
-        };
-        URLClassLoader urlClassLoader = URLClassLoader.newInstance(maor);
-        Class<?> c=urlClassLoader.loadClass("anomalyDetectors."+className);
+    public void setAnomalyDetector(String classPath) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        // load the jar
+        URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[] {
+                new URL("file:///"+classPath)
+        });
+        Class<?> c=urlClassLoader.loadClass("anomalyDetectors.Algorithm");//the path of the class in the jar file
         AnomalyDetector ad=(AnomalyDetector) c.newInstance();
         if(!m.setAnomalyDetector(ad,selectedFeature,regTs)){
-            throw new Exception();
-        }
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        if(o==m){
+           throw new IllegalAccessException();
         }
     }
 }

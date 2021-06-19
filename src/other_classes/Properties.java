@@ -10,14 +10,13 @@ import java.util.Map;
 public class Properties {
 
     private Map<String, String> rowsIndex;
-    private Float rate;
+    private Float rate;//the speed of reading rows from the csv file.rows in a second.
     private String flightGearIP;
     private int flightGearPort;
     private String normalFlightCsvPath;
-    private String anomalyDetectionFilePath;
 
     public Properties() {
-        rowsIndex=new HashMap<>();
+        rowsIndex=new HashMap();
     }
 
     public void setRowsIndex(Map<String, String> rowsIndex) {
@@ -40,10 +39,6 @@ public class Properties {
         this.normalFlightCsvPath = normalFlightCsvPath;
     }
 
-    public void setAnomalyDetectionFilePath(String anomalyDetectionFilePath) {
-        this.anomalyDetectionFilePath = anomalyDetectionFilePath;
-    }
-
     public Map<String, String> getRowsIndex() {
         return rowsIndex;
     }
@@ -64,29 +59,24 @@ public class Properties {
         return normalFlightCsvPath;
     }
 
-    public String getAnomalyDetectionFilePath() {
-        return anomalyDetectionFilePath;
-    }
-
     public String propertyName(String propertyName){ return rowsIndex.get(propertyName);}
 
-    public void setFromAnotherProperties(Properties properties){
+    public void setFromAnotherProperties(Properties properties){//copy one Properties data to another Properties object
         setRowsIndex(properties.getRowsIndex());
         setRate(properties.getRate());
         setFlightGearIP(properties.getFlightGearIP());
         setFlightGearPort(properties.getFlightGearPort());
         setNormalFlightCsvPath(properties.getNormalFlightCsvPath());
-        setAnomalyDetectionFilePath(properties.getAnomalyDetectionFilePath());
     }
 
-    public void serializeToXML (String filePath) throws IOException {
+    public void serializeToXML (String filePath) throws IOException {//from Properties object to xml file
         FileOutputStream fos = new FileOutputStream(filePath);
         XMLEncoder encoder = new XMLEncoder(fos);
         encoder.writeObject(this);
         encoder.close();
         fos.close();
     }
-    public Boolean deserializeFromXML(String filePath) {
+    public Boolean deserializeFromXML(String filePath) {//from xml file to Properties object
         try {
             FileInputStream fis = new FileInputStream(filePath);
             XMLDecoder decoder = new XMLDecoder(fis);

@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class TimeSeries {
 
-    private Map<String, ArrayList<Double>> ts;
-    private ListProperty<String> atts;
+    private Map<String, ArrayList<Double>> ts;//data
+    private ListProperty<String> atts;//Columns names
 
     public TimeSeries(String csvFileName) throws IOException {
         ts=new HashMap();
@@ -38,7 +38,7 @@ public class TimeSeries {
         return ts.get(featureName);
     }
 
-    public ListProperty<Point> getListOfPointsUntilSpecificRow(String featureName, int rowNumber){
+    public ListProperty<Point> getListOfPointsUntilSpecificRow(String featureName, int rowNumber){//this method return List Of Points Until Specific Row
         ListProperty<Point> tempList=new SimpleListProperty(FXCollections.observableArrayList());
         for(int i=0; i<rowNumber;i++){
             tempList.add(new Point(i,ts.get(featureName).get(i)));
@@ -53,10 +53,13 @@ public class TimeSeries {
     public int getRowSize() {
         return ts.get(atts.get(0)).size();
     }
+
     public int getNumOfColumns(){
         return ts.size();
     }
 
+    //we use this method for sending data to the flight gear server
+    //it's return one long string of each value in specific row' diverge with commas
     public String getRowByRowNumber(int rowNumber) {
         StringBuilder result= new StringBuilder();
         for(int i=0;i<atts.size()-1;i++) {
@@ -65,6 +68,7 @@ public class TimeSeries {
         result.append(ts.get(atts.get(atts.size()-1)).get(rowNumber));
         return result.toString();
     }
+
     public double getDataFromSpecificRowAndColumn(String featureName,int rowNumber){
         return ts.get(featureName).get(rowNumber);
     }

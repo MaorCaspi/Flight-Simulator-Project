@@ -9,7 +9,7 @@
 
 <Pane prefHeight="241.0" prefWidth="263.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Joystick.JoystickWindowController">
 <children>
-    <Circle fx:id="joystickBorder" layoutX="133.0" layoutY="105.0" radius="65.0" stroke="BLACK" strokeType="INSIDE">
+    <Circle layoutX="133.0" layoutY="105.0" radius="65.0" stroke="BLACK" strokeType="INSIDE">
         <fill>
             <RadialGradient centerX="0.5057803468208093" centerY="0.5147783251231528" cycleMethod="REFLECT" focusAngle="69.44" radius="0.33544303797468356">
                 <stops>

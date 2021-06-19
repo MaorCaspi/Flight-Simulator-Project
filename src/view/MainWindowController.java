@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.scene.layout.AnchorPane;
@@ -37,10 +38,11 @@ public class MainWindowController implements Observer{
         controllers.controller.currentTime.textProperty().bind(vm.currentTime);
         vm.playSpeed.bind(controllers.controller.playSpeed);
         controllers.controller.onPlay=()->{
-            if(anomalyFlightPath.getValue()==null) {
+            if(anomalyFlightPath.getValue()==null) {//If the user has not yet uploaded a flight file.
                 showErrorMessage("Problem with flight recording file!\nYou must upload a CSV file.");
                 return;
             }
+            //else:
             vm.play();
         };
         controllers.controller.onPause=()->vm.pause();
@@ -61,13 +63,13 @@ public class MainWindowController implements Observer{
         graphs.getTheMostCorrelativeAttribute().bind(vm.theMostCorrelativeAttribute);
         graphs.getCorrelationPercents().bind(vm.correlationPercents);
     }
-    private void showErrorMessage(String message) {
+    private void showErrorMessage(String message) {//function to show error messages, it's accepts the message as a string.
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(message);
         alert.showAndWait();
     }
-    private String uploadFile(String title,String description,String extensions){
+    private String uploadFile(String title,String description,String extensions){//function to upload file
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(description, extensions));
@@ -97,28 +99,37 @@ public class MainWindowController implements Observer{
         }
     }
 
-    public AnchorPane getPainter() throws Exception {
+    public AnchorPane getPainter() throws Exception {//this function ask for an anchorPane of the paint method on the anomaly algorithm
         return vm.getPainter().call();
     }
+
     @FXML
     private void pressButtonLoadAdAlgorithm(){
         if(anomalyFlightPath.getValue()==null){
             showErrorMessage("You must upload flight recording file before doing this!");
             return;
         }
-        /*
-        String filePath=uploadFile("Upload anomaly detection algorithm","XML file","*.xml*");
+        String filePath=uploadFile("Upload anomaly detection algorithm","JAR file","*.jar*");
         if (filePath != null) {
-            propertiesPath.setValue(filePath);
-        }
-         */
-
-        try {
-            vm.setAnomalyDetector("AnomalyDetectorHybridAlgorithm");//AnomalyDetectorZScoreAlgorithm//AnomalyDetectorLinearRegression
-            anomalyDetectAnchorPane.getChildren().setAll(getPainter());
-        }
-        catch (Exception e) {
-            e.printStackTrace();////////////////////////////////////////////
+            try {
+                vm.setAnomalyDetector(filePath);
+                anomalyDetectAnchorPane.getChildren().setAll(getPainter());
+            }
+            catch (MalformedURLException e) {
+                showErrorMessage("Problem with selected JAR file!\nThis is not a valid JAR file.");
+            }
+            catch (ClassNotFoundException e) {
+                showErrorMessage("Problem with selected JAR file!\nThere is no anomalyDetectors.Algorithm class.");
+            }
+            catch (InstantiationException e) {
+                showErrorMessage("Problem with selected JAR file!\nYou don't realized the methods of the interface as well.");
+            }
+            catch (IllegalAccessException e) {
+                showErrorMessage("Problem with selected JAR file!\nYou don't realized the methods of the interface as well.");
+            }
+            catch (Exception e) {
+                showErrorMessage("Problem with selected JAR file!\nThe paint method is wrong.");
+            }
         }
     }
 

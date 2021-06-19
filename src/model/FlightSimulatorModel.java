@@ -1,52 +1,46 @@
 package model;
 
 import anomalyDetectors.AnomalyDetector;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.AnchorPane;
 import other_classes.FGPlayer;
 import other_classes.Properties;
 import other_classes.TimeSeries;
-import java.util.Observable;
 import java.util.concurrent.Callable;
 
-public class FlightSimulatorModel extends Observable implements Model{
-    public IntegerProperty numOfRow;
-    private double playSpeed;
+public class FlightSimulatorModel implements Model{
     private FGPlayer fgPlayer;
-    private boolean firstTimePlay;
-    private TimeSeries ts;
-    private Thread thread;
     private Properties properties;
+    private TimeSeries ts;
     private AnomalyDetector ad;
+    private Thread thread;
+    private double playSpeed;
+    private boolean firstTimePlay;
 
     public FlightSimulatorModel() {
         firstTimePlay=true;
-        numOfRow= new SimpleIntegerProperty(0);
-        properties=new Properties();
     }
 
     @Override
     public boolean setAnomalyDetector(AnomalyDetector ad, StringProperty selectedFeature,TimeSeries regTs) {
         if(selectedFeature.getValue()==null || regTs==null)
             return false;
-        this.ad=ad;
-        this.ad.selectedFeature.bind(selectedFeature);
-        this.ad.numOfRow.bindBidirectional(numOfRow);
-        ad.learnNormal(regTs);
-        ad.detect(ts);
-
-        return true;/////
+        try {
+            this.ad=ad;
+            this.ad.selectedFeature.bind(selectedFeature);
+            this.ad.numOfRow.bindBidirectional(numOfRow);
+            ad.learnNormal(regTs);
+            ad.detect(ts);
+            return true;
+        }
+        catch (Exception e){
+            return false;//if there was any problem with the AnomalyDetector, then return false
+        }
     }
 
     @Override
     public Callable<AnchorPane> getPainter() {
-        //////////
-        if(ad!=null){
-            return ()->ad.paint();
-        }
-        return null;
+        return ()->ad.paint();
     }
 
     @Override
@@ -73,7 +67,7 @@ public class FlightSimulatorModel extends Observable implements Model{
 
     @Override
     public void setProgression(int rowNumber) {
-        if (!firstTimePlay && !(rowNumber-5<this.numOfRow.getValue() && this.numOfRow.getValue()<rowNumber+5)) {
+        if (!firstTimePlay && !(rowNumber-3<this.numOfRow.getValue() && this.numOfRow.getValue()<rowNumber+3)) {
             thread.stop();
             thread=new Thread()
             {
@@ -153,8 +147,6 @@ public class FlightSimulatorModel extends Observable implements Model{
     @Override
     public void setNumOfRow(int numOfRow){
         this.numOfRow.setValue(numOfRow);
-        setChanged();
-        notifyObservers(numOfRow);
     }
 }
 

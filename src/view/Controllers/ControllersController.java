@@ -24,14 +24,12 @@ public class ControllersController {
         if(onPlay!=null){
             onPlay.run();
         }
-        progressBar.setDisable(false);
     }
     @FXML
     private void pressButtonPause(){
         if(onPause!=null){
             onPause.run();
         }
-        progressBar.setDisable(true);
     }
     @FXML
     private void pressButtonForward(){

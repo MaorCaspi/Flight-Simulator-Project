@@ -19,12 +19,11 @@ public class Main extends Application {
         Image icon = new Image("media/Icon.png");
         primaryStage.setTitle("Flight Simulator");
         primaryStage.getIcons().add(icon);
-        //primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         FlightSimulatorModel flightGearModel=new FlightSimulatorModel();
         ViewModel vm=new ViewModel(flightGearModel);
-        flightGearModel.addObserver(vm);
+        //flightGearModel.addObserver(vm);
         MainWindowController mwc=fxl.getController();
         mwc.setViewModel(vm);
         vm.addObserver(mwc);
@@ -32,12 +31,10 @@ public class Main extends Application {
         //when press the x button
         primaryStage.setOnCloseRequest(event -> {
             vm.shutdownExecutor();
-           /////////////////////////////////////////////// mwc.pressButtonStop();
             Platform.exit();
             System.exit(0);
         });
     }
-
 
     public static void main(String[] args) {
         launch(args);

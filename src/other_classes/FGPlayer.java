@@ -1,6 +1,6 @@
 package other_classes;
 
-import model.FlightSimulatorModel;
+import model.Model;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -10,10 +10,10 @@ public class FGPlayer {
     private PrintWriter out;
     private double playSpeed, prevPlaySpeed;
     private TimeSeries ts;
-    private FlightSimulatorModel flightSimulatorModel;
+    private Model flightSimulatorModel;
     private boolean pause, connectionIsClose, moveForwardIsInProgress, moveRewindIsInProgress;
 
-    public FGPlayer(TimeSeries ts, double speed, FlightSimulatorModel flightSimulatorModel) {
+    public FGPlayer(TimeSeries ts, double speed, Model flightSimulatorModel) {
         connectionIsClose = true;
         this.ts = ts;
         playSpeed = speed;
@@ -46,14 +46,13 @@ public class FGPlayer {
         this.pause = pause;
     }
 
-    private boolean createConnection() {
+    private boolean createConnection() {//create connection to the flightgear server
         try {
             fg = new Socket(flightSimulatorModel.getProperties().getFlightGearIP(), flightSimulatorModel.getProperties().getFlightGearPort());
             out = new PrintWriter(fg.getOutputStream());
             connectionIsClose = false;
             return true;
         } catch (Exception e) {
-            System.out.println("FlightGear Connection Error");/////////////////////////
             return false;
         }
     }
@@ -65,22 +64,19 @@ public class FGPlayer {
         try {
             for (int i = start; i < ts.getRowSize(); i++) {
                 while (pause) {
-                    wait();
+                    wait();//wait with non busy waiting until wake up
                 }
                 try {
                     out.println(ts.getRowByRowNumber(i));
                     out.flush();
                 } catch (Exception e) { }
                 flightSimulatorModel.setNumOfRow(i);
-                //System.out.println(ts.getRowByRowNumber(i));///////////////////////////////
                 Thread.sleep((long) (flightSimulatorModel.getProperties().getRate()/ playSpeed));
             }
             out.close();
-            fg.close();
+            fg.close();//close the Socket
             connectionIsClose = true;
-        } catch (Exception e) {
-            System.out.println("Time Series Error");///////////////////////////////////////////
-        }
+        } catch (Exception e) { }
     }
 
     public synchronized void wakeUP() {
@@ -99,7 +95,7 @@ public class FGPlayer {
     public void forward() {
         setMoveForwardIsInProgress(true);
         prevPlaySpeed = getPlaySpeed();
-        setPlaySpeed(5);
+        setPlaySpeed(3.5);
     }
 
     public void rewind(int start) {
@@ -111,24 +107,23 @@ public class FGPlayer {
                 try {
                     out.println(ts.getRowByRowNumber(i));
                     out.flush();
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
                 flightSimulatorModel.setNumOfRow(i);
-                //System.out.println(ts.getRowByRowNumber(i));//////////////
-                Thread.sleep((long) (flightSimulatorModel.getProperties().getRate()/5));
+                Thread.sleep((long) (flightSimulatorModel.getProperties().getRate() / 3.5));
             }
             stop();
-        } catch (Exception e) {
-            System.out.println("Time Series Error");////////////////////////
         }
+        catch (Exception e) { }
     }
 
-    public void unForward() {
+    public void unForward() {//this will happened when the user stop go Forward mode
         if (isMoveForwardIsInProgress()) {
             setPlaySpeed(prevPlaySpeed);
             setMoveForwardIsInProgress(false);
         }
     }
-    private void stop() {
+    private void stop() {//close all connections to the flightgear
         try {
             out.close();
             fg.close();
