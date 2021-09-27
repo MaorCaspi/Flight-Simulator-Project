@@ -19,7 +19,7 @@ and watch the result
 
 And of course watch your flight in real time, with Flight Gear simulation (https://www.flightgear.org/)
 
-![](1WAOQ3.gif)
+![](https://github.com/avihu2929/Flight-Simulator/blob/master/1WAOQ3.gif)
 
 Demonstration Video: https://youtu.be/WHPlTH6ydBs
 
