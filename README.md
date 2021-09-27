@@ -1,5 +1,4 @@
-
-A flight simulator made as a final Project at Advanced software development. </br>
+## A flight simulator made as a final Project at Advanced software development.
 
 Use the control panel to naviagte through a flight,
 
@@ -18,12 +17,9 @@ and watch the result
 ![alt text](https://raw.githubusercontent.com/avihu2929/Flight-Simulator/master/algo.png)
 
 
-And of course watch your flight in real time, with Flight Gear simulation (link below)
+And of course watch your flight in real time, with Flight Gear simulation (https://www.flightgear.org/)
 
 ![](1WAOQ3.gif)
-
-https://www.flightgear.org/
-
 
 Demonstration Video: https://youtu.be/WHPlTH6ydBs
 
